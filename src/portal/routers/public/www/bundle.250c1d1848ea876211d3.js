@@ -1,0 +1,752 @@
+"use strict";
+(self.webpackChunkkinetix_frontoffice =
+  self.webpackChunkkinetix_frontoffice || []).push([
+  [834],
+  {
+    5813: (t, e, n) => {
+      n.d(e, { Z: () => p });
+      var a = n(85893),
+        r = n(67294),
+        i = n(89250),
+        o = n(12599),
+        u = n(27306),
+        c = n(96233),
+        s = n(42155),
+        l = n(19010),
+        d = function () {
+          return (
+            (d =
+              Object.assign ||
+              function (t) {
+                for (var e, n = 1, a = arguments.length; n < a; n++)
+                  for (var r in (e = arguments[n]))
+                    Object.prototype.hasOwnProperty.call(e, r) && (t[r] = e[r]);
+                return t;
+              }),
+            d.apply(this, arguments)
+          );
+        },
+        f = function (t, e, n) {
+          if (n || 2 === arguments.length)
+            for (var a, r = 0, i = e.length; r < i; r++)
+              (!a && r in e) ||
+                (a || (a = Array.prototype.slice.call(e, 0, r)), (a[r] = e[r]));
+          return t.concat(a || Array.prototype.slice.call(e));
+        },
+        v = function (t) {
+          var e = t.sort(function (t, e) {
+            return t.createdAt < e.createdAt
+              ? -1
+              : t.createdAt > e.createdAt
+                ? 1
+                : 0;
+          });
+          return (
+            (e.length && e[e.length - 1].configuration.mainUsage) ||
+            u.APPLICATION_MAIN_USAGE.SDK
+          );
+        };
+      const p = function (t) {
+        var e = t.children,
+          n = t.hideFooter,
+          p = void 0 !== n && n,
+          h = (0, i.s0)(),
+          m = (0, i.TH)(),
+          b = (0, i.UO)(),
+          g = (0, u.useApplications)(),
+          y = g.applications,
+          w = g.limit,
+          O = (0, r.useState)(!1),
+          A = O[0],
+          I = O[1],
+          E = (0, r.useState)(0),
+          N = E[0],
+          S = E[1],
+          x = (0, r.useState)(),
+          U = x[0],
+          T = x[1],
+          R = (null == b ? void 0 : b.uuid) || "";
+        return (
+          (0, r.useEffect)(
+            function () {
+              var t = y.find(function (t) {
+                return t.uuid === R;
+              });
+              t &&
+                (T({ label: t.name, uuid: t.uuid }),
+                s.P$ &&
+                  (0, l.IB)({ virtualWorldUuid: t.uuid, limit: 1 }).then(
+                    function (t) {
+                      return S(t.total);
+                    },
+                  ));
+            },
+            [R],
+          ),
+          U
+            ? (0, a.jsx)(
+                "div",
+                d(
+                  { id: "ConnectedLayout", className: "lg:flex" },
+                  {
+                    children: (0, a.jsx)(
+                      u.HeaderVertical,
+                      d(
+                        {
+                          contextItems: y.map(function (t) {
+                            return { label: t.name, uuid: t.uuid };
+                          }),
+                          selectedContextItem: U,
+                          onCreateContextItem:
+                            y.length < w
+                              ? function () {
+                                  return I(!0);
+                                }
+                              : void 0,
+                          onSelectContextItem: function (t) {
+                            var e;
+                            (e = m.pathname.includes("/user-moderation")
+                              ? c.n.USER_MODERATION.path
+                              : c.n.VIRTUAL_WORLD.path),
+                              h((0, o.Gn)(e, { uuid: t.uuid }));
+                          },
+                          topNavigationItems: f(
+                            [],
+                            y.length && U
+                              ? f(
+                                  f(
+                                    f(
+                                      f(
+                                        [
+                                          {
+                                            label: "Dashboard",
+                                            iconName: "dashboard",
+                                            to: (0, o.Gn)(
+                                              c.n.VIRTUAL_WORLD.path,
+                                              { uuid: U.uuid },
+                                            ),
+                                          },
+                                        ],
+                                        s.p6
+                                          ? [
+                                              {
+                                                label: "Settings",
+                                                iconName: "settings",
+                                                to: (0, o.Gn)(
+                                                  c.n.SETTINGS.path,
+                                                  { uuid: U.uuid },
+                                                ),
+                                              },
+                                            ]
+                                          : [],
+                                        !0,
+                                      ),
+                                      [
+                                        {
+                                          label: "User-Generated Emote",
+                                          isSeparator: !0,
+                                        },
+                                        {
+                                          label: "Avatar Upload",
+                                          iconName: "directions_run",
+                                          to: (0, o.Gn)(
+                                            c.n.AVATAR_MANAGEMENT.path,
+                                            { uuid: U.uuid },
+                                          ),
+                                        },
+                                        {
+                                          label: "UGC Viewer",
+                                          iconName: "neurology",
+                                          to: (0, o.Gn)(
+                                            c.n.USER_GENERATED_EMOTES.path,
+                                            { uuid: U.uuid },
+                                          ),
+                                        },
+                                      ],
+                                      !1,
+                                    ),
+                                    s.P$
+                                      ? [
+                                          {
+                                            label: "UGC Moderation",
+                                            iconName: "security",
+                                            items: [
+                                              {
+                                                label: "Moderation Overview",
+                                                to: (0, o.Gn)(
+                                                  c.n.MODERATION_OVERVIEW.path,
+                                                  { uuid: U.uuid },
+                                                ),
+                                                counter: N,
+                                              },
+                                              {
+                                                label: "User Moderation",
+                                                to: (0, o.Gn)(
+                                                  c.n.USER_MODERATION.path,
+                                                  { uuid: U.uuid },
+                                                ),
+                                              },
+                                            ],
+                                          },
+                                        ]
+                                      : [
+                                          {
+                                            label: "UGC Moderation",
+                                            iconName: "security",
+                                            to: (0, o.Gn)(
+                                              c.n.USER_MODERATION.path,
+                                              { uuid: U.uuid },
+                                            ),
+                                          },
+                                        ],
+                                    !0,
+                                  ),
+                                  [
+                                    {
+                                      label: "Emote Icon Manager",
+                                      iconName: "mood",
+                                      to: (0, o.Gn)(c.n.EMOTES_ICON.path, {
+                                        uuid: U.uuid,
+                                      }),
+                                    },
+                                  ],
+                                  !1,
+                                )
+                              : [
+                                  {
+                                    label: "Game API Key",
+                                    iconName: "public",
+                                    to: c.n.CREATE_VIRTUAL_WORLD.path,
+                                  },
+                                ],
+                            !0,
+                          ),
+                          documentationNavigationItems: {
+                            label: "Documentation",
+                            iconName: "find_in_page",
+                            items: [
+                              { label: "General Information", href: s.sW },
+                              { label: "Integrate SDK", href: s.yy },
+                              {
+                                label: "Integrate Without SDK (API)",
+                                href: s.HI,
+                              },
+                            ],
+                          },
+                        },
+                        {
+                          children: (0, a.jsxs)(a.Fragment, {
+                            children: [
+                              (0, a.jsx)(
+                                "div",
+                                d(
+                                  {
+                                    className:
+                                      "min-h-[calc(100vh-162px)] lg:min-h-[calc(100vh-98px)] pt-6",
+                                  },
+                                  { children: e },
+                                ),
+                                (null == U ? void 0 : U.uuid) || "create",
+                              ),
+                              !p &&
+                                (0, a.jsx)(u.FooterLight, {
+                                  className: "w-fit mx-auto lg:w-full",
+                                }),
+                              (0, a.jsx)(u.CreateApplicationModal, {
+                                isOpened: A,
+                                onClose: function () {
+                                  return I(!1);
+                                },
+                                application: "DEV_PORTAL",
+                                mainUsage: v(y),
+                              }),
+                            ],
+                          }),
+                        },
+                      ),
+                    ),
+                  },
+                ),
+              )
+            : (0, a.jsx)(u.Loader, {})
+        );
+      };
+    },
+    48397: (t, e, n) => {
+      n.d(e, {
+        Ez: () => A,
+        NR: () => y,
+        Nh: () => E,
+        Os: () => h,
+        Sy: () => I,
+        Uo: () => O,
+        gg: () => g,
+        gr: () => b,
+        p1: () => v,
+        qh: () => w,
+        yT: () => f,
+        zZ: () => p,
+      });
+      var a,
+        r = n(9669),
+        i = n.n(r),
+        o = n(42155),
+        u = function () {
+          return (
+            (u =
+              Object.assign ||
+              function (t) {
+                for (var e, n = 1, a = arguments.length; n < a; n++)
+                  for (var r in (e = arguments[n]))
+                    Object.prototype.hasOwnProperty.call(e, r) && (t[r] = e[r]);
+                return t;
+              }),
+            u.apply(this, arguments)
+          );
+        },
+        c = function (t, e, n, a) {
+          return new (n || (n = Promise))(function (r, i) {
+            function o(t) {
+              try {
+                c(a.next(t));
+              } catch (t) {
+                i(t);
+              }
+            }
+            function u(t) {
+              try {
+                c(a.throw(t));
+              } catch (t) {
+                i(t);
+              }
+            }
+            function c(t) {
+              var e;
+              t.done
+                ? r(t.value)
+                : ((e = t.value),
+                  e instanceof n
+                    ? e
+                    : new n(function (t) {
+                        t(e);
+                      })).then(o, u);
+            }
+            c((a = a.apply(t, e || [])).next());
+          });
+        },
+        s = function (t, e) {
+          var n,
+            a,
+            r,
+            i,
+            o = {
+              label: 0,
+              sent: function () {
+                if (1 & r[0]) throw r[1];
+                return r[1];
+              },
+              trys: [],
+              ops: [],
+            };
+          return (
+            (i = { next: u(0), throw: u(1), return: u(2) }),
+            "function" == typeof Symbol &&
+              (i[Symbol.iterator] = function () {
+                return this;
+              }),
+            i
+          );
+          function u(u) {
+            return function (c) {
+              return (function (u) {
+                if (n) throw new TypeError("Generator is already executing.");
+                for (; i && ((i = 0), u[0] && (o = 0)), o; )
+                  try {
+                    if (
+                      ((n = 1),
+                      a &&
+                        (r =
+                          2 & u[0]
+                            ? a.return
+                            : u[0]
+                              ? a.throw || ((r = a.return) && r.call(a), 0)
+                              : a.next) &&
+                        !(r = r.call(a, u[1])).done)
+                    )
+                      return r;
+                    switch (((a = 0), r && (u = [2 & u[0], r.value]), u[0])) {
+                      case 0:
+                      case 1:
+                        r = u;
+                        break;
+                      case 4:
+                        return o.label++, { value: u[1], done: !1 };
+                      case 5:
+                        o.label++, (a = u[1]), (u = [0]);
+                        continue;
+                      case 7:
+                        (u = o.ops.pop()), o.trys.pop();
+                        continue;
+                      default:
+                        if (
+                          !(
+                            (r = (r = o.trys).length > 0 && r[r.length - 1]) ||
+                            (6 !== u[0] && 2 !== u[0])
+                          )
+                        ) {
+                          o = 0;
+                          continue;
+                        }
+                        if (
+                          3 === u[0] &&
+                          (!r || (u[1] > r[0] && u[1] < r[3]))
+                        ) {
+                          o.label = u[1];
+                          break;
+                        }
+                        if (6 === u[0] && o.label < r[1]) {
+                          (o.label = r[1]), (r = u);
+                          break;
+                        }
+                        if (r && o.label < r[2]) {
+                          (o.label = r[2]), o.ops.push(u);
+                          break;
+                        }
+                        r[2] && o.ops.pop(), o.trys.pop();
+                        continue;
+                    }
+                    u = e.call(t, o);
+                  } catch (t) {
+                    (u = [6, t]), (a = 0);
+                  } finally {
+                    n = r = 0;
+                  }
+                if (5 & u[0]) throw u[1];
+                return { value: u[0] ? u[1] : void 0, done: !0 };
+              })([u, c]);
+            };
+          }
+        },
+        l = function (t, e) {
+          var n = {};
+          for (var a in t)
+            Object.prototype.hasOwnProperty.call(t, a) &&
+              e.indexOf(a) < 0 &&
+              (n[a] = t[a]);
+          if (null != t && "function" == typeof Object.getOwnPropertySymbols) {
+            var r = 0;
+            for (a = Object.getOwnPropertySymbols(t); r < a.length; r++)
+              e.indexOf(a[r]) < 0 &&
+                Object.prototype.propertyIsEnumerable.call(t, a[r]) &&
+                (n[a[r]] = t[a[r]]);
+          }
+          return n;
+        },
+        d = i().create({ baseURL: o.Fv || "/", withCredentials: !0 }),
+        f = function () {
+          return c(void 0, void 0, void 0, function () {
+            var t, e, n;
+            return s(this, function (a) {
+              switch (a.label) {
+                case 0:
+                  return [4, d.get("/api/v1/categories")];
+                case 1:
+                  return (
+                    (t = a.sent()),
+                    (e = t.data.data
+                      .filter(function (t) {
+                        return !t.parentId;
+                      })
+                      .map(function (t) {
+                        return u(u({}, t), { subCategories: [] });
+                      })),
+                    (n = t.data.data.filter(function (t) {
+                      return t.parentId;
+                    })),
+                    n.map(function (t) {
+                      var n = e.find(function (e) {
+                        return e.id === t.parentId;
+                      });
+                      return t.parentId && n && n.subCategories.push(t), t;
+                    }),
+                    [2, e]
+                  );
+              }
+            });
+          });
+        },
+        v = function (t) {
+          return c(void 0, void 0, void 0, function () {
+            var e;
+            return s(this, function (n) {
+              return (
+                (e = Promise.all(
+                  t.map(function (t) {
+                    return c(void 0, void 0, void 0, function () {
+                      return s(this, function (e) {
+                        switch (e.label) {
+                          case 0:
+                            return [4, d.get("/api/v1/assets/".concat(t))];
+                          case 1:
+                            return [2, e.sent().data.data];
+                        }
+                      });
+                    });
+                  }),
+                )),
+                [2, e]
+              );
+            });
+          });
+        },
+        p = function (t) {
+          return c(void 0, void 0, void 0, function () {
+            var e,
+              n = t.limit,
+              r = void 0 === n ? 10 : n,
+              i = t.offset,
+              o = void 0 === i ? 0 : i,
+              f = t.searchTerm,
+              v = t.categories,
+              p = l(t, ["limit", "offset", "searchTerm", "categories"]);
+            return s(this, function (t) {
+              switch (t.label) {
+                case 0:
+                  return [
+                    4,
+                    c(void 0, void 0, void 0, function () {
+                      var t, e;
+                      return s(this, function (n) {
+                        switch (n.label) {
+                          case 0:
+                            return a ? [3, 2] : [4, d.get("/api/v1/providers")];
+                          case 1:
+                            (t = n.sent()),
+                              (a =
+                                null ===
+                                  (e = t.data.data.find(function (t) {
+                                    return (
+                                      "kineportal" === t.name.toLowerCase()
+                                    );
+                                  })) || void 0 === e
+                                  ? void 0
+                                  : e.id),
+                              (n.label = 2);
+                          case 2:
+                            return [2, a];
+                        }
+                      });
+                    }),
+                  ];
+                case 1:
+                  return (
+                    (e = t.sent()),
+                    [
+                      4,
+                      d.get("/api/v1/store?type=emote", {
+                        params: u(
+                          u(
+                            u(
+                              u(
+                                { limit: r, offset: o },
+                                e ? { providers: [e] } : {},
+                              ),
+                              f && f.length ? { search: f } : {},
+                            ),
+                            v && v.length ? { categories: v } : {},
+                          ),
+                          p,
+                        ),
+                      }),
+                    ]
+                  );
+                case 2:
+                  return [2, t.sent().data.data];
+              }
+            });
+          });
+        },
+        h = function () {
+          return {
+            name: "Sam",
+            uuid: "Sam",
+            isPremium: !1,
+            modelUrl: o.uA,
+            userDataUrl: o.yF,
+            thumbnailUrl: "",
+          };
+        },
+        m = function (t) {
+          var e,
+            n =
+              (null === (e = t.metadata) || void 0 === e
+                ? void 0
+                : e.assetNumber) || 0;
+          return u(u({}, t), {
+            name:
+              t.name && t.name.length
+                ? t.name
+                : "Avatar ".concat(n < 10 ? "0".concat(n) : n),
+          });
+        },
+        b = function (t) {
+          return c(void 0, void 0, void 0, function () {
+            var e = t.limit,
+              n = void 0 === e ? 10 : e,
+              a = t.offset,
+              r = void 0 === a ? 0 : a,
+              i = l(t, ["limit", "offset"]);
+            return s(this, function (t) {
+              switch (t.label) {
+                case 0:
+                  return [
+                    4,
+                    d.get("/api/v1/assets?type=avatar", {
+                      params: u({ limit: n, offset: r }, i),
+                    }),
+                  ];
+                case 1:
+                  return [
+                    2,
+                    t.sent().data.data.map(function (t) {
+                      return m(t);
+                    }),
+                  ];
+              }
+            });
+          });
+        },
+        g = function (t, e, n) {
+          return c(void 0, void 0, void 0, function () {
+            var a, r;
+            return s(this, function (i) {
+              switch (i.label) {
+                case 0:
+                  return (
+                    (a = new FormData()).append("avatar", t, t.name),
+                    a.append("source", "kinePortal"),
+                    a.append("name", e),
+                    a.append("metadata[retargetingQuality]", "Standard"),
+                    [
+                      4,
+                      d.post("/api/v1/assets/avatar/upload", a, {
+                        onUploadProgress: function (t) {
+                          n(t);
+                        },
+                      }),
+                    ]
+                  );
+                case 1:
+                  return (
+                    (r = i.sent()),
+                    [
+                      2,
+                      ((o = r.data.data.uuid),
+                      c(void 0, void 0, void 0, function () {
+                        var t;
+                        return s(this, function (e) {
+                          switch (e.label) {
+                            case 0:
+                              return [4, d.get("/api/v1/assets/".concat(o))];
+                            case 1:
+                              return (t = e.sent()), [2, m(t.data.data)];
+                          }
+                        });
+                      })),
+                    ]
+                  );
+              }
+              var o;
+            });
+          });
+        },
+        y = function (t, e) {
+          return (
+            void 0 === e && (e = !1),
+            c(void 0, void 0, void 0, function () {
+              var n;
+              return s(this, function (a) {
+                switch (a.label) {
+                  case 0:
+                    return [
+                      4,
+                      d.post("/api/v1/assets/avatar/".concat(t, "/validate"), {
+                        informKineTeam: e,
+                      }),
+                    ];
+                  case 1:
+                    return (n = a.sent()), [2, m(n.data.data)];
+                }
+              });
+            })
+          );
+        },
+        w = function (t, e) {
+          return c(void 0, void 0, void 0, function () {
+            return s(this, function (n) {
+              switch (n.label) {
+                case 0:
+                  return [
+                    4,
+                    d.put("/api/v1/assets/avatar/".concat(t, "/files"), e),
+                  ];
+                case 1:
+                  return [2, n.sent().data.data];
+              }
+            });
+          });
+        },
+        O = function (t, e) {
+          return c(void 0, void 0, void 0, function () {
+            return s(this, function (n) {
+              switch (n.label) {
+                case 0:
+                  return [
+                    4,
+                    d.post("/api/v1/assets/avatar/".concat(t, "/autorig"), e),
+                  ];
+                case 1:
+                  return [2, n.sent().data.data.files];
+              }
+            });
+          });
+        },
+        A = function (t, e) {
+          return c(void 0, void 0, void 0, function () {
+            return s(this, function (n) {
+              switch (n.label) {
+                case 0:
+                  return [4, d.put("/api/v1/assets/".concat(t), { name: e })];
+                case 1:
+                  return [2, n.sent().data.data];
+              }
+            });
+          });
+        },
+        I = function (t) {
+          return c(void 0, void 0, void 0, function () {
+            return s(this, function (e) {
+              switch (e.label) {
+                case 0:
+                  return [4, d.delete("/api/v1/assets/".concat(t))];
+                case 1:
+                  return [2, e.sent().data.data];
+              }
+            });
+          });
+        },
+        E = function (t) {
+          return c(void 0, void 0, void 0, function () {
+            return s(this, function (e) {
+              switch (e.label) {
+                case 0:
+                  return [4, d.get("/api/v1/assets/".concat(t))];
+                case 1:
+                  return [2, e.sent().data.data];
+              }
+            });
+          });
+        };
+    },
+  },
+]);

@@ -1,0 +1,128 @@
+{
+  "campaignName": "KINETIX",
+  "logo": "/campaign-images/logo.svg",
+  "iubendaConfig": {
+    "siteId": 2961899,
+    "cookiePolicyId": 16420899
+  },
+  "characters": [
+    {
+      "name": "Sam"
+    }
+  ],
+  "Home": {
+    "title": ["", "Select an emote creation mode"]
+  },
+  "RecordOnBoarding": {
+    "slider": [
+      {
+        "imageUrl": "/campaign-images/record_1.png",
+        "title": ["", "Best Practice:", "Filming Method"],
+        "text": [
+          "Mobile only creation flow",
+          "Prop your phone against a wall and film your move by following the guidelines detailed in the next slides."
+        ]
+      },
+      {
+        "imageUrl": "/campaign-images/slider_2.png",
+        "title": ["", "Best Practice:", "Frame Composition"],
+        "text": [
+          "1 person only in the frame",
+          "Good contrast - feet must be clearly visible and distinguishable from ground",
+          "The person’s limbs are all clearly visible - avoid loose clothing"
+        ]
+      },
+      {
+        "imageUrl": "/campaign-images/slider_3.png",
+        "title": ["", "Best Practice:", "Shooting your video"],
+        "text": [
+          "One continuous video - no cuts or zooming in/out during filming",
+          "Ensure the camera is stable"
+        ]
+      },
+      {
+        "imageUrl": "/campaign-images/slider_4.png",
+        "title": ["", "Best Practice:", "Video Duration"],
+        "text": [
+          "Keep length of video to 1 minute max:",
+          "Emotes can only last 10 seconds max",
+          "The shorter your video, the faster the animation will be extracted"
+        ]
+      }
+    ],
+    "nextButtonLabel": "Get Started"
+  },
+  "Record": {
+    "title": ["", "record VIDEO MODE"],
+    "text": [
+      "To make optimal use of the Editor, please upload a video featuring no more than 1 character.",
+      "The shorter your video, the faster the animation will be extracted."
+    ],
+    "buttonLabel": "Record"
+  },
+  "UploadOnBoarding": {
+    "slider": [
+      {
+        "imageUrl": "/campaign-images/upload_1.png",
+        "title": ["", "Best Practice:", "Upload video"],
+        "text": [
+          "Ensure your video file is not too large - lighter video files will allow for quicker processing.",
+          "Most video file formats are accepted (.mov, mp4, etc)."
+        ]
+      },
+      {
+        "imageUrl": "/campaign-images/slider_2.png",
+        "title": ["", "Best Practice:", "Frame Composition"],
+        "text": [
+          "1 person only in the frame",
+          "Good contrast - feet must be clearly visible and distinguishable from ground",
+          "The person’s limbs are all clearly visible - avoid loose clothing"
+        ]
+      },
+      {
+        "imageUrl": "/campaign-images/slider_3.png",
+        "title": ["", "Best Practice:", "Shooting your video"],
+        "text": [
+          "One continuous video - no cuts or zooming in/out during filming",
+          "Ensure the camera is stable"
+        ]
+      },
+      {
+        "imageUrl": "/campaign-images/slider_4.png",
+        "title": ["", "Best Practice:", "Video Duration"],
+        "text": [
+          "Keep length of video to 1 minute max:",
+          "Emotes can only last 10 seconds max",
+          "The shorter your video, the faster the animation will be extracted"
+        ]
+      }
+    ],
+    "nextButtonLabel": "Get Started"
+  },
+  "Upload": {
+    "title": ["", "upload VIDEO MODE"],
+    "text": [
+      "To make optimal use of the Editor, please upload a video featuring no more than 1 character.",
+      "The shorter your video, the faster the animation will be extracted."
+    ],
+    "buttonLabel": "Drag & Drop your video or select it from your device"
+  },
+  "Trim": {
+    "title": ["", "Trim"],
+    "subTitle": ["Select the segment you wish to extract (10 s max)"],
+    "buttonLabel": "continue"
+  },
+  "EmoteInformations": {
+    "title": ["", "Emote information"],
+    "Step1": {}
+  },
+  "EmoteCreationSuccess": {
+    "imageUrl": "/campaign-images/emote-creation-success.png",
+    "title": ["", "Emote Successfully Created!"],
+    "text": [
+      "Your Emote is being processed.",
+      "It will be available in your Emote bag within 15 minutes.",
+      "Scan a new QR Code or follow a new link in 'Create'Tab of your Emote Wheel to begin creating a new Emote."
+    ]
+  }
+}
