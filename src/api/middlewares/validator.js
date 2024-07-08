@@ -1,5 +1,5 @@
-import JoiBase from '@hapi/joi';
-import JoiDate from '@hapi/joi-date';
+import JoiBase from "joi";
+import JoiDate from "@hapi/joi-date";
 
 export const Joi = JoiBase.extend(JoiDate);
 
@@ -14,28 +14,31 @@ const validateSchema = (schema, req) => {
   });
 
   // We are only interested in those fields
-  const {
-    query, params, body, headers, files,
-  } = req;
+  const { query, params, body, headers, files } = req;
   const validationData = {
-    query, params, body, headers, files,
+    query,
+    params,
+    body,
+    headers,
+    files,
   };
 
   // We remove the empty objects to use the allowUnknown: false
-  Object
-    .keys(validationData)
-    .forEach((key) => !Object.keys(validationData[key]
-      || {}).length && delete validationData[key]);
+  Object.keys(validationData).forEach(
+    (key) =>
+      !Object.keys(validationData[key] || {}).length &&
+      delete validationData[key],
+  );
 
   const options = { allowUnknown: false, abortEarly: false };
   const { error, value } = fullSchema.validate(validationData, options);
 
   if (error) {
-    const message = error.details.map((detail) => detail?.message).join(', ');
+    const message = error.details.map((detail) => detail?.message).join(", ");
     return {
       error: true,
       details: message,
-      message: 'malformed request',
+      message: "malformed request",
     };
   }
 
@@ -49,16 +52,16 @@ const validateSchema = (schema, req) => {
   return {
     error: false,
   };
-}
+};
 
 const errorResponse = (res, error) => {
   res.error = {
     code: 400,
     message: error.message,
     data: error.details,
-  }
+  };
   return res.status(400).send(error);
-}
+};
 
 /**
  * @typedef {Function} ValidatorMiddleware
@@ -79,15 +82,14 @@ export default (schema) => (req, res, next) => {
       return next();
     }
 
-
     if (Array.isArray(schema)) {
       const validations = schema.map((s) => validateSchema(s, req));
-      const oneOk = validations.find((v) => v.error === false)
+      const oneOk = validations.find((v) => v.error === false);
       if (!oneOk) {
         return errorResponse(res, {
-          message: 'malformed request',
+          message: "malformed request",
           details: validations.map((v) => v.details),
-        })
+        });
       }
     } else {
       const validation = validateSchema(schema, req);
@@ -95,10 +97,10 @@ export default (schema) => (req, res, next) => {
         return errorResponse(res, {
           details: validation.details,
           message: validation.message,
-        })
+        });
       }
     }
-    
+
     return next();
   } catch (e) {
     return next(e);
