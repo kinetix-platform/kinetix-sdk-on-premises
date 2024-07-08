@@ -1,0 +1,179 @@
+<!--------------------------------------------------------------------------------------------------------------------->
+<br />
+
+<h2>Authentication</h2>
+
+<p>
+    In order to call these APIs, you will need an <strong>API key</strong>. Set the API key in the header <span class="code">x-api-key</span>:
+</p>
+
+<pre>x-api-key: xxxxxxxxxxxxxxxxxxxx</pre>
+
+<!--------------------------------------------------------------------------------------------------------------------->
+<br />
+
+<h2>HTTP Codes</h2>
+
+<p>
+    The APIs will return the following HTTP codes:
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong class="model-title">200 (OK)</strong></td>
+            <td>Request processed successfully. The response is different for each API, please refer to the operation's documentation</td>
+        </tr>
+        <tr>
+            <td><strong class="model-title">201 (Created)</strong></td>
+            <td>Request processed successfully. The response is different for each API, please refer to the operation's documentation</td>
+        </tr>
+        <tr>
+            <td><strong class="model-title">204 (No Content)</strong></td>
+            <td>Request processed successfully. The response is empty</td>
+        </tr>
+        <tr>
+            <td><strong class="model-title">208 (Already Reported)</strong></td>
+            <td>Request processed successfully through the cache. The response is different for each API, please refer to the operation's documentation</td>
+        </tr>
+        <tr>
+            <td><strong class="model-title">400 (Bad Request)</strong></td>
+            <td>Syntax error. For instance, when a required field was not provided. The response is as defined in <a href="#model-BadRequestError">BadRequestError</a></td>
+        </tr>
+        <tr>
+            <td><strong class="model-title">401 (Unauthorized)</strong></td>
+            <td>API key not provided or invalid. The response is as defined in <a href="#model-UnauthorizedError">UnauthorizedError</a></td>
+        </tr>
+        <tr>
+            <td><strong class="model-title">403 (Forbidden)</strong></td>
+            <td>API key is valid, but the application has insufficient permissions to complete the requested operation. The response is as defined in <a href="#model-ForbiddenError">ForbiddenError</a></td>
+        </tr>
+        <tr>
+            <td><strong class="model-title">404 (Not Found)</strong></td>
+            <td>Cannot found the asked resource. The response is as defined in <a href="#model-NotFoundError">NotFoundError</a></td>
+        </tr>
+        <tr>
+            <td><strong class="model-title">406 (Not Acceptable)</strong></td>
+            <td>This is not acceptable to process the asked ressource (mature content, etc...). The response is as defined in <a href="#model-NotAcceptableError">NotAcceptableError</a></td>
+        </tr>
+        <tr>
+            <td><strong class="model-title">409 (CONFLICT)</strong></td>
+            <td>The ressource already exists. The response is as defined in <a href="#model-ConflictError">ConflictError</a></td>
+        </tr>
+        <tr>
+            <td><strong class="model-title">413 (Payload Too Large)</strong></td>
+            <td>The request is larger than the server is willing or able to process. (video too long, etc...). The response is as defined in <a href="#model-PayloadTooLargeError">PayloadTooLargeError</a></td>
+        </tr>
+        <tr>
+            <td><strong class="model-title">425 (Too Early)</strong></td>
+            <td>The request try to update a resource before it's available. The response is as defined in <a href="#model-TooEarlyError">TooEarlyError</a></td>
+        </tr>
+        <tr>
+            <td><strong class="model-title">428 (Precondition Required)</strong></td>
+            <td>The request is valid but you need to setup something before. The response is as defined in <a href="#model-PreconditionRequiredError">PreconditionRequiredError</a></td>
+        </tr>
+        <tr>
+            <td><strong class="model-title">429 (Too Many Requests)</strong></td>
+            <td>The user has sent too many requests in a given amount of time. The response is as defined in <a href="#model-TooManyRequestsError">TooManyRequestsError</a></td>
+        </tr>
+        <tr>
+            <td><strong class="model-title">500 (Internal Server Error)</strong></td>
+            <td>API error. The response is as defined in <a href="#model-InternalError">InternalError</a></td>
+        </tr>
+    </tbody>
+</table>
+
+<br />
+
+<h3>Global Errors</h3>
+
+<p>Some of the main errors returned in a 400, 401, 403, 404 or 409 responses are provided below*:</p>
+
+<ul>
+    <li><strong>badRequest</strong>: Bad request</li>
+    <li><strong>missingApiKey</strong>: Missing API key</li>
+    <li><strong>unknownApiKey</strong>: Unknown API key</li>
+    <li><strong>expiredApiKey</strong>: Expired API key</li>
+    <li><strong>deletedApiKey</strong>: Deleted API key</li>
+    <li><strong>wrongApiKey</strong>: Wrong API key or API key doesnt have the needed permissions</li>
+    <li><strong>deletedVW</strong>: Deleted virtual world</li>
+    <li><strong>planLimitReached</strong>: You have reached your plan limit</li>
+    <li><strong>emoteNotAvailable</strong>: Emote not available for SDK usage</li>
+    <li><strong>emoteNotAllowed</strong>: Emote not allowed for SDK usage</li>
+    <li><strong>noUGC</strong>: Virtual world does not allow UGC</li>
+    <li><strong>alreadyExists</strong>: Resource already exists</li>
+</ul>
+
+<p style="font-size: 0.9em">
+    *The errors shown above are the main errors. Nonetheless, this list is not comprehensive. New codes may be added anytime without previous warning.
+</p>
+
+<!--------------------------------------------------------------------------------------------------------------------->
+<br />
+
+<h2>Webhooks</h2>
+
+<p>
+    It is recommended to subscribe to Webhook events <strong>instead</strong> of polling APIs. To do so, enable webhooks and register a URL that will receive a POST request
+    whenever one of the events below occurs.
+</p>
+
+<!--
+<p>
+    All requests have the format described in <a href="#model-Webhooks.WebhookModel">Webhooks.WebhookModel</a>.
+    The data field varies according to the webhook event type:
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Event type</th>
+            <th>Description</th>
+            <th>Payload</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong class="model-title">DocumentSigned</strong></td>
+            <td>Triggered when a document is signed.</td>
+            <td><a href="#model-Webhooks.DocumentSignedModel">Webhooks.DocumentSignedModel</a></td>
+        </tr>
+        <tr>
+            <td><strong class="model-title">DocumentApproved</strong></td>
+            <td>Triggered when a document is approved.</td>
+            <td><a href="#model-Webhooks.DocumentApprovedModel">Webhooks.DocumentApprovedModel</a></td>
+        </tr>
+        <tr>
+            <td><strong class="model-title">DocumentRefused</strong></td>
+            <td>Triggered when a document is refused.</td>
+            <td><a href="#model-Webhooks.DocumentRefusedModel">Webhooks.DocumentRefusedModel</a></td>
+        </tr>
+        <tr>
+            <td><strong class="model-title">DocumentConcluded</strong></td>
+            <td>Triggered when the flow of a document is concluded.</td>
+            <td><a href="#model-Webhooks.DocumentConcludedModel">Webhooks.DocumentConcludedModel</a></td>
+        </tr>
+        <tr>
+            <td><strong class="model-title">DocumentCanceled</strong></td>
+            <td>Triggered when the document is canceled.</td>
+            <td><a href="#model-Webhooks.DocumentCanceledModel">Webhooks.DocumentCanceledModel</a></td>
+        </tr>
+        <tr>
+            <td><strong class="model-title">DocumentsCreated (v1.50.0)</strong></td>
+            <td>Triggered when one or more documents are created.</td>
+            <td><a href="#model-Webhooks.DocumentsCreatedModel">Webhooks.DocumentsCreatedModel</a></td>
+        </tr>
+    </tbody>
+</table>
+
+<p>
+    To register your application URL and enable Webhooks, access the integrations section in your <a href="/private/organizations" target="_blank">organization's details page</a>.
+</p>
+-->
+
