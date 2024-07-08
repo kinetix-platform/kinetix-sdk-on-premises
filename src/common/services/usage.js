@@ -19,7 +19,7 @@ export const mergeUsages = (usages) =>
 
 export const getCachedUsages = async (vw, startOfMonth) => {
   const caches = await cacheService.scan(
-    `*usages:*:${vw.uuid}:${startOfMonth.unix()}:${vw.plan.id}:*`,
+    `*usages:*:${vw.uuid}:${startOfMonth.unix()}:*`,
   );
   return Promise.all(
     caches.map(async (rawKey) => {

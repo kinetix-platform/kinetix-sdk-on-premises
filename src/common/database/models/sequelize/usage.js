@@ -9,7 +9,6 @@ class Usage extends Model {
       as: "virtualWorld",
       onDelete: "CASCADE",
     });
-    Usage.belongsTo(models.Plan, { as: "plan", onDelete: "CASCADE" });
   }
 }
 
@@ -29,11 +28,6 @@ Usage.init(
       type: DataTypes.BIGINT,
       field: "key_id",
       allowNull: true,
-    },
-    planId: {
-      type: DataTypes.BIGINT,
-      field: "plan_id",
-      allowNull: false,
     },
     periodStart: {
       type: DataTypes.DATE,

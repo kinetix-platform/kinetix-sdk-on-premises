@@ -1,9 +1,9 @@
 import express from "express";
-import controller from "../../../controllers/user.js";
-import validator from "../../../middlewares/validator.js";
-import keyAuth from "../../../middlewares/keyAuth.js";
-import keyRead from "../../../middlewares/keyRead.js";
-import keyWrite from "../../../middlewares/keyWrite.js";
+import controller from "#common/controllers/user.js";
+import validator from "#common/middlewares/validator.js";
+import keyAuth from "#common/middlewares/keyAuth.js";
+import keyRead from "#common/middlewares/keyRead.js";
+import keyWrite from "#common/middlewares/keyWrite.js";
 import {
   getEmotes,
   addEmote,
@@ -11,7 +11,6 @@ import {
   deleteEmote,
   updateEmote,
 } from "./schema.js";
-import monitor from "../../../middlewares/monitor.js";
 
 const router = express.Router();
 
@@ -20,7 +19,6 @@ router.post(
   validator(addEmote),
   keyAuth,
   keyWrite,
-  monitor("calls"),
   controller.addEmote,
 );
 router.delete(
@@ -28,7 +26,6 @@ router.delete(
   validator(deleteEmote),
   keyAuth,
   keyWrite,
-  monitor("calls"),
   controller.removeEmote,
 );
 router.put(
@@ -36,7 +33,6 @@ router.put(
   validator(updateEmote),
   keyAuth,
   keyWrite,
-  monitor("calls"),
   controller.updateEmote,
 );
 router.get(
@@ -44,7 +40,6 @@ router.get(
   validator(getEmotes),
   keyAuth,
   keyRead,
-  monitor("calls"),
   controller.getEmotes,
 );
 router.get(
@@ -52,7 +47,6 @@ router.get(
   validator(getProcesses),
   keyAuth,
   keyRead,
-  monitor("calls"),
   controller.getProcesses,
 );
 

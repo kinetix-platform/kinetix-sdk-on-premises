@@ -1,6 +1,6 @@
 import Sequelize from "sequelize";
 import sequelize from "../../sequelize.js";
-import { truncate } from "#common/services/string.js";
+import { truncate } from "../../../helpers/string.js";
 
 const { Model, DataTypes } = Sequelize;
 

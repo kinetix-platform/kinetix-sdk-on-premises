@@ -1,4 +1,4 @@
-import { Joi } from "../../../middlewares/validator.js";
+import { Joi } from "#common/middlewares/validator.js";
 
 export const addEmotes = {
   body: Joi.object().keys({

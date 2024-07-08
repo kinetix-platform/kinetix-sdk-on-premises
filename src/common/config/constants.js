@@ -44,3 +44,15 @@ export const API_PORT = process.env.API_PORT
 export const API_CORS_ORIGINS = process.env.API_CORS_ORIGINS
   ? process.env.API_CORS_ORIGINS.split(";")
   : ["*"];
+
+export const PORTAL_PORT = process.env.PORTAL_PORT
+  ? parseInt(PORTAL_PORT, 10)
+  : 4001;
+
+export const PORTAL_CORS_ORIGINS = process.env.PORTAL_CORS_ORIGINS
+  ? process.PORTAL_CORS_ORIGINS.split(";")
+  : ["*"];
+
+export const EXPOSE_SWAGGER = process.env.EXPOSE_SWAGGER
+  ? process.env.EXPOSE_SWAGGER === "true"
+  : true;

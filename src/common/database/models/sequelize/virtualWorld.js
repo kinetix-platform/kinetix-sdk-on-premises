@@ -14,11 +14,6 @@ class VirtualWorld extends Model {
       onDelete: "CASCADE",
     });
     VirtualWorld.hasMany(models.Key, { as: "keys", onDelete: "CASCADE" });
-    VirtualWorld.hasOne(models.Plan, {
-      as: "plan",
-      sourceKey: "planId",
-      foreignKey: "id",
-    });
     VirtualWorld.hasMany(models.Usage, { as: "usages" });
     VirtualWorld.hasMany(models.VirtualWorldAlias, {
       as: "alias",
@@ -52,11 +47,6 @@ VirtualWorld.init(
     name: {
       type: DataTypes.STRING(255),
       allowNull: false,
-    },
-    planId: {
-      type: DataTypes.BIGINT,
-      allowNull: false,
-      field: "plan_id",
     },
     configuration: {
       type: DataTypes.JSON,

@@ -3,21 +3,6 @@
  *
  *components:
  *  schemas:
- *    Plan:
- *      type: "object"
- *      properties:
- *        name:
- *          type: "string"
- *        mugeLimit:
- *          type: "number"
- *        totalUsersLimit:
- *          type: "number"
- *        callsLimit:
- *          type: "number"
- *        createdAt:
- *          type: "string"
- *          format: date-time
- *
  *    Usage:
  *      type: "object"
  *      properties:
@@ -38,8 +23,6 @@
  *          type: "number"
  *        virtual_world_id:
  *          type: "string"
- *        plan:
- *          $ref: '#/components/schemas/Plan'
  *        createdAt:
  *          type: "string"
  *          format: date-time

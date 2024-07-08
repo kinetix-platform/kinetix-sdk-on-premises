@@ -1,5 +1,4 @@
 import Key from "./key.js";
-import Plan from "./plan.js";
 import Usage from "./usage.js";
 import User from "./user.js";
 import UserActivity from "./userActivity.js";
@@ -21,7 +20,6 @@ export const associationModels = {
 
 export default {
   Key,
-  Plan,
   Usage,
   User,
   UserEmote,

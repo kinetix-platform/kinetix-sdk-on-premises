@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import loggerMiddleware from "#common/middlewares/logger.js";
 import errorMiddleware from "#common/middlewares/error.js";
 import logger from "#common/services/logger.js";
-import { API_PORT, API_CORS_ORIGINS } from "#common/config/constants.js";
+import { PORTAL_PORT, PORTAL_CORS_ORIGINS } from "#common/config/constants.js";
 import routers from "./routers/index.js";
 
 const { associateModels } = await import("#common/database/sequelize.js");
@@ -16,7 +16,7 @@ const app = express();
 app.set("trust proxy", 1);
 app.use(
   cors({
-    origin: API_CORS_ORIGINS,
+    origin: PORTAL_CORS_ORIGINS,
     credentials: true,
   }),
 );
@@ -30,7 +30,7 @@ app.use(errorMiddleware);
 class App {
   async start() {
     await new Promise((resolve) => {
-      const server = app.listen(API_PORT, () => {
+      const server = app.listen(PORTAL_PORT, () => {
         server.timeout = 1000 * 60 * 60;
         server.headersTimeout = 1000 * 60 * 60;
         createTerminus(server, {
@@ -53,7 +53,7 @@ class App {
         resolve(server);
       });
     });
-    logger.info(`API server started on ${API_PORT}`);
+    logger.info(`Portal server started on ${PORTAL_PORT}`);
   }
 
   async stop() {

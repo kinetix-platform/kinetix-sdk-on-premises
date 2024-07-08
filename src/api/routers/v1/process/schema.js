@@ -1,4 +1,4 @@
-import { Joi } from "../../../middlewares/validator.js";
+import { Joi } from "#common/middlewares/validator.js";
 
 const file = ({ allowedTypes = [] }) =>
   Joi.object()

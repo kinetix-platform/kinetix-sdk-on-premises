@@ -4,7 +4,6 @@ import VirtualWorld from "#common/database/models/sequelize/virtualWorld.js";
 import Key from "#common/database/models/sequelize/key.js";
 import User from "#common/database/models/sequelize/user.js";
 import VirtualWorldEmoteModel from "#common/database/models/sequelize/virtualWorldEmote.js";
-import Plan from "#common/database/models/sequelize/plan.js";
 import VirtualWorldUser from "#common/database/models/sequelize/virtualWorldUser.js";
 
 const { USE_WHITELIST } = process.env;
@@ -20,13 +19,7 @@ export class VirtualWorldService extends CrudService {
       attributes: {
         include: fields,
       },
-      include: [
-        {
-          model: Plan,
-          as: "plan",
-          attributes: ["name", "mugeLimit", "totalUsersLimit", "callsLimit"],
-        },
-      ],
+      include: [],
       ...options,
     });
   }
@@ -37,13 +30,7 @@ export class VirtualWorldService extends CrudService {
       attributes: {
         include: fields,
       },
-      include: [
-        {
-          model: Plan,
-          as: "plan",
-          attributes: ["name", "mugeLimit", "totalUsersLimit", "callsLimit"],
-        },
-      ],
+      include: [],
       ...options,
     });
   }

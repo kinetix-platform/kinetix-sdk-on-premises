@@ -27,7 +27,7 @@ export default {
       await Promise.all(
         Object.entries(usageKeys).map(async ([vwUuid, vwKeys]) => {
           const vw = await vwService.getBy({ uuid: vwUuid });
-          // Then group by period/plan/key groups
+          // Then group by period/key groups
           const keysByGroup = _.groupBy(vwKeys, (key) => {
             return key.split(":").slice(-3).join(":");
           });
@@ -35,13 +35,12 @@ export default {
           await Promise.all(
             Object.entries(keysByGroup).map(
               async ([groupString, groupKeys]) => {
-                const [timestamp, planId, keyIdString] = groupString.split(":");
+                const [timestamp, keyIdString] = groupString.split(":");
                 const keyId = keyIdString === "undefined" ? null : keyIdString;
                 // Extract corresponding stored usages and cached instances entries
                 const storedUsage = await usageService.getAll(
                   {
                     periodStart: moment.unix(timestamp).utcOffset(0),
-                    planId,
                     virtualWorldId: vw.id,
                     keyId,
                   },

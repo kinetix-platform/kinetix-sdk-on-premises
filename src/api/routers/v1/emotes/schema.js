@@ -1,4 +1,4 @@
-import { Joi } from "../../../middlewares/validator.js";
+import { Joi } from "#common/middlewares/validator.js";
 
 export const get = {
   params: Joi.object()
