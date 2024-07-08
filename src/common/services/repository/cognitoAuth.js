@@ -1,11 +1,11 @@
-import CognitoAuth from '#common/database/models/sequelize/cognitoAuth.js';
-import CrudService from './crud.js';
+import CognitoAuth from "#common/database/models/sequelize/cognitoAuth.js";
+import CrudService from "./crud.js";
 
 export class CognitosService extends CrudService {
   constructor() {
-    super('cognito_auth', CognitoAuth);
+    super("cognito_auth", CognitoAuth);
   }
-  
+
   async createOrUpdate(cognitoUuid) {
     let auth = await this.getBy({ cognitoUuid });
     if (auth) {
@@ -14,10 +14,10 @@ export class CognitosService extends CrudService {
       auth = new CognitoAuth({
         cognitoUuid,
         firstConnection: new Date(),
-        lastConnection: new Date()
+        lastConnection: new Date(),
       });
     }
-    
+
     await auth.save();
   }
 }

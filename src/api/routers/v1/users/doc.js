@@ -124,7 +124,7 @@
  * /v1/users/{userId}/emotes/{emoteUuid}:
  *    post:
  *      summary: Associate emote to user
- *      deprecated: true 
+ *      deprecated: true
  *      tags:
  *        - /users
  *      description: Associate an emote to a user. The emote must be associated to requesting virtual world

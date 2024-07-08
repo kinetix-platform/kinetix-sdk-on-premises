@@ -1,5 +1,5 @@
-import express from 'express';
-import users from './users/index.js';
+import express from "express";
+import users from "./users/index.js";
 
 const routers = {
   users,
@@ -7,7 +7,8 @@ const routers = {
 
 const router = express.Router();
 
-Object.entries(routers)
-  .forEach(([name, subRouter]) => router.use(`/${name}/`, subRouter));
+Object.entries(routers).forEach(([name, subRouter]) =>
+  router.use(`/${name}/`, subRouter),
+);
 
 export default router;

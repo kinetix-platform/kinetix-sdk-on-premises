@@ -1,12 +1,11 @@
-import { Sequelize } from 'sequelize';
-import moment from 'moment';
-import sequelizeConfig from '../config/sequelize.js';
+import { Sequelize } from "sequelize";
+import moment from "moment";
+import sequelizeConfig from "../config/sequelize.js";
 
 const { NODE_ENV } = process.env;
 
-const {
-  host, replicaHost, port, username, password, database, dialect,
-} = sequelizeConfig;
+const { host, replicaHost, port, username, password, database, dialect } =
+  sequelizeConfig;
 
 /**
  * Every model (except relation tables) have an associate() method.
@@ -15,7 +14,7 @@ const {
  */
 export const associateModels = async () => {
   const { default: models, associationModels } = await import(
-    '#common/database/models/sequelize/index.js'
+    "#common/database/models/sequelize/index.js"
   );
   const allModels = { ...models, ...associationModels };
   Object.entries(models).forEach((entry) => entry[1].associate(allModels));
@@ -29,8 +28,8 @@ const getRandomWithinRange = (min, max) => {
 
 let sequelize;
 
-if (NODE_ENV === 'production') {
-  const maxConnectionAge = moment.duration(10, 'minutes').asSeconds();
+if (NODE_ENV === "production") {
+  const maxConnectionAge = moment.duration(10, "minutes").asSeconds();
   const pool = {
     handleDisconnects: true,
     min: 1,
@@ -40,11 +39,11 @@ if (NODE_ENV === 'production') {
       if (!obj.recycleWhen) {
         obj.recycleWhen = moment().add(
           getRandomWithinRange(maxConnectionAge, maxConnectionAge * 2),
-          'seconds',
+          "seconds",
         );
         return true;
       }
-      return moment().diff(obj.recycleWhen, 'seconds') < 0;
+      return moment().diff(obj.recycleWhen, "seconds") < 0;
     },
   };
   const master = {
@@ -58,7 +57,7 @@ if (NODE_ENV === 'production') {
   const replica = { ...master, host: replicaHost };
   sequelize = new Sequelize(null, null, null, {
     dialect,
-    ...((process.env.SEQUELIZE_LOGGING || 'true') !== 'true' && {
+    ...((process.env.SEQUELIZE_LOGGING || "true") !== "true" && {
       logging: false,
     }),
     replication: {
@@ -68,8 +67,8 @@ if (NODE_ENV === 'production') {
   });
 }
 
-export default sequelize
-  || new Sequelize(
+export default sequelize ||
+  new Sequelize(
     database,
     username,
     password,
@@ -77,7 +76,7 @@ export default sequelize
       host,
       port,
       dialect,
-      ...((process.env.SEQUELIZE_LOGGING || 'true') !== 'true' && {
+      ...((process.env.SEQUELIZE_LOGGING || "true") !== "true" && {
         logging: false,
       }),
       pool: {

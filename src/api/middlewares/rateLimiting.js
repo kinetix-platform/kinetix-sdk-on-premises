@@ -1,6 +1,6 @@
-import httpStatus from 'http-status';
-import moment from 'moment';
-import cacheService from '#common/services/cache.js';
+import httpStatus from "http-status";
+import moment from "moment";
+import cacheService from "#common/services/cache.js";
 import HttpError from "#api/helpers/error.js";
 
 const WINDOW_SIZE_IN_MINUTES = 5;
@@ -24,21 +24,43 @@ export default (prefix, max_request) => async (req, res, next) => {
       await cacheService.set(redisKey, JSON.stringify(newRecord));
       return next();
     }
-    
-    let windowStartTimestamp = moment().subtract(WINDOW_SIZE_IN_MINUTES, 'minutes').unix();
+
+    let windowStartTimestamp = moment()
+      .subtract(WINDOW_SIZE_IN_MINUTES, "minutes")
+      .unix();
     let requestsWithinWindow = record.filter((entry) => {
       return entry.requestTimeStamp > windowStartTimestamp;
     });
-    let totalWindowRequestsCount = requestsWithinWindow.reduce((accumulator, entry) => {
-      return accumulator + entry.requestCount;
-    }, 0);
+    let totalWindowRequestsCount = requestsWithinWindow.reduce(
+      (accumulator, entry) => {
+        return accumulator + entry.requestCount;
+      },
+      0,
+    );
 
-    if (MAX_WINDOW_REQUEST_COUNT > 0 && totalWindowRequestsCount >= MAX_WINDOW_REQUEST_COUNT) {
-      return next(new HttpError(null, {}, TOO_MANY_REQUESTS, `You have exceeded the ${MAX_WINDOW_REQUEST_COUNT} requests in ${WINDOW_SIZE_IN_MINUTES} minutes limit!`, 'rateLimiting'));
+    if (
+      MAX_WINDOW_REQUEST_COUNT > 0 &&
+      totalWindowRequestsCount >= MAX_WINDOW_REQUEST_COUNT
+    ) {
+      return next(
+        new HttpError(
+          null,
+          {},
+          TOO_MANY_REQUESTS,
+          `You have exceeded the ${MAX_WINDOW_REQUEST_COUNT} requests in ${WINDOW_SIZE_IN_MINUTES} minutes limit!`,
+          "rateLimiting",
+        ),
+      );
     } else {
       let lastRequestLog = record[record.length - 1];
-      let potentialCurrentWindowIntervalStartTimeStamp = currentRequestTime.clone().subtract(WINDOW_LOG_INTERVAL_IN_MINUTES, 'minute').unix();
-      if (lastRequestLog.requestTimeStamp > potentialCurrentWindowIntervalStartTimeStamp) {
+      let potentialCurrentWindowIntervalStartTimeStamp = currentRequestTime
+        .clone()
+        .subtract(WINDOW_LOG_INTERVAL_IN_MINUTES, "minute")
+        .unix();
+      if (
+        lastRequestLog.requestTimeStamp >
+        potentialCurrentWindowIntervalStartTimeStamp
+      ) {
         lastRequestLog.requestCount++;
         record[record.length - 1] = lastRequestLog;
       } else {
@@ -51,6 +73,8 @@ export default (prefix, max_request) => async (req, res, next) => {
       next();
     }
   } catch (error) {
-    return next(new HttpError(error, {}, INTERNAL_SERVER_ERROR, 'An error occured.'));
+    return next(
+      new HttpError(error, {}, INTERNAL_SERVER_ERROR, "An error occured."),
+    );
   }
 };

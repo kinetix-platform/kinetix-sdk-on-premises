@@ -1,5 +1,5 @@
-import Sequelize from 'sequelize';
-import httpStatus from 'http-status';
+import Sequelize from "sequelize";
+import httpStatus from "http-status";
 
 const { UniqueConstraintError } = Sequelize;
 const { CONFLICT } = httpStatus;
@@ -9,7 +9,7 @@ class CrudService {
     this.model = model;
     this.name = name;
   }
-  
+
   /**
    * create an entity in database
    * @param data users input data
@@ -26,8 +26,8 @@ class CrudService {
       throw e;
     }
   }
-  
-  async getAll(where, fields = ['*'], options = {}) {
+
+  async getAll(where, fields = ["*"], options = {}) {
     return this.model.findAll({
       where,
       attributes: {
@@ -36,22 +36,22 @@ class CrudService {
       ...options,
     });
   }
-  
+
   async remove(id) {
     return this.model.destroy({ where: { id } });
   }
-  
-  async getBy(where, fields = ['*'], include = []) {
+
+  async getBy(where, fields = ["*"], include = []) {
     return this.model.findOne({
       where,
       attributes: {
         include: fields,
       },
-      include
+      include,
     });
   }
-  
-  async countBy(where, fields = ['*']) {
+
+  async countBy(where, fields = ["*"]) {
     return this.model.count({
       where,
       attributes: {
@@ -59,15 +59,15 @@ class CrudService {
       },
     });
   }
-  
+
   async update(data) {
     const { id } = data;
     if (!id) {
-      throw new Error('No id to update');
+      throw new Error("No id to update");
     }
     return this.model.update(data, { where: { id } });
   }
-  
+
   async get(id) {
     return this.model.findOne({ where: { id: parseInt(id) } });
   }

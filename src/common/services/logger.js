@@ -1,5 +1,5 @@
-import winston from 'winston';
-import os from 'os';
+import winston from "winston";
+import os from "os";
 
 const {
   ENV_NAME,
@@ -11,28 +11,26 @@ class Logger {
   constructor() {
     this.logger = winston.createLogger({
       format: winston.format.json(),
-      level: 'http',
+      level: "http",
       defaultMeta: {
         ...(SERVICE_NAME && { service: SERVICE_NAME }),
         ...(NPM_PACKAGE_VERSION && { version: NPM_PACKAGE_VERSION }),
         ...(ENV_NAME && { env: ENV_NAME }),
         hostname: os.hostname(),
       },
-      transports: [
-        new winston.transports.Console(),
-      ],
+      transports: [new winston.transports.Console()],
     });
   }
 
   static removeSensitiveData(requestData) {
     return requestData?.body?.password
       ? {
-        ...requestData,
-        body: {
-          ...requestData.body,
-          password: '***SENSITIVE_DATA***',
-        },
-      }
+          ...requestData,
+          body: {
+            ...requestData.body,
+            password: "***SENSITIVE_DATA***",
+          },
+        }
       : requestData;
   }
 

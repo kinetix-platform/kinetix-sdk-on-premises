@@ -1,13 +1,13 @@
-import httpStatus from 'http-status';
-import HttpError from '#api/helpers/error.js';
+import httpStatus from "http-status";
+import HttpError from "#api/helpers/error.js";
 
 const { FORBIDDEN } = httpStatus;
 
 export default async (req, res, next) => {
   const { vw } = req;
-  const [ key ] = vw.keys;
+  const [key] = vw.keys;
   if (!key.canWrite) {
-    return next(new HttpError(null, {}, FORBIDDEN, 'Wrong API key'));
+    return next(new HttpError(null, {}, FORBIDDEN, "Wrong API key"));
   }
   return next();
 };

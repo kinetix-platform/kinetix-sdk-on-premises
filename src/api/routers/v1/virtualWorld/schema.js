@@ -1,4 +1,4 @@
-import { Joi } from '../../../middlewares/validator.js';
+import { Joi } from "../../../middlewares/validator.js";
 
 export const addEmotes = {
   body: Joi.object().keys({
@@ -13,8 +13,8 @@ export const createUser = {
 };
 
 export const getEmotes = {
-  query : Joi.object().keys({
-    mature: Joi.boolean()
+  query: Joi.object().keys({
+    mature: Joi.boolean(),
   }),
 };
 
@@ -39,8 +39,8 @@ export const updateConf = {
 export const aliasGetByName = {
   params: Joi.object().keys({
     name: Joi.string().required(),
-  })
-}
+  }),
+};
 
 export const usersGetAll = {
   params: Joi.object().keys({
@@ -48,7 +48,7 @@ export const usersGetAll = {
   }),
   query: Joi.object().keys({
     name: Joi.string(),
-    orderBy: Joi.string().valid('createdAt','userId'),
-    orderDirection: Joi.string().valid('ASC', 'DESC'),
-  })
+    orderBy: Joi.string().valid("createdAt", "userId"),
+    orderDirection: Joi.string().valid("ASC", "DESC"),
+  }),
 };

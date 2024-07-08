@@ -1,10 +1,27 @@
 /* eslint-disable no-useless-escape */
 
-export const averageEmotePerUser = ({limit, offset = 0, orderBy, orderDirection = 'DESC', virtualWorldUuids = [], countOnly = false, userBlacklist = []}) => {
-  const vwFilter = virtualWorldUuids.length ? `AND virtual_worlds.uuid in (${JSON.stringify(virtualWorldUuids).replace(/[\[\]]/g, '').replace(/"/g, "'")})\n` : '';
-  const blacklist = userBlacklist.length ? `AND virtual_worlds.cognito_uuid NOT IN (${JSON.stringify(userBlacklist).replace(/[\[\]]/g, '').replace(/"/g, "'")})\n` : '';
-  const pagination = limit && !countOnly ? `LIMIT ${limit} OFFSET ${offset}` : '';
-  const order = orderBy ? `ORDER BY ${orderBy} ${orderDirection}` : '';
+export const averageEmotePerUser = ({
+  limit,
+  offset = 0,
+  orderBy,
+  orderDirection = "DESC",
+  virtualWorldUuids = [],
+  countOnly = false,
+  userBlacklist = [],
+}) => {
+  const vwFilter = virtualWorldUuids.length
+    ? `AND virtual_worlds.uuid in (${JSON.stringify(virtualWorldUuids)
+        .replace(/[\[\]]/g, "")
+        .replace(/"/g, "'")})\n`
+    : "";
+  const blacklist = userBlacklist.length
+    ? `AND virtual_worlds.cognito_uuid NOT IN (${JSON.stringify(userBlacklist)
+        .replace(/[\[\]]/g, "")
+        .replace(/"/g, "'")})\n`
+    : "";
+  const pagination =
+    limit && !countOnly ? `LIMIT ${limit} OFFSET ${offset}` : "";
+  const order = orderBy ? `ORDER BY ${orderBy} ${orderDirection}` : "";
   const query = `SELECT
         id,
         name,
@@ -26,16 +43,40 @@ export const averageEmotePerUser = ({limit, offset = 0, orderBy, orderDirection 
     ${order}
     ${pagination}
     `;
-  
-  return countOnly ? `SELECT COUNT(*) as count FROM (${query}) AS subquery` : query;
-}
 
-export const rankingUserPerEmote = ({limit, offset = 0, orderBy, orderDirection = 'DESC', virtualWorldUuids = [], emoteUuids = [], userBlacklist = [], countOnly = false}) => {
-  const vwFilter = virtualWorldUuids.length ? `AND virtual_worlds.uuid in (${JSON.stringify(virtualWorldUuids).replace(/[\[\]]/g, '').replace(/"/g, "'")})\n` : '';
-  const emoteFilter = emoteUuids.length ? `AND users_emotes.emote_uuid in (${JSON.stringify(emoteUuids).replace(/[\[\]]/g, '').replace(/"/g, "'")})\n` : '';
-  const blacklist = userBlacklist.length ? `AND virtual_worlds.cognito_uuid NOT IN (${JSON.stringify(userBlacklist).replace(/[\[\]]/g, '').replace(/"/g, "'")})\n` : '';
-  const pagination = limit && !countOnly ? `LIMIT ${limit} OFFSET ${offset}` : '';
-  const order = orderBy ? `ORDER BY ${orderBy} ${orderDirection}` : '';
+  return countOnly
+    ? `SELECT COUNT(*) as count FROM (${query}) AS subquery`
+    : query;
+};
+
+export const rankingUserPerEmote = ({
+  limit,
+  offset = 0,
+  orderBy,
+  orderDirection = "DESC",
+  virtualWorldUuids = [],
+  emoteUuids = [],
+  userBlacklist = [],
+  countOnly = false,
+}) => {
+  const vwFilter = virtualWorldUuids.length
+    ? `AND virtual_worlds.uuid in (${JSON.stringify(virtualWorldUuids)
+        .replace(/[\[\]]/g, "")
+        .replace(/"/g, "'")})\n`
+    : "";
+  const emoteFilter = emoteUuids.length
+    ? `AND users_emotes.emote_uuid in (${JSON.stringify(emoteUuids)
+        .replace(/[\[\]]/g, "")
+        .replace(/"/g, "'")})\n`
+    : "";
+  const blacklist = userBlacklist.length
+    ? `AND virtual_worlds.cognito_uuid NOT IN (${JSON.stringify(userBlacklist)
+        .replace(/[\[\]]/g, "")
+        .replace(/"/g, "'")})\n`
+    : "";
+  const pagination =
+    limit && !countOnly ? `LIMIT ${limit} OFFSET ${offset}` : "";
+  const order = orderBy ? `ORDER BY ${orderBy} ${orderDirection}` : "";
   const query = `SELECT
         emote_uuid as uuid,
         sum(user_count_per_emote) as count
@@ -55,17 +96,40 @@ export const rankingUserPerEmote = ({limit, offset = 0, orderBy, orderDirection 
     GROUP BY emote_uuid
     ${order}
     ${pagination}
-    `
-  return countOnly ? `SELECT COUNT(*) as count FROM (${query}) AS subquery` : query;
-}
+    `;
+  return countOnly
+    ? `SELECT COUNT(*) as count FROM (${query}) AS subquery`
+    : query;
+};
 
-export const rankingEmotesPerVW = ({limit, offset = 0, orderBy, orderDirection = 'DESC', virtualWorldUuids = [], isUGE, isDeleted, userBlacklist = [], countOnly = false }) => {
-  const vwFilter = virtualWorldUuids.length ? `virtual_worlds.uuid in (${JSON.stringify(virtualWorldUuids).replace(/[\[\]]/g, '').replace(/"/g, "'")})\n` : '';
-  const blacklist = userBlacklist.length ? `AND virtual_worlds.cognito_uuid NOT IN (${JSON.stringify(userBlacklist).replace(/[\[\]]/g, '').replace(/"/g, "'")})\n` : '';
-  const ugeFilter = isUGE ? `AND users_emotes.is_uge = ${isUGE}\n` : '';
-  const deletionFilter = isDeleted ? `AND users_emotes.is_deleted = ${isDeleted}\n` : '';
-  const pagination = limit && !countOnly ? `LIMIT ${limit} OFFSET ${offset}` : '';
-  const order = orderBy ? `ORDER BY ${orderBy} ${orderDirection}` : '';
+export const rankingEmotesPerVW = ({
+  limit,
+  offset = 0,
+  orderBy,
+  orderDirection = "DESC",
+  virtualWorldUuids = [],
+  isUGE,
+  isDeleted,
+  userBlacklist = [],
+  countOnly = false,
+}) => {
+  const vwFilter = virtualWorldUuids.length
+    ? `virtual_worlds.uuid in (${JSON.stringify(virtualWorldUuids)
+        .replace(/[\[\]]/g, "")
+        .replace(/"/g, "'")})\n`
+    : "";
+  const blacklist = userBlacklist.length
+    ? `AND virtual_worlds.cognito_uuid NOT IN (${JSON.stringify(userBlacklist)
+        .replace(/[\[\]]/g, "")
+        .replace(/"/g, "'")})\n`
+    : "";
+  const ugeFilter = isUGE ? `AND users_emotes.is_uge = ${isUGE}\n` : "";
+  const deletionFilter = isDeleted
+    ? `AND users_emotes.is_deleted = ${isDeleted}\n`
+    : "";
+  const pagination =
+    limit && !countOnly ? `LIMIT ${limit} OFFSET ${offset}` : "";
+  const order = orderBy ? `ORDER BY ${orderBy} ${orderDirection}` : "";
   const query = `SELECT
         COUNT(DISTINCT emote_uuid) as emotes,
         name
@@ -85,16 +149,37 @@ export const rankingEmotesPerVW = ({limit, offset = 0, orderBy, orderDirection =
     GROUP BY id, name
     ${order}
     ${pagination}
-    `
-  return countOnly ? `SELECT COUNT(*) as count FROM (${query}) AS subquery` : query;
-}
+    `;
+  return countOnly
+    ? `SELECT COUNT(*) as count FROM (${query}) AS subquery`
+    : query;
+};
 
-export const rankingUserData = ({limit, offset = 0, orderBy, orderDirection = 'DESC', userBlacklist = [], userWhitelist = [], countOnly = false}) => {
-  const whitelist = userWhitelist.length ? `AND virtual_worlds.cognito_uuid in (${JSON.stringify(userWhitelist).replace(/[\[\]]/g, '').replace(/"/g, "'")})\n` : '';
-  const blacklist = userBlacklist.length ? `AND virtual_worlds.cognito_uuid NOT IN (${JSON.stringify(userBlacklist).replace(/[\[\]]/g, '').replace(/"/g, "'")})\n` : '';
-  
-  const pagination = limit && !countOnly ? `LIMIT ${limit} OFFSET ${offset}` : '';
-  const order = orderBy ? `ORDER BY ${orderBy} ${orderDirection} NULLS LAST` : '';
+export const rankingUserData = ({
+  limit,
+  offset = 0,
+  orderBy,
+  orderDirection = "DESC",
+  userBlacklist = [],
+  userWhitelist = [],
+  countOnly = false,
+}) => {
+  const whitelist = userWhitelist.length
+    ? `AND virtual_worlds.cognito_uuid in (${JSON.stringify(userWhitelist)
+        .replace(/[\[\]]/g, "")
+        .replace(/"/g, "'")})\n`
+    : "";
+  const blacklist = userBlacklist.length
+    ? `AND virtual_worlds.cognito_uuid NOT IN (${JSON.stringify(userBlacklist)
+        .replace(/[\[\]]/g, "")
+        .replace(/"/g, "'")})\n`
+    : "";
+
+  const pagination =
+    limit && !countOnly ? `LIMIT ${limit} OFFSET ${offset}` : "";
+  const order = orderBy
+    ? `ORDER BY ${orderBy} ${orderDirection} NULLS LAST`
+    : "";
   const query = `SELECT
     virtual_worlds.cognito_uuid,
     cognito_auth.last_connection,
@@ -107,31 +192,58 @@ export const rankingUserData = ({limit, offset = 0, orderBy, orderDirection = 'D
     GROUP BY virtual_worlds.cognito_uuid, cognito_auth.last_connection
     ${order}
     ${pagination}
-    `
-  
-  return countOnly ? `SELECT COUNT(*) as count FROM (${query}) AS subquery` : query;
-}
+    `;
 
-export const apiKeysByVW = ({limit, offset, orderBy = 'last_usage', orderDirection = 'DESC', virtualWorldUuids = [], userBlacklist = [],  userWhitelist = [], countOnly, cachedValues}) => {
-  const whitelist = userWhitelist.length ? `AND virtual_worlds.cognito_uuid IN (${JSON.stringify(userWhitelist).replace(/[\[\]]/g, '').replace(/"/g, "'")})\n` : '';
-  const blacklist = userBlacklist.length ? `AND virtual_worlds.cognito_uuid NOT IN (${JSON.stringify(userBlacklist).replace(/[\[\]]/g, '').replace(/"/g, "'")})\n` : '';
-  const vwFilter = virtualWorldUuids.length ? `AND virtual_worlds.uuid IN (${JSON.stringify(virtualWorldUuids).replace(/[\[\]]/g, '').replace(/"/g, "'")})\n` : '';
-  const pagination = limit && !countOnly ? `LIMIT ${limit} OFFSET ${offset}` : '';
-  const order = orderBy ? `ORDER BY ${orderBy} ${orderDirection} NULLS LAST` : '';
+  return countOnly
+    ? `SELECT COUNT(*) as count FROM (${query}) AS subquery`
+    : query;
+};
+
+export const apiKeysByVW = ({
+  limit,
+  offset,
+  orderBy = "last_usage",
+  orderDirection = "DESC",
+  virtualWorldUuids = [],
+  userBlacklist = [],
+  userWhitelist = [],
+  countOnly,
+  cachedValues,
+}) => {
+  const whitelist = userWhitelist.length
+    ? `AND virtual_worlds.cognito_uuid IN (${JSON.stringify(userWhitelist)
+        .replace(/[\[\]]/g, "")
+        .replace(/"/g, "'")})\n`
+    : "";
+  const blacklist = userBlacklist.length
+    ? `AND virtual_worlds.cognito_uuid NOT IN (${JSON.stringify(userBlacklist)
+        .replace(/[\[\]]/g, "")
+        .replace(/"/g, "'")})\n`
+    : "";
+  const vwFilter = virtualWorldUuids.length
+    ? `AND virtual_worlds.uuid IN (${JSON.stringify(virtualWorldUuids)
+        .replace(/[\[\]]/g, "")
+        .replace(/"/g, "'")})\n`
+    : "";
+  const pagination =
+    limit && !countOnly ? `LIMIT ${limit} OFFSET ${offset}` : "";
+  const order = orderBy
+    ? `ORDER BY ${orderBy} ${orderDirection} NULLS LAST`
+    : "";
   const filter = `WHERE
     virtual_worlds.is_deleted = false
     AND keys.is_deleted = false
     ${vwFilter}
     ${whitelist}
     ${blacklist}
-    `
-  
+    `;
+
   // Build a virtual table with the cache, we will compare this with the last usage of DB stored usages
   const cachedVirtualTable = `WITH values_table AS (
     SELECT
       (jsonb_each_text('${JSON.stringify(cachedValues || {})}'::jsonb)).*
   )`;
-  
+
   const query = `
   ${cachedVirtualTable}
   
@@ -170,45 +282,63 @@ export const apiKeysByVW = ({limit, offset, orderBy = 'last_usage', orderDirecti
     vw_name
   ${order}
   ${pagination}
-  `
-  
+  `;
+
   // In order to properly count and have a working pagination we just wrap all of this into a counter
-  return countOnly ? `SELECT COUNT(*) as count FROM (${query}) AS subquery` : query;
-}
+  return countOnly
+    ? `SELECT COUNT(*) as count FROM (${query}) AS subquery`
+    : query;
+};
 
 export const ugeEmotesCount = (userBlacklist, deleted = false) => {
-  const blacklist = userBlacklist.length ? ` virtual_worlds.cognito_uuid NOT IN (${JSON.stringify(userBlacklist).replace(/[\[\]]/g, '').replace(/"/g, "'")}) and\n` : '';
-  const deletedFilter = deleted ? 'and users_emotes.is_deleted = true' : '';
+  const blacklist = userBlacklist.length
+    ? ` virtual_worlds.cognito_uuid NOT IN (${JSON.stringify(userBlacklist)
+        .replace(/[\[\]]/g, "")
+        .replace(/"/g, "'")}) and\n`
+    : "";
+  const deletedFilter = deleted ? "and users_emotes.is_deleted = true" : "";
   return `SELECT
    COUNT (DISTINCT users_emotes.emote_uuid) count
    FROM users_emotes
    LEFT JOIN virtual_worlds_users on virtual_worlds_users.user_id = users_emotes.user_id
    LEFT JOIN virtual_worlds on virtual_worlds_users.vw_id = virtual_worlds.id
-   WHERE ${blacklist} is_uge = true ${deletedFilter} and virtual_worlds.is_deleted = false`
-}
+   WHERE ${blacklist} is_uge = true ${deletedFilter} and virtual_worlds.is_deleted = false`;
+};
 
 export const cognitoAccountsWithUsageCount = ({ userBlacklist = [] }) => {
-  const blacklist = userBlacklist.length ? `WHERE cognito_auth.cognito_uuid NOT IN (${JSON.stringify(userBlacklist).replace(/[\[\]]/g, '').replace(/"/g, "'")})\n` : '';
+  const blacklist = userBlacklist.length
+    ? `WHERE cognito_auth.cognito_uuid NOT IN (${JSON.stringify(userBlacklist)
+        .replace(/[\[\]]/g, "")
+        .replace(/"/g, "'")})\n`
+    : "";
   return `SELECT COUNT(*)
   FROM cognito_auth
   ${blacklist}
   `;
-}
+};
 
 export const gameWithKeyPercentage = (userBlacklist) => {
-  const blacklist = userBlacklist.length ? `WHERE virtual_worlds.cognito_uuid NOT IN (${JSON.stringify(userBlacklist).replace(/[\[\]]/g, '').replace(/"/g, "'")})\n` : '';
-  
+  const blacklist = userBlacklist.length
+    ? `WHERE virtual_worlds.cognito_uuid NOT IN (${JSON.stringify(userBlacklist)
+        .replace(/[\[\]]/g, "")
+        .replace(/"/g, "'")})\n`
+    : "";
+
   return `SELECT
    CAST(SUM(CASE WHEN keys.id IS NOT NULL THEN 1 ELSE 0 END) AS DECIMAL) / COUNT(*) * 100 as percentage
    FROM virtual_worlds
    LEFT JOIN keys on keys.vw_id = virtual_worlds.id
    ${blacklist}
-   `
-}
+   `;
+};
 
 export const accountsWithUGE = (userBlacklist) => {
-  const blacklist = userBlacklist.length ? `WHERE virtual_worlds.cognito_uuid NOT IN (${JSON.stringify(userBlacklist).replace(/[\[\]]/g, '').replace(/"/g, "'")})\n` : '';
-  
+  const blacklist = userBlacklist.length
+    ? `WHERE virtual_worlds.cognito_uuid NOT IN (${JSON.stringify(userBlacklist)
+        .replace(/[\[\]]/g, "")
+        .replace(/"/g, "'")})\n`
+    : "";
+
   return `select
     CAST(COUNT(DISTINCT CASE WHEN is_uge = true THEN cognito_uuid END) as DECIMAL)
     / CAST (count (distinct virtual_worlds.cognito_uuid) as decimal)
@@ -216,12 +346,16 @@ export const accountsWithUGE = (userBlacklist) => {
   FROM virtual_worlds
   left join virtual_worlds_users on virtual_worlds.id = virtual_worlds_users.vw_id
   left join users_emotes on virtual_worlds_users.user_id = users_emotes.user_id
-  ${blacklist}`
-}
+  ${blacklist}`;
+};
 
 export const accountsWithModeration = (userBlacklist) => {
-  const blacklist = userBlacklist.length ? `WHERE virtual_worlds.cognito_uuid NOT IN (${JSON.stringify(userBlacklist).replace(/[\[\]]/g, '').replace(/"/g, "'")})\n` : '';
-  
+  const blacklist = userBlacklist.length
+    ? `WHERE virtual_worlds.cognito_uuid NOT IN (${JSON.stringify(userBlacklist)
+        .replace(/[\[\]]/g, "")
+        .replace(/"/g, "'")})\n`
+    : "";
+
   return `select
     CAST(COUNT(DISTINCT CASE WHEN users_emotes.is_deleted = true THEN cognito_uuid END) as DECIMAL)
     / CAST (count (distinct virtual_worlds.cognito_uuid) as decimal)
@@ -229,5 +363,5 @@ export const accountsWithModeration = (userBlacklist) => {
   FROM virtual_worlds
   left join virtual_worlds_users on virtual_worlds.id = virtual_worlds_users.vw_id
   left join users_emotes on virtual_worlds_users.user_id = users_emotes.user_id
-  ${blacklist}`
-}
+  ${blacklist}`;
+};

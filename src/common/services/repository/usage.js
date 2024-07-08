@@ -1,9 +1,9 @@
-import UsageModel from '#common/database/models/sequelize/usage.js';
-import CrudService from './crud.js';
+import UsageModel from "#common/database/models/sequelize/usage.js";
+import CrudService from "./crud.js";
 
 export class UsageService extends CrudService {
   constructor() {
-    super('usages', UsageModel);
+    super("usages", UsageModel);
   }
 }
 

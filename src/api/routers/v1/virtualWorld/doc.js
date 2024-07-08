@@ -281,7 +281,7 @@
  * /v1/virtual-world/alias/{name}:
  *    get:
  *      summary: Get an emote by alias
- *      deprecated: true 
+ *      deprecated: true
  *      tags:
  *        - /virtual-world/emotes
  *      description: Create an alias in the portal and retrieve the emote associated with the requested alias here

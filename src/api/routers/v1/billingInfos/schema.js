@@ -1,4 +1,4 @@
-import { Joi } from '../../../middlewares/validator.js';
+import { Joi } from "../../../middlewares/validator.js";
 
 export const create = {
   body: Joi.object().keys({
@@ -7,11 +7,11 @@ export const create = {
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
     email: Joi.string().email().required(),
-    accountingEmail: Joi.string().email().allow(''),
+    accountingEmail: Joi.string().email().allow(""),
     phoneNumber: Joi.string().required(),
     address: Joi.object().keys({
       streetAddress: Joi.string().required(),
-      additionalAddressLine: Joi.string().allow(''),
+      additionalAddressLine: Joi.string().allow(""),
       city: Joi.string().required(),
       region: Joi.string().required(),
       zipCode: Joi.string().required(),
@@ -20,12 +20,12 @@ export const create = {
     }),
     invoiceAddress: Joi.object().keys({
       streetAddress: Joi.string().required(),
-      additionalAddressLine: Joi.string().allow(''),
+      additionalAddressLine: Joi.string().allow(""),
       city: Joi.string().required(),
       region: Joi.string().required(),
       zipCode: Joi.string().required(),
       country: Joi.string().required(),
     }),
-    others: Joi.string().allow(''),
+    others: Joi.string().allow(""),
   }),
 };

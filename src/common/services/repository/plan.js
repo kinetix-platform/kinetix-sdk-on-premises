@@ -1,9 +1,9 @@
-import PlanModel from '#common/database/models/sequelize/plan.js';
-import CrudService from './crud.js';
+import PlanModel from "#common/database/models/sequelize/plan.js";
+import CrudService from "./crud.js";
 
 export class PlansService extends CrudService {
   constructor() {
-    super('plans', PlanModel);
+    super("plans", PlanModel);
   }
 }
 

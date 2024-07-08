@@ -1,4 +1,4 @@
-import { Joi } from '../../../middlewares/validator.js';
+import { Joi } from "../../../middlewares/validator.js";
 
 export const addEmote = {
   params: Joi.object().keys({
@@ -14,7 +14,7 @@ export const deleteEmote = {
   }),
   body: Joi.object().keys({
     reason: Joi.string(),
-  })
+  }),
 };
 
 export const updateEmote = {
@@ -22,9 +22,11 @@ export const updateEmote = {
     userId: Joi.string().required(),
     emoteUuid: Joi.string().uuid().required(),
   }),
-  body: Joi.object().keys({
-    name: Joi.string().min(4).max(16),
-  }).required()
+  body: Joi.object()
+    .keys({
+      name: Joi.string().min(4).max(16),
+    })
+    .required(),
 };
 
 export const getEmotes = {

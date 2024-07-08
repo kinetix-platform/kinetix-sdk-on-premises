@@ -1,11 +1,11 @@
-import Redis from 'ioredis';
-import { 
-  CACHE_REDIS_ENDPOINTS, 
-  DEFAULT_RENEWAL_TTL, 
-  DISABLE_CACHE, 
-  NODE_ENV 
-} from '#common/config/constants.js';
-import logger from './logger.js';
+import Redis from "ioredis";
+import {
+  CACHE_REDIS_ENDPOINTS,
+  DEFAULT_RENEWAL_TTL,
+  DISABLE_CACHE,
+  NODE_ENV,
+} from "#common/config/constants.js";
+import logger from "./logger.js";
 
 class CacheService {
   constructor(endpoints, disableCache = false) {
@@ -14,7 +14,10 @@ class CacheService {
 
     if (endpoints.length > 1) {
       this.client = new Redis.Cluster(
-        endpoints.map((endpoint) => ({ host: endpoint.split(':')[0], port: endpoint.split(':')[1] })),
+        endpoints.map((endpoint) => ({
+          host: endpoint.split(":")[0],
+          port: endpoint.split(":")[1],
+        })),
         DEFAULT_REDIS_OPTIONS,
       );
     } else if (endpoints.length === 0) {
@@ -22,15 +25,15 @@ class CacheService {
     } else {
       this.disableCache = true;
     }
-    
+
     if (this.client) {
-      this.client.on('error', (err) => logger.error('Redis Client Error', err));
+      this.client.on("error", (err) => logger.error("Redis Client Error", err));
     }
   }
-  
+
   async connect() {
     if (this.disableCache) {
-      return
+      return;
     }
 
     await this.client.connect();
@@ -38,22 +41,27 @@ class CacheService {
 
   async set(key, value, expire = DEFAULT_RENEWAL_TTL) {
     if (this.disableCache) {
-      return
+      return;
     }
 
-    return this.client.set(key, typeof value === 'string' ? value : JSON.stringify(value), 'EX', expire);
+    return this.client.set(
+      key,
+      typeof value === "string" ? value : JSON.stringify(value),
+      "EX",
+      expire,
+    );
   }
-  
+
   async get(key) {
     if (this.disableCache) {
-      return
+      return;
     }
 
     const result = await this.client.get(key);
     if (result) {
-      let value
+      let value;
       try {
-        value = JSON.parse(result)
+        value = JSON.parse(result);
       } catch {
         value = result;
       }
@@ -61,18 +69,18 @@ class CacheService {
     }
     return null;
   }
-  
+
   async ttl(key) {
     if (this.disableCache) {
-      return
+      return;
     }
 
     return this.client.ttl(key);
   }
-  
+
   async del(key) {
     if (this.disableCache) {
-      return
+      return;
     }
 
     return this.client.del(key);
@@ -80,18 +88,24 @@ class CacheService {
 
   async flush() {
     if (this.disableCache) {
-      return
+      return;
     }
 
     return this.client.flushall();
   }
-    
+
   async scan(key) {
     if (this.disableCache) {
-      return
+      return;
     }
 
-    const result = await this.client.scan(0, 'MATCH', `${NODE_ENV}:${key}`, 'COUNT', 1000000000000);
+    const result = await this.client.scan(
+      0,
+      "MATCH",
+      `${NODE_ENV}:${key}`,
+      "COUNT",
+      1000000000000,
+    );
     return result[1];
   }
 
@@ -109,7 +123,9 @@ class CacheService {
 
   async flushEmotesVW(vwUuid) {
     const keys = await this.scan(`emotesUser:${vwUuid}:*`);
-    return Promise.all(keys.map(key => this.del(key.split(':').slice(1).join(':'))));
+    return Promise.all(
+      keys.map((key) => this.del(key.split(":").slice(1).join(":"))),
+    );
   }
 
   async ttlEmotesVWUser(vwUuid, userVwId) {
@@ -132,7 +148,12 @@ class CacheService {
     return this.ttl(`vwKey:${key}`);
   }
 
-  async setEmoteMetadata(vwUuid, emoteUuid, value, expire = DEFAULT_RENEWAL_TTL) {
+  async setEmoteMetadata(
+    vwUuid,
+    emoteUuid,
+    value,
+    expire = DEFAULT_RENEWAL_TTL,
+  ) {
     return this.set(`emoteMetadata:${vwUuid}:${emoteUuid}`, value, expire);
   }
 
@@ -149,9 +170,6 @@ class CacheService {
   }
 }
 
-const cacheService = new CacheService(
-  CACHE_REDIS_ENDPOINTS, 
-  DISABLE_CACHE
-);
+const cacheService = new CacheService(CACHE_REDIS_ENDPOINTS, DISABLE_CACHE);
 
 export default cacheService;

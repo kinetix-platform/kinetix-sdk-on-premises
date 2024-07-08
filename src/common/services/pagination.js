@@ -1,7 +1,7 @@
-import qs from 'qs';
+import qs from "qs";
 
 const setPaginationHeader = (key, req, res, limit, offset) => {
-  const [fullPath, queryString] = req.originalUrl.split('?')
+  const [fullPath, queryString] = req.originalUrl.split("?");
   const url = qs.parse(queryString);
   url.offset = offset;
   res.setHeader(
@@ -18,13 +18,13 @@ export const setPaginationHeaders = (req, res, total, limit, offset = 0) => {
   const previousOffset = Math.max(0, currentPageFactor - 1) * limit;
   const hasNextPage = limit * (currentPageFactor + 1) <= lastOffset;
   const hasPreviousPage = currentPageFactor > 0;
-  res.setHeader('x-pagination-length', total);
-  setPaginationHeader('first', req, res, limit, 0);
-  setPaginationHeader('last', req, res, limit, lastOffset);
+  res.setHeader("x-pagination-length", total);
+  setPaginationHeader("first", req, res, limit, 0);
+  setPaginationHeader("last", req, res, limit, lastOffset);
   if (hasNextPage) {
-    setPaginationHeader('next', req, res, limit, nextOffset);
+    setPaginationHeader("next", req, res, limit, nextOffset);
   }
   if (hasPreviousPage) {
-    setPaginationHeader('previous', req, res, limit, previousOffset);
+    setPaginationHeader("previous", req, res, limit, previousOffset);
   }
 };

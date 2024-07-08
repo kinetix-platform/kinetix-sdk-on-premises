@@ -1,4 +1,13 @@
-import { DB_USER, DB_PASSWORD, DB_NAME, DB_HOST, DB_PORT, DB_DIALECT, DB_HOST_REPLICA, SEQUELIZE_LOGGING } from './constants.js';
+import {
+  DB_USER,
+  DB_PASSWORD,
+  DB_NAME,
+  DB_HOST,
+  DB_PORT,
+  DB_DIALECT,
+  DB_HOST_REPLICA,
+  SEQUELIZE_LOGGING,
+} from "./constants.js";
 
 const options = {
   username: DB_USER,

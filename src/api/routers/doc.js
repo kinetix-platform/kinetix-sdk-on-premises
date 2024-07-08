@@ -1,7 +1,5 @@
- 
-
-/** 
- * 
+/**
+ *
  * @swagger
  *components:
  *  schemas:
@@ -125,7 +123,7 @@
  *       message:
  *         type: string
  *         example: "Missing API key"
- * 
+ *
  *   NotAcceptableError:
  *     type: object
  *     properties:
@@ -134,7 +132,7 @@
  *       message:
  *         type: string
  *         example: "Video mature are not authorized"
- * 
+ *
  *   PayloadTooLargeError:
  *     type: object
  *     properties:
@@ -143,7 +141,7 @@
  *       message:
  *         type: string
  *         example: "Video is too long"
- * 
+ *
  *   PreconditionRequiredError:
  *     type: object
  *     properties:
@@ -152,7 +150,7 @@
  *       message:
  *         type: string
  *         example: "You need to setup the interval & startDate for alias1"
- * 
+ *
  *   TooManyRequestsError:
  *     type: object
  *     properties:
@@ -161,5 +159,5 @@
  *       message:
  *         type: string
  *         example: "You have exceeded the 2000 requests in 1 minutes limit!"
- * 
+ *
  */
