@@ -1,7 +1,6 @@
 import { CognitoJwtVerifier } from "aws-jwt-verify";
 import httpStatus from "http-status";
 import HttpError from "../../common/helpers/error.js";
-import cognitoAuthService from "#common/services/repository/cognitoAuth.js";
 import logger from "#common/services/logger.js";
 
 const { COGNITO_USER_POOL_ID, COGNITO_CLIENT_ID, COGNITO_ALLOWED_GROUPS } =
@@ -39,12 +38,5 @@ export default async (req, res, next) => {
     return next(new HttpError(null, {}, UNAUTHORIZED, e.message));
   }
 
-  try {
-    await cognitoAuthService.createOrUpdate(req.user.username);
-  } catch (e) {
-    logger.error(
-      `Error logging cognito authentication for user ${req.user.username} : ${e}`,
-    );
-  }
   return next();
 };
