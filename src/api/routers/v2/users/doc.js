@@ -24,8 +24,6 @@
  *          type: integer
  *        user:
  *          type: integer
- *        progression:
- *          type: integer
  *        name:
  *          type: string
  *        createdAt:
@@ -35,8 +33,6 @@
  *          type: boolean
  *        rejected:
  *          type: boolean
- *        ml:
- *         $ref: '#/components/schemas/MLProgression'
  *        hierarchy:
  *         $ref: '#/components/schemas/ProcessHierarchy'
  *      example:
@@ -46,7 +42,6 @@
  *       video: '00000003-0003-0003-0003-000000000003'
  *       vw: 123
  *       user: 12345
- *       progression: 100
  *       createdAt: '2023-01-01T12:12:30Z'
  *       name: foo
  *       validated: false

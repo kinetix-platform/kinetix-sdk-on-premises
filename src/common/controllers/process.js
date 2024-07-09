@@ -25,13 +25,6 @@ const enrichProcess = async (process) => {
   let ml;
   let thumbnailUrl;
   const errorMessage = generateErrorMessage(process);
-  if (process.step === "ml_running") {
-    try {
-      ml = await cacheService.get(`progression:${process.uuid}`);
-    } catch {
-      ml = null;
-    }
-  }
 
   if (process.video && process.step !== "transcode_failed") {
     const asset = await kinetixService.getAsset(process.video);
@@ -348,7 +341,6 @@ class Controller {
         ...(text ? { text } : { video: videoAsset.uuid }), // SUPPORT FOR VIDEO OR TEXT
         ...(vw && { vw: vw.id }), // IF COGNITO THERE IS NO VW
         step: "initialized",
-        progression: 0,
         maturity: mature,
         validated: false,
         rejected: false,

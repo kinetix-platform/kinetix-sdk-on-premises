@@ -3,15 +3,6 @@
  *
  * components:
  *   schemas:
- *     MLProgression:
- *      type: "object"
- *      properties:
- *        progression:
- *          type: integer
- *        mlRemaining:
- *          type: integer
- *        mlElapsed:
- *          type: integer
  *
  *     ProcessChild:
  *      type: "object"
@@ -66,13 +57,9 @@
  *           type: integer
  *         user:
  *           type: integer
- *         progression:
- *           type: integer
  *         createdAt:
  *           type: string
  *           format: "date-time"
- *         ml:
- *          $ref: '#/components/schemas/MLProgression'
  *
  *     TokenResponse:
  *       type: 'object'

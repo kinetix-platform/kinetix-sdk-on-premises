@@ -1,4 +1,3 @@
-import cacheService from "../services/cache.js";
 import kinetixService from "../services/kinetix.js";
 import dynamoService from "../services/dynamo.js";
 
@@ -16,13 +15,6 @@ class ProcessHelper {
     let ml;
     let thumbnailUrl;
     const errorMessage = await this.generateErrorMessage(process);
-    if (process.step === "ml_running") {
-      try {
-        ml = await cacheService.get(`progression:${process.uuid}`);
-      } catch {
-        ml = null;
-      }
-    }
 
     if (process.video && process.step !== "transcode_failed") {
       const asset = await kinetixService.getAsset(process.video);
