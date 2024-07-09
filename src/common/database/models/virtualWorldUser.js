@@ -38,7 +38,7 @@ VirtualWorldUser.init(
     indexes: [],
     sequelize,
     modelName: "virtual_worlds_users",
-    timestamps: false,
+    timestamps: true,
   },
 );
 

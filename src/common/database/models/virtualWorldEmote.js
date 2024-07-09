@@ -37,7 +37,7 @@ VirtualWorldEmote.init(
     indexes: [],
     sequelize,
     modelName: "virtual_worlds_emotes",
-    timestamps: false,
+    timestamps: true,
   },
 );
 

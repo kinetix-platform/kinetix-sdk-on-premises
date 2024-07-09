@@ -76,7 +76,7 @@ Usage.init(
     indexes: [],
     sequelize,
     modelName: "usages",
-    timestamps: false,
+    timestamps: true,
   },
 );
 

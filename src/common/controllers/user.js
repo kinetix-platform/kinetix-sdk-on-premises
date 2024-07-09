@@ -3,7 +3,7 @@ import userService from "#common/services/repository/user.js";
 import HttpError from "../../common/helpers/error.js";
 import storeService from "#common/services/store.js";
 import httpStatus from "http-status";
-import processesServce from "#common/services/dynamo.js";
+import processesServce from "#common/services/repository/process.js";
 import cacheService from "#common/services/cache.js";
 import { setPaginationHeaders } from "#common/services/pagination.js";
 import processHelper from "../helpers/process.js";

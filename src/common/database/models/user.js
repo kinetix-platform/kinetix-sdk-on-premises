@@ -43,7 +43,7 @@ User.init(
     indexes: [],
     sequelize,
     modelName: "users",
-    timestamps: false,
+    timestamps: true,
   },
 );
 

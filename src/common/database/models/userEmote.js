@@ -79,7 +79,7 @@ UserEmote.init(
     indexes: [],
     sequelize,
     modelName: "users_emotes",
-    timestamps: false,
+    timestamps: true,
   },
 );
 

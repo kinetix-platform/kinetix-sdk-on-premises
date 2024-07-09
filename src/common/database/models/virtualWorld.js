@@ -70,7 +70,7 @@ VirtualWorld.init(
     indexes: [],
     sequelize,
     modelName: "virtual_worlds",
-    timestamps: false,
+    timestamps: true,
   },
 );
 

@@ -48,7 +48,7 @@ VirtualWorldToken.init(
     indexes: [],
     sequelize,
     modelName: "virtual_worlds_tokens",
-    timestamps: false,
+    timestamps: true,
   },
 );
 

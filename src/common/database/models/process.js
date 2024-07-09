@@ -114,7 +114,7 @@ Process.init(
     indexes: [],
     sequelize,
     modelName: "processes",
-    timestamps: false,
+    timestamps: true,
   },
 );
 

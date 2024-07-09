@@ -5,7 +5,7 @@ import HttpError from "../../common/helpers/error.js";
 import kinetixService from "#common/services/kinetix.js";
 import awsService from "#common/services/aws.js";
 import vwService from "#common/services/repository/virtualWorld.js";
-import dynamoService from "#common/services/dynamo.js";
+import processService from "#common/services/repository/process.js";
 import cacheService from "#common/services/cache.js";
 import webhookService from "#common/services/webhook.js";
 import userService from "#common/services/repository/user.js";
@@ -44,7 +44,7 @@ class Controller {
     try {
       const { user } = req;
       const { uuid } = req.params;
-      const process = await dynamoService.getProcess(uuid);
+      const process = await processService.getProcess(uuid);
       if (!process) {
         return next(new HttpError(null, {}, NOT_FOUND, "Process not found"));
       }
@@ -74,7 +74,7 @@ class Controller {
     try {
       const { user } = req;
       const { uuid } = req.params;
-      const process = await dynamoService.getProcess(uuid);
+      const process = await processService.getProcess(uuid);
       if (!process) {
         return next(new HttpError(null, {}, NOT_FOUND, "Process not found"));
       }
@@ -130,7 +130,7 @@ class Controller {
         logger.error(err.message, err);
       }
 
-      const response = await dynamoService.deleteProcess(uuid);
+      const response = await processService.deleteProcess(uuid);
 
       res.send(response);
     } catch (e) {
@@ -144,7 +144,7 @@ class Controller {
   async getAllByCognito(req, res, next) {
     try {
       const { user } = req;
-      const processes = await dynamoService.getProcessesByCognito(user.sub);
+      const processes = await processService.getProcessesByCognito(user.sub);
       const enrichProcesses = await Promise.all(
         processes.toJSON().map((p) => enrichProcess(p)),
       );
@@ -351,7 +351,7 @@ class Controller {
         npData.parent = parentProcess;
       }
 
-      const newProcess = await dynamoService.createProcess(npData);
+      const newProcess = await processService.createProcess(npData);
 
       res.status(201).send(newProcess);
       if (req.token) {
@@ -511,7 +511,7 @@ class Controller {
           ),
         );
       }
-      const process = await dynamoService.getProcess(uuid);
+      const process = await processService.getProcess(uuid);
       if (!process) {
         return next(new HttpError(null, {}, NOT_FOUND, "Process not found"));
       }
@@ -564,7 +564,7 @@ class Controller {
           ),
         );
       }
-      let process = await dynamoService.getProcess(uuid);
+      let process = await processService.getProcess(uuid);
       if (!process || process.vw !== vw.id) {
         return next(new HttpError(null, {}, NOT_FOUND, "Process not found"));
       }
@@ -584,7 +584,7 @@ class Controller {
           lastChildProcess.hierarchy?.child || lastChildProcess.child;
       }
       if (lastChildProcess !== process) {
-        lastChildProcess = await dynamoService.getProcess(
+        lastChildProcess = await processService.getProcess(
           lastChildProcess.uuid,
         );
         lastChildProcess = await processHelper.buildHierarchy(
@@ -647,7 +647,7 @@ class Controller {
       const { params, body, user } = req;
       const { name } = body;
 
-      const process = await dynamoService.getProcess(params.uuid);
+      const process = await processService.getProcess(params.uuid);
       if (!process) {
         return next(new HttpError(null, {}, NOT_FOUND, "Process not found"));
       }
@@ -663,7 +663,7 @@ class Controller {
         );
       }
 
-      const updatedProcess = await dynamoService.updateProcess(params.uuid, {
+      const updatedProcess = await processService.updateProcess(params.uuid, {
         name,
       });
 

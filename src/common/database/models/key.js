@@ -58,17 +58,17 @@ Key.init(
       field: "is_deleted",
     },
     createdAt: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-      allowNull: false,
       field: "created_at",
+    },
+    updatedAt: {
+      field: "updated_at",
     },
   },
   {
     indexes: [],
     sequelize,
     modelName: "keys",
-    timestamps: false,
+    timestamps: true,
   },
 );
 

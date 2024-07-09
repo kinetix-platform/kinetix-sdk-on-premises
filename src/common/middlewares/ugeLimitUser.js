@@ -1,7 +1,7 @@
 import moment from "moment";
 import httpStatus from "http-status";
 import HttpError from "../../common/helpers/error.js";
-import processesServce from "#common/services/dynamo.js";
+import processesServce from "#common/services/repository/process.js";
 
 const { NOT_FOUND, TOO_MANY_REQUESTS, INTERNAL_SERVER_ERROR } = httpStatus;
 

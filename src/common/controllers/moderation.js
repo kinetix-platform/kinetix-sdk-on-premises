@@ -3,7 +3,7 @@ import HttpError from "../../common/helpers/error.js";
 import userService from "#common/services/repository/user.js";
 import userEmotesService from "#common/services/repository/userEmotes.js";
 import storeService from "#common/services/store.js";
-import dynamoService from "#common/services/dynamo.js";
+import processService from "#common/repository/process.js";
 import { setPaginationHeaders } from "#common/services/pagination.js";
 import logger from "#common/services/logger.js";
 import kinetixService from "#common/services/kinetix.js";
@@ -30,7 +30,7 @@ class Controller {
 
       const emotesWithVideo = await Promise.all(
         emotess.map(async (e) => {
-          const process = await dynamoService.getProcessByEmote(e.emoteUuid);
+          const process = await processService.getProcessByEmote(e.emoteUuid);
           const video = await storeService.getAsset(process.video);
           return {
             ...e,

@@ -86,6 +86,6 @@ export default sequelize ||
       },
     },
     {
-      timestamps: false,
+      timestamps: true,
     },
   );

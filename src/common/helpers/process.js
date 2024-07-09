@@ -1,5 +1,5 @@
 import kinetixService from "../services/kinetix.js";
-import dynamoService from "../services/dynamo.js";
+import processService from "../services/repository/process.js";
 
 class ProcessHelper {
   async generateErrorMessage(process) {
@@ -45,7 +45,7 @@ class ProcessHelper {
     let parent = hierarchy.parent;
     let currentParent = process;
     while (currentParent.parent) {
-      currentParent = await dynamoService.getProcess(currentParent.parent);
+      currentParent = await processService.getProcess(currentParent.parent);
       hierarchy.parents += 1;
       parent.uuid = currentParent.uuid;
       parent.parent = currentParent.parent ? {} : undefined;
@@ -53,13 +53,13 @@ class ProcessHelper {
     }
 
     // Iterate over child processes where parent is process.uuid to find all the children until lastChild and count
-    let currentChild = (await dynamoService.getProcessChild(process.uuid))[0];
+    let currentChild = (await processService.getProcessChild(process.uuid))[0];
     let child = hierarchy.child;
     while (currentChild) {
       hierarchy.children += 1;
       child.uuid = currentChild.uuid;
       currentChild = (
-        await dynamoService.getProcessChild(currentChild.uuid)
+        await processService.getProcessChild(currentChild.uuid)
       )[0];
       child.child = currentChild ? {} : undefined;
       child = child.child;

@@ -39,7 +39,7 @@ UserActivity.init(
     sequelize,
     modelName: "user_activity",
     tableName: "user_activity",
-    timestamps: false,
+    timestamps: true,
   },
 );
 
