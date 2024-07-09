@@ -53,3 +53,22 @@ services:
       DB_USER: postgres
       DB_PASSWORD: postgres
       DB_NAME: mydatabase
+
+  webhook:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kinetix-webhook
+    command: ["npm", "run", "start:webhook"]
+    depends_on:
+      - redis
+      - postgres
+    ports:
+      - "4001:4001"
+    environment:
+      CACHE_REDIS_ENDPOINTS: "redis:6379"
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: mydatabase

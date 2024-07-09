@@ -1,4 +1,4 @@
-import KeyModel from "#common/database/models/sequelize/key.js";
+import KeyModel from "#common/database/models/key.js";
 import CrudService from "./crud.js";
 
 export class KeysService extends CrudService {

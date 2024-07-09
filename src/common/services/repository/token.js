@@ -1,4 +1,4 @@
-import TokenModel from "#common/database/models/sequelize/virtualWorldToken.js";
+import TokenModel from "#common/database/models/virtualWorldToken.js";
 import CrudService from "./crud.js";
 
 export class TokenService extends CrudService {

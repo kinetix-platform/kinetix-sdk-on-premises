@@ -56,3 +56,7 @@ export const PORTAL_CORS_ORIGINS = process.env.PORTAL_CORS_ORIGINS
 export const EXPOSE_SWAGGER = process.env.EXPOSE_SWAGGER
   ? process.env.EXPOSE_SWAGGER === "true"
   : true;
+
+export const WEBHOOK_PORT = process.env.WEBHOOK_PORT
+  ? process.env.WEBHOOK_PORT
+  : 4002;

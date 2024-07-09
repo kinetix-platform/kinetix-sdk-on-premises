@@ -1,10 +1,19 @@
-import Process from "#common/database/models/dynamoose/process.js";
 import moment from "moment";
 import momentDurationFormat from "moment-duration-format";
-import dynamoose from "dynamoose";
-
 momentDurationFormat(moment);
 
+import ProcessModel from "#common/database/models/process.js";
+import CrudService from "./crud.js";
+
+export class ProcessService extends CrudService {
+  constructor() {
+    super("processes", ProcessModel);
+  }
+}
+
+export default new ProcessService();
+
+/*
 class DatabaseService {
   async createProcess(data) {
     return Process.create({
@@ -240,3 +249,4 @@ class DatabaseService {
 }
 
 export default new DatabaseService();
+*/

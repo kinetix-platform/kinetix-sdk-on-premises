@@ -1,4 +1,4 @@
-import UsageModel from "#common/database/models/sequelize/usage.js";
+import UsageModel from "#common/database/models/usage.js";
 import CrudService from "./crud.js";
 
 export class UsageService extends CrudService {
