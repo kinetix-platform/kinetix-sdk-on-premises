@@ -119,7 +119,6 @@ class Store {
   // If emote and vw, more complex
   async getAssetByType(type, uuid, vw) {
     let asset;
-    let allowed = false;
     if (type === "emote" && uuid && vw && vw.uuid) {
       asset = cacheService.getEmoteMetadata(vw.uuid, uuid);
       if (asset.uuid) return asset;
@@ -143,22 +142,8 @@ class Store {
     asset = r.data.data;
 
     if (type === "emote" && uuid && vw && vw.uuid) {
-      if (
-        asset.source === "backOffice" &&
-        asset.providers.find((p) => p.name === "KinePortal")
-      ) {
-        allowed = true;
-      } else if (asset.source === "sdk" || asset.source === null) {
-        // TO DO find a way to enforce control of ownership
-        allowed = true;
-      }
-
-      if (allowed) {
-        await cacheService.setEmoteMetadata(vw.uuid, uuid, asset);
-        return asset;
-      } else {
-        return;
-      }
+      await cacheService.setEmoteMetadata(vw.uuid, uuid, asset);
+      return asset;
     }
 
     return asset;

@@ -3,12 +3,7 @@ import logger from "#common/services/logger.js";
 import HttpError from "../../common/helpers/error.js";
 import storeService from "#common/services/store.js";
 
-const {
-  INTERNAL_SERVER_ERROR,
-  FORBIDDEN,
-  NOT_FOUND,
-  ENABLE_UNREAL = "true",
-} = httpStatus;
+const { INTERNAL_SERVER_ERROR, NOT_FOUND, ENABLE_UNREAL = "true" } = httpStatus;
 
 class Controller {
   async get(req, res, next) {
@@ -47,7 +42,6 @@ class Controller {
   }
 
   async getWithAvatar(req, res, next) {
-    let allowed = false;
     try {
       const { vw } = req;
       const { uuid, avatarUuid } = req.params;
@@ -83,37 +77,16 @@ class Controller {
         (a) => a.name === "userData" && a.extension === "json",
       )?.url;
 
-      if (
-        emote.source === "backOffice" &&
-        emote.providers.find((p) => p.name === "KinePortal")
-      ) {
-        allowed = true;
-      } else if (emote.source === "sdk" || emote.source === null) {
-        // TODO : add a way to enforce control of ownership to avoid vw to steal emote from another vw
-        allowed = true;
-      }
-
-      if (allowed) {
-        res.send({
-          ...emote,
-          thumbnailGifUrl,
-          thumbnailPngUrl,
-          animationFbxUrl,
-          animationGlbUrl,
-          animationKinanimUrl,
-          avatarMappingUrl,
-          ...(ENABLE_UNREAL === "true" && { unrealGlbUrl }),
-        });
-      } else {
-        return next(
-          new HttpError(
-            null,
-            {},
-            FORBIDDEN,
-            "You are not allowed to access this ressource",
-          ),
-        );
-      }
+      res.send({
+        ...emote,
+        thumbnailGifUrl,
+        thumbnailPngUrl,
+        animationFbxUrl,
+        animationGlbUrl,
+        animationKinanimUrl,
+        avatarMappingUrl,
+        ...(ENABLE_UNREAL === "true" && { unrealGlbUrl }),
+      });
     } catch (e) {
       if (e?.response?.status === 404) {
         return next(new HttpError(null, {}, NOT_FOUND, "Emote not found"));
