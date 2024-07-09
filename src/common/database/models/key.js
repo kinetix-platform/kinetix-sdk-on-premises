@@ -24,7 +24,7 @@ Key.init(
     uuid: {
       type: DataTypes.UUID,
       allowNull: false,
-      defaultValue: Sequelize.literal("public.uuid_generate_v4()"),
+      defaultValue: Sequelize.UUIDV4,
     },
     value: {
       type: DataTypes.STRING(255),
