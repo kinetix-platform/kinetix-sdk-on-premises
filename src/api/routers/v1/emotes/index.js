@@ -3,11 +3,10 @@ import controller from "#common/controllers/emotes.js";
 import validator from "#common/middlewares/validator.js";
 import keyAuth from "#common/middlewares/keyAuth.js";
 import keyRead from "#common/middlewares/keyRead.js";
-import { get, getWithAvatar, search, categoriesSearch } from "./schema.js";
+import { get, getWithAvatar, categoriesSearch } from "./schema.js";
 
 const router = express.Router();
 
-router.get("/search", validator(search), keyAuth, keyRead, controller.search);
 router.get(
   "/categories",
   validator(categoriesSearch),

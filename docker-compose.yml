@@ -1,0 +1,55 @@
+name: kinetix
+
+services:
+  redis:
+    image: redis:alpine
+    ports:
+      - '6379:6379'
+
+  postgres:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    volumes:
+     - ./db:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kinetix-api
+    command: ["npm", "run", "start:api"]
+    depends_on:
+      - redis
+      - postgres
+    ports:
+      - "4000:4000"
+    environment:
+      CACHE_REDIS_ENDPOINTS: "redis:6379"
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: mydatabase
+
+  portal:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kinetix-portal
+    command: ["npm", "run", "start:portal"]
+    depends_on:
+      - redis
+      - postgres
+    ports:
+      - "4001:4001"
+    environment:
+      CACHE_REDIS_ENDPOINTS: "redis:6379"
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: mydatabase

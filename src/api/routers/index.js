@@ -11,8 +11,9 @@ if (EXPOSE_SWAGGER) {
   router.use("/documentation", documentation);
 }
 
-router.use("/", rootPublic);
 router.use("/v1", v1);
 router.use("/v2", v2);
+
+router.use("/", rootPublic);
 
 export default router;

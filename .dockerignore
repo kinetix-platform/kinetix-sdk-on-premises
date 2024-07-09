@@ -33,3 +33,5 @@ kinetix.log
 .husky
 .git
 .github
+.env
+db
