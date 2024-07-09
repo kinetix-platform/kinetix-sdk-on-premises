@@ -7,7 +7,6 @@ import awsService from "#common/services/aws.js";
 import vwService from "#common/services/repository/virtualWorld.js";
 import processService from "#common/services/repository/process.js";
 import cacheService from "#common/services/cache.js";
-import webhookService from "#common/services/webhook.js";
 import userService from "#common/services/repository/user.js";
 import processHelper from "../helpers/process.js";
 import tokenService from "#common/services/repository/token.js";
@@ -404,7 +403,6 @@ class Controller {
       } catch {
         newProcess.step = "ml_request_failed";
         await newProcess.save();
-        if (vw) await webhookService.call(vw, newProcess, "error");
       }
 
       newProcess.step = "waiting_scheduler";
@@ -538,7 +536,6 @@ class Controller {
       await vwService.createEmote(vw, process.emote);
       const user = await userService.getBy({ id: process.user });
       await userService.createEmote(user, process.emote, true);
-      await webhookService.call(vw, process, "validated");
       await cacheService.delEmotesVWUser(vw.uuid, user.virtualWorldId);
       return res.send(process);
     } catch (e) {
@@ -601,15 +598,10 @@ class Controller {
         );
       }
 
-      const previousStep = lastChildProcess.step;
       lastChildProcess.validated = false;
       lastChildProcess.rejected = true;
       lastChildProcess.step = "rejected";
       await lastChildProcess.save();
-
-      if (previousStep !== "rejected") {
-        await webhookService.call(vw, lastChildProcess, "rejected");
-      }
 
       const token = uuidv4();
       const user = await userService.get(parseInt(lastChildProcess.user));

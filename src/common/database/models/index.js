@@ -1,9 +1,9 @@
 import Key from "./key.js";
+import Process from "./process.js";
 import Usage from "./usage.js";
 import User from "./user.js";
 import UserActivity from "./userActivity.js";
 import VirtualWorld from "./virtualWorld.js";
-
 import VirtualWorldEmote from "./virtualWorldEmote.js";
 import VirtualWorldUser from "./virtualWorldUser.js";
 import VirtualWorldToken from "./virtualWorldToken.js";
@@ -14,6 +14,7 @@ export const associationModels = {
   VirtualWorldEmote,
   VirtualWorldUser,
   VirtualWorldToken,
+  Process,
 };
 
 export default {
