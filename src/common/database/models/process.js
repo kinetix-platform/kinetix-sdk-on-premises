@@ -92,29 +92,11 @@ Process.init(
       allowNull: true,
       field: "parent_id",
     },
-    createdAt: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-      allowNull: false,
-      field: "created_at",
-    },
-    endedAt: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      field: "ended_at",
-    },
-    lastUpdateAt: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-      allowNull: false,
-      field: "last_update_at",
-    },
   },
   {
     indexes: [],
     sequelize,
     modelName: "processes",
-    timestamps: true,
   },
 );
 

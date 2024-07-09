@@ -37,18 +37,11 @@ VirtualWorldToken.init(
       field: "process_uuid",
       allowNull: true,
     },
-    createdAt: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-      allowNull: true,
-      field: "created_at",
-    },
   },
   {
     indexes: [],
     sequelize,
     modelName: "virtual_worlds_tokens",
-    timestamps: true,
   },
 );
 

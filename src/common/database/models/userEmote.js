@@ -27,22 +27,6 @@ UserEmote.init(
       allowNull: false,
       defaultValue: false,
     },
-    isDeleted: {
-      type: DataTypes.BOOLEAN,
-      field: "is_deleted",
-      allowNull: false,
-      defaultValue: false,
-    },
-    deletedAt: {
-      type: DataTypes.DATE,
-      field: "deleted_at",
-      allowNull: true,
-    },
-    deletedBy: {
-      type: DataTypes.STRING,
-      field: "deleted_by",
-      allowNull: true,
-    },
     deletionReason: {
       type: DataTypes.STRING,
       field: "deletion_reason",
@@ -68,18 +52,11 @@ UserEmote.init(
       field: "moderation",
       allowNull: true,
     },
-    createdAt: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-      allowNull: false,
-      field: "created_at",
-    },
   },
   {
     indexes: [],
     sequelize,
     modelName: "users_emotes",
-    timestamps: true,
   },
 );
 

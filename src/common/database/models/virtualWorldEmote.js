@@ -26,18 +26,11 @@ VirtualWorldEmote.init(
       field: "vw_id",
       allowNull: false,
     },
-    createdAt: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-      allowNull: true,
-      field: "created_at",
-    },
   },
   {
     indexes: [],
     sequelize,
     modelName: "virtual_worlds_emotes",
-    timestamps: true,
   },
 );
 

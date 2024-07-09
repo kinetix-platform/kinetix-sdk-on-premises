@@ -51,24 +51,11 @@ Key.init(
       type: DataTypes.DATE,
       allowNull: true,
     },
-    isDeleted: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-      field: "is_deleted",
-    },
-    createdAt: {
-      field: "created_at",
-    },
-    updatedAt: {
-      field: "updated_at",
-    },
   },
   {
     indexes: [],
     sequelize,
     modelName: "keys",
-    timestamps: true,
   },
 );
 

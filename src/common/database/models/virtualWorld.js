@@ -53,24 +53,11 @@ VirtualWorld.init(
       allowNull: true,
       field: "configuration",
     },
-    isDeleted: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-      field: "is_deleted",
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-      allowNull: true,
-      field: "created_at",
-    },
   },
   {
     indexes: [],
     sequelize,
     modelName: "virtual_worlds",
-    timestamps: true,
   },
 );
 

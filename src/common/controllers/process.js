@@ -533,7 +533,6 @@ class Controller {
       process.validated = true;
       process.step = "validated";
       process.rejected = false;
-      process.lastUpdateAt = new Date();
       await process.save();
 
       await vwService.createEmote(vw, process.emote);
@@ -606,7 +605,6 @@ class Controller {
       lastChildProcess.validated = false;
       lastChildProcess.rejected = true;
       lastChildProcess.step = "rejected";
-      lastChildProcess.lastUpdateAt = new Date();
       await lastChildProcess.save();
 
       if (previousStep !== "rejected") {

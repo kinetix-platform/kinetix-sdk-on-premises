@@ -32,18 +32,11 @@ User.init(
       allowNull: false,
       field: "vw_id",
     },
-    createdAt: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-      allowNull: true,
-      field: "created_at",
-    },
   },
   {
     indexes: [],
     sequelize,
     modelName: "users",
-    timestamps: true,
   },
 );
 

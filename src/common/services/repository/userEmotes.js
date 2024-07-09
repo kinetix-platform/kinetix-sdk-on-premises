@@ -20,7 +20,6 @@ export class UserEmotesService extends CrudService {
         [Op.and]: {
           "moderation.validated": { [Op.not]: true },
           "moderation.minimumDistance": { [Op.lt]: threshold },
-          isDeleted: false,
           isUGE: true,
         },
       },

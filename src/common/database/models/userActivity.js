@@ -27,19 +27,12 @@ UserActivity.init(
       allowNull: false,
       field: "period_start",
     },
-    createdAt: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-      allowNull: false,
-      field: "created_at",
-    },
   },
   {
     indexes: [],
     sequelize,
     modelName: "user_activity",
     tableName: "user_activity",
-    timestamps: true,
   },
 );
 

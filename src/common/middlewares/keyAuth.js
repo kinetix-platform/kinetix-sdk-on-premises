@@ -57,21 +57,11 @@ export default async (req, res, next) => {
       new HttpError(null, {}, FORBIDDEN, "Expired API key", "expiredApiKey"),
     );
   }
-  if (theKey.isDeleted) {
-    return next(
-      new HttpError(null, {}, FORBIDDEN, "Deleted API key", "deletedApiKey"),
-    );
-  }
 
   const vw = theKey.virtualWorld;
   if (!vw) {
     return next(
       new HttpError(null, {}, FORBIDDEN, "Wrong API key", "wrongApiKey"),
-    );
-  }
-  if (vw.isDeleted) {
-    return next(
-      new HttpError(null, {}, FORBIDDEN, "Deleted virtual world", "deletedVW"),
     );
   }
 

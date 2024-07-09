@@ -40,9 +40,6 @@ export class UsersService extends CrudService {
         {
           model: UserEmoteModel,
           as: "emotes",
-          where: {
-            isDeleted: false,
-          },
           required: false,
           attributes: [],
         },
@@ -77,7 +74,6 @@ export class UsersService extends CrudService {
     const params = {
       where: {
         userId: user.id,
-        isDeleted: false,
       },
       order,
       raw,
@@ -110,7 +106,6 @@ export class UsersService extends CrudService {
       where: {
         userId: user.id,
         emoteUuid,
-        isDeleted: false,
       },
     });
   }
@@ -124,18 +119,15 @@ export class UsersService extends CrudService {
     });
   }
 
-  async removeEmote(user, emoteUuid, asAdmin = false, reason = "") {
+  async removeEmote(user, emoteUuid, reason = "") {
     const emote = await this.hasEmote(user, emoteUuid);
     if (emote) {
-      emote.isDeleted = true;
-      emote.deletedBy = asAdmin ? "Kinetix" : "You";
-      emote.deletedAt = new Date();
-      emote.changed("deletedAt", true);
       emote.deletionReason = reason;
       emote.validatedAt = null;
       emote.validatedBy = null;
       emote.changed("validatedAt", true);
       await emote.save();
+      await emote.destroy();
     }
   }
 
@@ -153,10 +145,6 @@ export class UsersService extends CrudService {
   async validateEmote(user, emoteUuid) {
     const emote = await this.hasEmote(user, emoteUuid);
     if (emote) {
-      emote.isDeleted = false;
-      emote.deletedBy = null;
-      emote.deletedAt = null;
-      emote.changed("deletedAt", true);
       emote.deletionReason = null;
       emote.validatedAt = new Date();
       emote.validatedBy = "You";

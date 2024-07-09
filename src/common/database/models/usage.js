@@ -65,18 +65,11 @@ Usage.init(
       allowNull: false,
       field: "last_usage",
     },
-    createdAt: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-      allowNull: false,
-      field: "created_at",
-    },
   },
   {
     indexes: [],
     sequelize,
     modelName: "usages",
-    timestamps: true,
   },
 );
 
