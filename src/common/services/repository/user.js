@@ -1,9 +1,9 @@
-import UserModel from "#common/database/models/sequelize/user.js";
+import UserModel from "#common/database/models/user.js";
 import virtualWorldService from "./virtualWorld.js";
-import UserEmoteModel from "#common/database/models/sequelize/userEmote.js";
+import UserEmoteModel from "#common/database/models/userEmote.js";
 import CrudService from "./crud.js";
 import Sequelize from "sequelize";
-import VWModel from "#common/database/models/sequelize/virtualWorld.js";
+import VWModel from "#common/database/models/virtualWorld.js";
 import { Op } from "sequelize";
 
 const { USE_WHITELIST } = process.env;
@@ -150,7 +150,7 @@ export class UsersService extends CrudService {
     return emote;
   }
 
-  async validateEmote(user, emoteUuid, asAdmin = false) {
+  async validateEmote(user, emoteUuid) {
     const emote = await this.hasEmote(user, emoteUuid);
     if (emote) {
       emote.isDeleted = false;
@@ -159,7 +159,7 @@ export class UsersService extends CrudService {
       emote.changed("deletedAt", true);
       emote.deletionReason = null;
       emote.validatedAt = new Date();
-      emote.validatedBy = asAdmin ? "Kinetix" : "You";
+      emote.validatedBy = "You";
       emote.changed("validatedAt", true);
       emote.moderation = emote.moderation
         ? { ...emote.moderation, validated: true }

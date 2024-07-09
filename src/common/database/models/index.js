@@ -4,7 +4,6 @@ import User from "./user.js";
 import UserActivity from "./userActivity.js";
 import VirtualWorld from "./virtualWorld.js";
 
-import VirtualWorldAlias from "./virtualWorldAlias.js";
 import VirtualWorldEmote from "./virtualWorldEmote.js";
 import VirtualWorldUser from "./virtualWorldUser.js";
 import VirtualWorldToken from "./virtualWorldToken.js";
@@ -14,7 +13,6 @@ export const associationModels = {
   UserEmote,
   VirtualWorldEmote,
   VirtualWorldUser,
-  VirtualWorldAlias,
   VirtualWorldToken,
 };
 

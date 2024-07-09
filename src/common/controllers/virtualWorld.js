@@ -3,7 +3,7 @@ import vwService from "#common/services/repository/virtualWorld.js";
 import storeService from "#common/services/store.js";
 import userService from "#common/services/repository/user.js";
 import keyService from "#common/services/repository/key.js";
-import HttpError from "../../common/helpers/error.js";
+import HttpError from "../helpers/error.js";
 import logger from "#common/services/logger.js";
 import moment from "moment";
 import virtualWorldService from "#common/services/repository/virtualWorld.js";

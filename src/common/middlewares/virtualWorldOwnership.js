@@ -15,7 +15,7 @@ export default async (req, res, next) => {
         new HttpError(null, {}, NOT_FOUND, "VirtualWorld not found."),
       );
     }
-    if (vw.cognitoUuid !== user.username && !user.isAdmin) {
+    if (vw.cognitoUuid !== user.username) {
       return next(
         new HttpError(
           null,

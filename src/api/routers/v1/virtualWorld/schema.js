@@ -36,12 +36,6 @@ export const updateConf = {
   }),
 };
 
-export const aliasGetByName = {
-  params: Joi.object().keys({
-    name: Joi.string().required(),
-  }),
-};
-
 export const usersGetAll = {
   params: Joi.object().keys({
     uuid: Joi.string().uuid().required(),

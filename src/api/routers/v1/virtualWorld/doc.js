@@ -261,35 +261,4 @@
  *              schema:
  *                $ref: '#/components/schemas/User'
  *
- * /v1/virtual-world/alias/{name}:
- *    get:
- *      summary: Get an emote by alias
- *      deprecated: true
- *      tags:
- *        - /virtual-world/emotes
- *      description: Create an alias in the portal and retrieve the emote associated with the requested alias here
- *      parameters:
- *      - in: path
- *        name: name
- *        description: Alias name
- *      security:
- *        - write: []
- *      responses:
- *        401:
- *          description: Unauthorized
- *          content:
- *            application/json:
- *              schema:
- *                $ref: '#/components/schemas/UnauthorizedError'
- *        403:
- *          description: Forbidden
- *          content:
- *             application/json:
- *               schema:
- *                 $ref: '#/components/schemas/ForbiddenError'
- *        200:
- *          content:
- *            application/json:
- *              schema:
- *                $ref: '{{BACKEND_URL}}#/definitions/Asset'
  */

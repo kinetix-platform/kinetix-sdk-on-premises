@@ -1,30 +1,30 @@
 import Sequelize from "sequelize";
-import sequelize from "../../sequelize.js";
+import sequelize from "../sequelize.js";
 
 const { Model, DataTypes } = Sequelize;
 
-class User extends Model {
+class VirtualWorldEmote extends Model {
   static associate(models) {
-    User.belongsToMany(models.VirtualWorld, {
-      as: "virtualWorlds",
-      through: models.VirtualWorldUser,
-    });
-    User.hasMany(models.UserEmote, { as: "emotes", onDelete: "CASCADE" });
-    User.hasMany(models.UserActivity, { as: "activity", onDelete: "CASCADE" });
+    VirtualWorldEmote.belongsTo(models.VirtualWorld, { onDelete: "CASCADE" });
   }
 }
 
-User.init(
+VirtualWorldEmote.init(
   {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    virtualWorldId: {
-      type: DataTypes.STRING(255),
+    emoteUuid: {
+      type: DataTypes.UUID,
+      field: "emote_uuid",
       allowNull: false,
+    },
+    virtualWorldId: {
+      type: DataTypes.INTEGER,
       field: "vw_id",
+      allowNull: false,
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -36,9 +36,9 @@ User.init(
   {
     indexes: [],
     sequelize,
-    modelName: "users",
+    modelName: "virtual_worlds_emotes",
     timestamps: false,
   },
 );
 
-export default User;
+export default VirtualWorldEmote;

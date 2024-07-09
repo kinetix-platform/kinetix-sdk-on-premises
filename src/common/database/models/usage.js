@@ -1,5 +1,5 @@
 import Sequelize from "sequelize";
-import sequelize from "../../sequelize.js";
+import sequelize from "../sequelize.js";
 
 const { Model, DataTypes } = Sequelize;
 
@@ -20,12 +20,12 @@ Usage.init(
       autoIncrement: true,
     },
     virtualWorldId: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.INTEGER,
       field: "vw_id",
       allowNull: false,
     },
     keyId: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.INTEGER,
       field: "key_id",
       allowNull: true,
     },

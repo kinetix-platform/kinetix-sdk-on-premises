@@ -1,8 +1,8 @@
 import { Op } from "sequelize";
 import CrudService from "./crud.js";
-import UserEmoteModel from "#common/database/models/sequelize/userEmote.js";
-import UserModel from "#common/database/models/sequelize/user.js";
-import VWModel from "#common/database/models/sequelize/virtualWorld.js";
+import UserEmoteModel from "#common/database/models/userEmote.js";
+import UserModel from "#common/database/models/user.js";
+import VWModel from "#common/database/models/virtualWorld.js";
 
 export class UserEmotesService extends CrudService {
   constructor() {

@@ -1,5 +1,5 @@
 import Sequelize from "sequelize";
-import sequelize from "../../sequelize.js";
+import sequelize from "../sequelize.js";
 
 const { Model, DataTypes } = Sequelize;
 
@@ -15,12 +15,12 @@ class VirtualWorld extends Model {
     });
     VirtualWorld.hasMany(models.Key, { as: "keys", onDelete: "CASCADE" });
     VirtualWorld.hasMany(models.Usage, { as: "usages" });
-    VirtualWorld.hasMany(models.VirtualWorldAlias, {
-      as: "alias",
-      onDelete: "CASCADE",
-    });
     VirtualWorld.hasMany(models.VirtualWorldToken, {
       as: "tokens",
+      onDelete: "CASCADE",
+    });
+    VirtualWorld.hasMany(models.Process, {
+      as: "processes",
       onDelete: "CASCADE",
     });
   }

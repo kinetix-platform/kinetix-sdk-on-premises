@@ -1,15 +1,20 @@
 import Sequelize from "sequelize";
-import sequelize from "../../sequelize.js";
+import sequelize from "../sequelize.js";
+import { truncate } from "../../helpers/string.js";
 
 const { Model, DataTypes } = Sequelize;
 
-class VirtualWorldAlias extends Model {
+class Key extends Model {
   static associate(models) {
-    VirtualWorldAlias.belongsTo(models.VirtualWorld, { onDelete: "CASCADE" });
+    Key.belongsTo(models.VirtualWorld, {
+      as: "virtualWorld",
+      onDelete: "CASCADE",
+    });
+    Key.hasMany(models.Process, { as: "processes" });
   }
 }
 
-VirtualWorldAlias.init(
+Key.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -21,41 +26,36 @@ VirtualWorldAlias.init(
       allowNull: false,
       defaultValue: Sequelize.literal("public.uuid_generate_v4()"),
     },
+    value: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+    },
     virtualWorldId: {
       type: DataTypes.INTEGER,
       field: "vw_id",
       allowNull: false,
     },
-    name: {
-      type: DataTypes.CITEXT,
-      allowNull: false,
-    },
-    description: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
-    categories: {
-      type: DataTypes.ARRAY(DataTypes.UUID),
-      allowNull: false,
-      defaultValue: [],
-    },
-    mature: {
+    canRead: {
       type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
-    emotes: {
-      type: DataTypes.ARRAY(DataTypes.UUID),
+      defaultValue: true,
       allowNull: false,
-      defaultValue: [],
+      field: "can_read",
     },
-    startDate: {
+    canWrite: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+      allowNull: false,
+      field: "can_write",
+    },
+    expire: {
       type: DataTypes.DATE,
       allowNull: true,
-      field: "start_date",
     },
-    interval: {
-      type: DataTypes.BIGINT,
-      allowNull: true,
+    isDeleted: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+      field: "is_deleted",
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -67,15 +67,18 @@ VirtualWorldAlias.init(
   {
     indexes: [],
     sequelize,
-    modelName: "virtual_worlds_aliases",
+    modelName: "keys",
     timestamps: false,
   },
 );
 
-VirtualWorldAlias.prototype.toJSON = function () {
+Key.prototype.toJSON = function (hideKey = true) {
   const newObject = Object.assign({}, this.get());
+
   delete newObject.id;
+  delete newObject.applicationId;
+  if (hideKey) newObject.value = truncate(newObject.value);
   return newObject;
 };
 
-export default VirtualWorldAlias;
+export default Key;

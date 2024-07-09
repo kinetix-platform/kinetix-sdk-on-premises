@@ -1,4 +1,4 @@
-import CognitoAuth from "#common/database/models/sequelize/cognitoAuth.js";
+import CognitoAuth from "#common/database/models/cognitoAuth.js";
 import CrudService from "./crud.js";
 
 export class CognitosService extends CrudService {

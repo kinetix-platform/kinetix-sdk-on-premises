@@ -84,7 +84,7 @@ class Controller {
 
   async validateModeration(req, res, next) {
     try {
-      const { params, vw, user } = req;
+      const { params, vw } = req;
       const { userId, emoteUuid } = params;
 
       const [vwUser] = await vw.getUsers({ where: { virtualWorldId: userId } });
@@ -99,7 +99,7 @@ class Controller {
         );
       }
 
-      await userService.validateEmote(vwUser, emoteUuid, user.isAdmin);
+      await userService.validateEmote(vwUser, emoteUuid);
       await kinetixService.updateAsset({
         uuid: emoteUuid,
         data: { metadata: { moderation: { validated: true } } },

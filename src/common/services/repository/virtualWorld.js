@@ -1,10 +1,10 @@
 import crypto from "crypto";
 import CrudService from "./crud.js";
-import VirtualWorld from "#common/database/models/sequelize/virtualWorld.js";
-import Key from "#common/database/models/sequelize/key.js";
-import User from "#common/database/models/sequelize/user.js";
-import VirtualWorldEmoteModel from "#common/database/models/sequelize/virtualWorldEmote.js";
-import VirtualWorldUser from "#common/database/models/sequelize/virtualWorldUser.js";
+import VirtualWorld from "#common/database/models/virtualWorld.js";
+import Key from "#common/database/models/key.js";
+import User from "#common/database/models/user.js";
+import VirtualWorldEmoteModel from "#common/database/models/virtualWorldEmote.js";
+import VirtualWorldUser from "#common/database/models/virtualWorldUser.js";
 
 const { USE_WHITELIST } = process.env;
 

@@ -14,7 +14,7 @@ const { host, replicaHost, port, username, password, database, dialect } =
  */
 export const associateModels = async () => {
   const { default: models, associationModels } = await import(
-    "#common/database/models/sequelize/index.js"
+    "#common/database/models/index.js"
   );
   const allModels = { ...models, ...associationModels };
   Object.entries(models).forEach((entry) => entry[1].associate(allModels));

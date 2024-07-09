@@ -15,12 +15,6 @@ const file = ({ allowedTypes = [] }) =>
     })
     .required();
 
-const interval = Joi.alternatives([
-  Joi.string().valid(null),
-  Joi.number().integer().min(0),
-]); // WHITELIST AUTHORIZED INTERVALS
-const arrayOfUuids = Joi.array().items(Joi.string().uuid());
-
 export const get = {
   params: Joi.object().keys({
     uuid: Joi.string().uuid().required(),
@@ -147,54 +141,6 @@ export const listModeration = {
     offset: Joi.number().integer().min(0),
     threshold: Joi.number().min(0).max(1),
   }),
-};
-
-export const aliasCreate = {
-  params: Joi.object()
-    .keys({
-      uuid: Joi.string().uuid().required(),
-    })
-    .required(),
-  body: Joi.object()
-    .keys({
-      name: Joi.string().required(),
-      description: Joi.string(),
-      startDate: Joi.date(),
-      interval,
-      emotes: arrayOfUuids,
-      categories: arrayOfUuids,
-      mature: Joi.boolean(),
-    })
-    .required(),
-};
-
-export const aliasGet = {
-  params: Joi.object()
-    .keys({
-      uuid: Joi.string().uuid().required(),
-      aliasUuid: Joi.string().uuid().required(),
-    })
-    .required(),
-};
-
-export const aliasUpdate = {
-  params: Joi.object()
-    .keys({
-      uuid: Joi.string().uuid().required(),
-      aliasUuid: Joi.string().uuid().required(),
-    })
-    .required(),
-  body: Joi.object()
-    .keys({
-      name: Joi.string(),
-      description: Joi.string(),
-      startDate: Joi.date(),
-      interval,
-      emotes: arrayOfUuids,
-      categories: arrayOfUuids,
-      mature: Joi.alternatives([Joi.string().valid(null), Joi.boolean()]),
-    })
-    .required(),
 };
 
 export const usersGetAll = {

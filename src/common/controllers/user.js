@@ -92,7 +92,7 @@ class Controller {
 
   async removeEmote(req, res, next) {
     try {
-      const { params, vw, user: remover, body } = req;
+      const { params, vw, body } = req;
       const { userId, emoteUuid } = params;
       const { reason } = body;
 
@@ -108,12 +108,7 @@ class Controller {
         );
       }
 
-      await userService.removeEmote(
-        user,
-        emoteUuid,
-        remover?.isAdmin || false,
-        reason,
-      );
+      await userService.removeEmote(user, emoteUuid, reason);
       await Promise.all([
         cacheService.delEmotesVWUser(vw.uuid, userId),
         cacheService.delEmoteMetadata(vw.uuid, emoteUuid),
