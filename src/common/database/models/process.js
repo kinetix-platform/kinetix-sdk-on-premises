@@ -22,6 +22,7 @@ Process.init(
       type: DataTypes.UUID,
       allowNull: false,
       defaultValue: Sequelize.UUIDV4,
+      unique: true,
     },
     userId: {
       type: DataTypes.INTEGER,

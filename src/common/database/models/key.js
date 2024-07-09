@@ -25,10 +25,12 @@ Key.init(
       type: DataTypes.UUID,
       allowNull: false,
       defaultValue: Sequelize.UUIDV4,
+      unique: true,
     },
     value: {
       type: DataTypes.STRING(255),
       allowNull: false,
+      unique: true,
     },
     virtualWorldId: {
       type: DataTypes.INTEGER,

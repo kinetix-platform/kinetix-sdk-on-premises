@@ -26,6 +26,7 @@ User.init(
       type: DataTypes.UUID,
       allowNull: false,
       defaultValue: Sequelize.UUIDV4,
+      unique: true,
     },
     virtualWorldId: {
       type: DataTypes.STRING(255),

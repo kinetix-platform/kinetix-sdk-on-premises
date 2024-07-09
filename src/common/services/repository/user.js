@@ -110,12 +110,11 @@ export class UsersService extends CrudService {
     });
   }
 
-  async createEmote(user, emoteUuid, isUGE = false) {
+  async createEmote(user, emoteUuid) {
     const hasEmote = await this.hasEmote(user, emoteUuid);
     if (hasEmote) return;
     return user.createEmote({
       emoteUuid,
-      isUGE,
     });
   }
 

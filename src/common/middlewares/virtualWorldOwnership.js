@@ -1,5 +1,5 @@
 import httpStatus from "http-status";
-import HttpError from "../../common/helpers/error.js";
+import HttpError from "#common/helpers/error.js";
 import virtualWorldService from "#common/services/repository/virtualWorld.js";
 
 const { NOT_FOUND, FORBIDDEN, INTERNAL_SERVER_ERROR } = httpStatus;

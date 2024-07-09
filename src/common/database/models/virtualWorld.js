@@ -9,10 +9,6 @@ class VirtualWorld extends Model {
       as: "users",
       through: models.VirtualWorldUser,
     });
-    VirtualWorld.hasMany(models.VirtualWorldEmote, {
-      as: "emotes",
-      onDelete: "CASCADE",
-    });
     VirtualWorld.hasMany(models.Key, { as: "keys", onDelete: "CASCADE" });
     VirtualWorld.hasMany(models.Usage, { as: "usages" });
     VirtualWorld.hasMany(models.VirtualWorldToken, {
@@ -37,6 +33,7 @@ VirtualWorld.init(
       type: DataTypes.UUID,
       allowNull: false,
       defaultValue: Sequelize.UUIDV4,
+      unique: true,
     },
     cognitoUuid: {
       type: DataTypes.UUID,
@@ -49,7 +46,7 @@ VirtualWorld.init(
       allowNull: false,
     },
     configuration: {
-      type: DataTypes.JSON,
+      type: DataTypes.JSONB,
       allowNull: true,
       field: "configuration",
     },

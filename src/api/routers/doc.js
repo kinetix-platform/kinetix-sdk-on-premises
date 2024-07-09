@@ -48,24 +48,6 @@
  *     items:
  *       $ref: '#/components/schemas/UserEmote'
  *
- *   VirtualWorldEmote:
- *     type: "object"
- *     properties:
- *       id:
- *        type: "string"
- *       userId:
- *        type: "number"
- *       virtualWorldId:
- *        type: "number"
- *       createdAt:
- *         type: "string"
- *         format: date-time
- *
- *   VirtualWorldEmotes:
- *     type: "array"
- *     items:
- *       $ref: '#/components/schemas/VirtualWorldEmote'
- *
  *   InternalError:
  *     type: "object"
  *     properties:

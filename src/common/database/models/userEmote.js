@@ -21,11 +21,10 @@ UserEmote.init(
       field: "user_id",
       allowNull: false,
     },
-    isUGE: {
-      type: DataTypes.BOOLEAN,
-      field: "is_uge",
+    emoteUuid: {
+      type: DataTypes.UUID,
+      field: "emote_uuid",
       allowNull: false,
-      defaultValue: false,
     },
     deletionReason: {
       type: DataTypes.STRING,
@@ -41,11 +40,6 @@ UserEmote.init(
       type: DataTypes.STRING,
       field: "validated_by",
       allowNull: true,
-    },
-    emoteUuid: {
-      type: DataTypes.UUID,
-      field: "emote_uuid",
-      allowNull: false,
     },
     moderation: {
       type: DataTypes.JSONB,
