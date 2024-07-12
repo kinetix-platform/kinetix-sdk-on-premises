@@ -1,24 +1,13 @@
 import UserModel from "#common/database/models/user.js";
-import virtualWorldService from "./virtualWorld.js";
 import UserEmoteModel from "#common/database/models/userEmote.js";
 import CrudService from "./crud.js";
 import Sequelize from "sequelize";
 import VWModel from "#common/database/models/virtualWorld.js";
 import { Op } from "sequelize";
 
-const { USE_WHITELIST } = process.env;
-
 export class UsersService extends CrudService {
   constructor() {
     super("users", UserModel);
-  }
-
-  async isEmoteAllowed(user, emoteUuid) {
-    if (!USE_WHITELIST) {
-      return true;
-    }
-    const vw = await user.getVirtualWorlds();
-    return virtualWorldService.hasEmote(vw[0], emoteUuid);
   }
 
   async getAllFromVW(vw) {

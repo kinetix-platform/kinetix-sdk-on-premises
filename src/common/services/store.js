@@ -3,10 +3,9 @@ import hmac from "./hmac.js";
 import _ from "lodash";
 import logger from "./logger.js";
 import signRequest from "./hmac.js";
-import qs from "qs";
 import cacheService from "./cache.js";
 
-const { KINETIX_BACKEND, DISABLE_INTERNAL_BLACKLIST } = process.env;
+const { KINETIX_BACKEND } = process.env;
 
 class Store {
   constructor() {
@@ -207,58 +206,6 @@ class Store {
     }
 
     return r.data;
-  }
-
-  async getStatsAccountsWithAvatars() {
-    const blackListQS =
-      DISABLE_INTERNAL_BLACKLIST === "true" ? "?disableBlacklist=true" : "";
-    const route = `${KINETIX_BACKEND}/api/v1/admin/stats/sdk/accounts-with-avatars${blackListQS}`;
-    const signature = signRequest(route, null, "GET");
-    const r = await axios.get(route, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `hmac signature=${signature}`,
-      },
-    });
-
-    return r.data;
-  }
-
-  async getStatsAvatarsPerAccount({ limit, offset, orderDirection, orderBy }) {
-    const params = { limit, offset, orderDirection, orderBy };
-    if (DISABLE_INTERNAL_BLACKLIST === "true") {
-      params.disableBlacklist = true;
-    }
-    const queryString = qs.stringify(params);
-    const route = `${KINETIX_BACKEND}/api/v1/admin/stats/sdk/avatars-per-account?${queryString}`;
-    const signature = signRequest(route, null, "GET");
-    return axios.get(route, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `hmac signature=${signature}`,
-      },
-    });
-  }
-
-  async searchEmotes({ limit, offset, search }) {
-    const params = {
-      limit,
-      offset,
-      search,
-      type: "emote",
-      published: true,
-      fetchAll: true,
-      noSignature: true,
-    };
-    const queryString = qs.stringify(params);
-    const route = `${KINETIX_BACKEND}/api/v1/assets?${queryString}`;
-    const signature = signRequest(route, null, "GET");
-    return axios.get(route, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `hmac signature=${signature}`,
-      },
-    });
   }
 
   async updateEmote(uuid, { name }, vw) {

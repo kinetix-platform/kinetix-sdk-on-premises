@@ -1,8 +1,12 @@
 import { Sequelize } from "sequelize";
 import moment from "moment";
-import sequelizeConfig from "../config/sequelize.js";
-
-const { NODE_ENV } = process.env;
+import sequelizeConfig from "#common/config/sequelize.js";
+import {
+  DB_POOL_MIN,
+  DB_POOL_MAX,
+  DB_POOL_IDLE,
+  DB_LOGGING,
+} from "#common/config/constants.js";
 
 const { host, replicaHost, port, username, password, database, dialect } =
   sequelizeConfig;
@@ -26,15 +30,14 @@ const getRandomWithinRange = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-let sequelize;
-
-if (NODE_ENV === "production") {
+const initSequelize = () => {
   const maxConnectionAge = moment.duration(10, "minutes").asSeconds();
+
   const pool = {
     handleDisconnects: true,
-    min: 1,
-    max: 20,
-    idle: 30000,
+    min: DB_POOL_MIN,
+    max: DB_POOL_MAX,
+    idle: DB_POOL_IDLE,
     validate: (obj) => {
       if (!obj.recycleWhen) {
         obj.recycleWhen = moment().add(
@@ -46,29 +49,45 @@ if (NODE_ENV === "production") {
       return moment().diff(obj.recycleWhen, "seconds") < 0;
     },
   };
-  const master = {
-    host,
-    username,
-    password,
-    port,
-    database,
-    pool,
-  };
-  const replica = { ...master, host: replicaHost };
-  sequelize = new Sequelize(null, null, null, {
-    dialect,
-    ...((process.env.SEQUELIZE_LOGGING || "true") !== "true" && {
-      logging: false,
-    }),
-    replication: {
-      write: master,
-      read: [replica],
-    },
-  });
-}
 
-export default sequelize ||
-  new Sequelize(
+  const default_options = {
+    paranoid: true,
+    timestamps: true,
+    createdAt: "created_at",
+    updatedAt: "updated_at",
+    deletedAt: "deleted_at",
+  };
+
+  if (replicaHost) {
+    const master = {
+      host,
+      username,
+      password,
+      port,
+      database,
+      pool,
+    };
+    const replica = { ...master, host: replicaHost };
+
+    return new Sequelize(
+      null,
+      null,
+      null,
+      {
+        dialect,
+        ...(DB_LOGGING && {
+          logging: false,
+        }),
+        replication: {
+          write: master,
+          read: [replica],
+        },
+      },
+      default_options,
+    );
+  }
+
+  return new Sequelize(
     database,
     username,
     password,
@@ -76,20 +95,18 @@ export default sequelize ||
       host,
       port,
       dialect,
-      ...((process.env.SEQUELIZE_LOGGING || "true") !== "true" && {
+      ...(DB_LOGGING && {
         logging: false,
       }),
       pool: {
-        max: 20,
-        min: 1,
-        idle: 30000,
+        max: DB_POOL_MAX,
+        min: DB_POOL_MIN,
+        idle: DB_POOL_IDLE,
       },
     },
-    {
-      paranoid: true,
-      timestamps: true,
-      createdAt: "created_at",
-      updatedAt: "updated_at",
-      deletedAt: "deleted_at",
-    },
+    default_options,
   );
+};
+
+const sequelize = initSequelize();
+export default sequelize;

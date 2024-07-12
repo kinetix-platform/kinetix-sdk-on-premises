@@ -3,10 +3,7 @@ import CrudService from "./crud.js";
 import VirtualWorld from "#common/database/models/virtualWorld.js";
 import Key from "#common/database/models/key.js";
 import User from "#common/database/models/user.js";
-import VirtualWorldEmoteModel from "#common/database/models/virtualWorldEmote.js";
 import VirtualWorldUser from "#common/database/models/virtualWorldUser.js";
-
-const { USE_WHITELIST } = process.env;
 
 export class VirtualWorldService extends CrudService {
   constructor() {
@@ -85,19 +82,6 @@ export class VirtualWorldService extends CrudService {
       },
     });
     return users.length ? users[0] : false;
-  }
-
-  async hasEmote(virtualWorld, uuid) {
-    if (!USE_WHITELIST) {
-      return true;
-    }
-    const hasEmote = await VirtualWorldEmoteModel.findOne({
-      where: {
-        vw_id: virtualWorld.id,
-        emoteUuid: uuid,
-      },
-    });
-    return !!hasEmote;
   }
 
   async getByKey(value) {

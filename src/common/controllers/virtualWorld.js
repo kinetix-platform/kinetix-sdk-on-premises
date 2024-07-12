@@ -18,7 +18,7 @@ const {
   CONFLICT,
 } = httpStatus;
 
-const { MAX_VW_KEYS_COUNT, MAX_VW_COUNT, USE_WHITELIST } = process.env;
+const { MAX_VW_KEYS_COUNT, MAX_VW_COUNT } = process.env;
 
 class Controller {
   async createKey(req, res, next) {
@@ -438,17 +438,6 @@ class Controller {
   async getEmotes(req, res, next) {
     try {
       const { vw } = req;
-      const { mature, categories } = req.query;
-
-      if (USE_WHITELIST) {
-        const emotes = await vw.getEmotes({ raw: true });
-        const emotesData = await storeService.getEmotes(emotes, vw, {
-          mature,
-          categories,
-        });
-        return res.send(emotesData);
-      }
-
       const emotes = await storeService.getEmoteGallery(vw);
       res.send(emotes);
     } catch {

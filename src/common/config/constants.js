@@ -18,9 +18,21 @@ export const DB_PORT = process.env.DB_PORT;
 
 export const DB_DIALECT = process.env.DB_DIALECT;
 
-export const SEQUELIZE_LOGGING = process.env.SEQUELIZE_LOGGING
-  ? process.env.SEQUELIZE_LOGGING == "true"
+export const DB_LOGGING = process.env.DB_LOGGING
+  ? process.env.DB_LOGGING == "true"
   : true;
+
+export const DB_POOL_MIN = process.env.DB_POOL_MIN
+  ? parseInt(DB_POOL_MIN, 10)
+  : 1;
+
+export const DB_POOL_MAX = process.env.DB_POOL_MAX
+  ? parseInt(DB_POOL_MAX, 10)
+  : 20;
+
+export const DB_POOL_IDLE = process.env.DB_POOL_IDLE
+  ? parseInt(DB_POOL_IDLE, 10)
+  : 30000;
 
 export const DB_HOST_REPLICA = process.env.DB_HOST_REPLICA;
 
@@ -37,17 +49,11 @@ export const DISABLE_CACHE = process.env.DISABLE_CACHE
   ? process.env.DISABLE_CACHE == "true"
   : false;
 
-export const API_PORT = process.env.API_PORT
-  ? parseInt(process.env.API_PORT)
-  : 4000;
+export const PORT = process.env.PORT ? parseInt(process.env.PORT) : 4000;
 
 export const API_CORS_ORIGINS = process.env.API_CORS_ORIGINS
   ? process.env.API_CORS_ORIGINS.split(";")
   : ["*"];
-
-export const PORTAL_PORT = process.env.PORTAL_PORT
-  ? parseInt(PORTAL_PORT, 10)
-  : 4001;
 
 export const PORTAL_CORS_ORIGINS = process.env.PORTAL_CORS_ORIGINS
   ? process.PORTAL_CORS_ORIGINS.split(";")
@@ -56,7 +62,3 @@ export const PORTAL_CORS_ORIGINS = process.env.PORTAL_CORS_ORIGINS
 export const EXPOSE_SWAGGER = process.env.EXPOSE_SWAGGER
   ? process.env.EXPOSE_SWAGGER === "true"
   : true;
-
-export const WEBHOOK_PORT = process.env.WEBHOOK_PORT
-  ? process.env.WEBHOOK_PORT
-  : 4002;

@@ -57,18 +57,6 @@ class Controller {
         );
       }
 
-      const isEmoteAllowed = await userService.isEmoteAllowed(user, emoteUuid);
-      if (!isEmoteAllowed) {
-        return next(
-          new HttpError(
-            null,
-            {},
-            FORBIDDEN,
-            "Emote not allowed",
-            "emoteNotAllowed",
-          ),
-        );
-      }
       const hasEmote = await userService.hasEmote(user, emoteUuid);
       if (hasEmote) {
         return next(

@@ -3,7 +3,7 @@ import { createTerminus } from "@godaddy/terminus";
 import loggerMiddleware from "#common/middlewares/logger.js";
 import errorMiddleware from "#common/middlewares/error.js";
 import logger from "#common/services/logger.js";
-import { WEBHOOK_PORT } from "#common/config/constants.js";
+import { PORT } from "#common/config/constants.js";
 import routers from "./routers/index.js";
 
 const { associateModels } = await import("#common/database/sequelize.js");
@@ -21,7 +21,7 @@ app.use(errorMiddleware);
 class App {
   async start() {
     await new Promise((resolve) => {
-      const server = app.listen(WEBHOOK_PORT, () => {
+      const server = app.listen(PORT, () => {
         server.timeout = 1000 * 60 * 60;
         server.headersTimeout = 1000 * 60 * 60;
         createTerminus(server, {
@@ -44,7 +44,7 @@ class App {
         resolve(server);
       });
     });
-    logger.info(`Webhook server started on ${WEBHOOK_PORT}`);
+    logger.info(`Webhook server started on ${PORT}`);
   }
 
   async stop() {

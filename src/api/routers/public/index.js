@@ -1,6 +1,6 @@
 import express from "express";
 import path from "path";
-import { API_PORT } from "#common/config/constants.js";
+import { PORT } from "#common/config/constants.js";
 const __dirname = import.meta.dirname;
 
 const router = express.Router();
@@ -15,7 +15,7 @@ router.get("/env-config.js", (req, res) => {
         window._env_ = {
         REACT_APP_API_BASE_URL:"/",
         REACT_APP_ENV:"production",
-        REACT_APP_STORAGE_BASE_URL:"${req.protocol}://${req.hostname}:${API_PORT}",
+        REACT_APP_STORAGE_BASE_URL:"${req.protocol}://${req.hostname}:${PORT}",
     }`);
 });
 

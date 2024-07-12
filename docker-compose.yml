@@ -1,22 +1,36 @@
 name: kinetix
 
 services:
+  s3:
+    profiles: [s3, infra]
+    image: minio/minio
+    command: ["server", "/data", "--console-address", ":9001"]
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+     - ./s3:/data
+
   redis:
+    profiles: [cache, infra]
     image: redis:alpine
     ports:
       - '6379:6379'
 
   postgres:
+    profiles: [db, infra]
     image: postgres:alpine
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=kinetix
     ports:
       - '5432:5432'
     volumes:
      - ./db:/var/lib/postgresql/data
 
   api:
+    profiles: [api, apis]
     build:
       context: .
       dockerfile: Dockerfile
@@ -25,17 +39,21 @@ services:
     depends_on:
       - redis
       - postgres
+      - s3
     ports:
       - "4000:4000"
     environment:
       CACHE_REDIS_ENDPOINTS: "redis:6379"
+      DB_DIALECT: postgres
       DB_HOST: postgres
       DB_PORT: 5432
       DB_USER: postgres
       DB_PASSWORD: postgres
-      DB_NAME: mydatabase
+      DB_NAME: kinetix
+      S3_BUCKET:
 
   portal:
+    profiles: [portal, apis]
     build:
       context: .
       dockerfile: Dockerfile
@@ -44,17 +62,21 @@ services:
     depends_on:
       - redis
       - postgres
+      - s3
     ports:
-      - "4001:4001"
+      - "4001:4000"
     environment:
       CACHE_REDIS_ENDPOINTS: "redis:6379"
+      DB_DIALECT: postgres
       DB_HOST: postgres
       DB_PORT: 5432
       DB_USER: postgres
       DB_PASSWORD: postgres
-      DB_NAME: mydatabase
+      DB_NAME: kinetix
+      S3_BUCKET:
 
   webhook:
+    profiles: [webhook, apis]
     build:
       context: .
       dockerfile: Dockerfile
@@ -63,12 +85,15 @@ services:
     depends_on:
       - redis
       - postgres
+      - s3
     ports:
-      - "4001:4001"
+      - "4002:4000"
     environment:
       CACHE_REDIS_ENDPOINTS: "redis:6379"
+      DB_DIALECT: postgres
       DB_HOST: postgres
       DB_PORT: 5432
       DB_USER: postgres
       DB_PASSWORD: postgres
-      DB_NAME: mydatabase
+      DB_NAME: kinetix
+      S3_BUCKET:

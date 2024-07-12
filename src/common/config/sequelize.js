@@ -6,7 +6,7 @@ import {
   DB_PORT,
   DB_DIALECT,
   DB_HOST_REPLICA,
-  SEQUELIZE_LOGGING,
+  DB_LOGGING,
 } from "./constants.js";
 
 const options = {
@@ -16,7 +16,7 @@ const options = {
   host: DB_HOST,
   port: DB_PORT,
   dialect: DB_DIALECT,
-  logging: SEQUELIZE_LOGGING !== "false",
+  logging: DB_LOGGING !== "false",
 };
 
 if (DB_HOST_REPLICA) {
