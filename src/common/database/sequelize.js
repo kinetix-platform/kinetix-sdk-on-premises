@@ -6,31 +6,20 @@ import {
   DB_POOL_MAX,
   DB_POOL_IDLE,
   DB_LOGGING,
+  DB_AUTO_SYNC,
 } from "#common/config/constants.js";
+import logger from "#common/services/logger.js";
 
 const { host, replicaHost, port, username, password, database, dialect } =
   sequelizeConfig;
 
-/**
- * Every model (except relation tables) have an associate() method.
- * This method import all models and associate it to avoid cyclical dependencies
- * @returns {Promise<void>}
- */
-export const associateModels = async () => {
-  const { default: models, associationModels } = await import(
-    "#common/database/models/index.js"
-  );
-  const allModels = { ...models, ...associationModels };
-  Object.entries(models).forEach((entry) => entry[1].associate(allModels));
-};
+export const initSequelize = () => {
+  const getRandomWithinRange = (min, max) => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
 
-const getRandomWithinRange = (min, max) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-const initSequelize = () => {
   const maxConnectionAge = moment.duration(10, "minutes").asSeconds();
 
   const pool = {
@@ -108,5 +97,23 @@ const initSequelize = () => {
   );
 };
 
-const sequelize = initSequelize();
-export default sequelize;
+export const sequelize = initSequelize();
+
+export const sequelizeAutoSync = async (sync = false) => {
+  if (sync) {
+    await sequelize.sync({ alter: true });
+    logger.info("All models were synchronized successfully.");
+  }
+};
+
+export const initDB = async () => {
+  try {
+    await sequelize.authenticate();
+    logger.info("Connection has been established successfully.");
+  } catch (error) {
+    logger.error(`Unable to connect to the database: ${error.message}`);
+  }
+  const { associateModels } = await import("#common/database/models/index.js");
+  await associateModels();
+  await sequelizeAutoSync(DB_AUTO_SYNC);
+};

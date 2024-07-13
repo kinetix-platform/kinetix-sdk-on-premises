@@ -15,11 +15,24 @@ export const associationModels = {
   Process,
 };
 
-export default {
+export const models = {
   Key,
   Usage,
   User,
   UserEmote,
   UserActivity,
   VirtualWorld,
+};
+
+export const associateModels = async () => {
+  const allModels = { ...models, ...associationModels };
+  await Promise.all(
+    Object.entries(models).map((entry) => entry[1].associate(allModels)),
+  );
+};
+
+export default {
+  models,
+  associationModels,
+  associateModels,
 };

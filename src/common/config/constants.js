@@ -6,6 +6,10 @@ dotenv.config({
   example: ".env.example",
 });
 
+export const DB_AUTO_SYNC = process.env.DB_AUTO_SYNC
+  ? process.env.DB_AUTO_SYNC === "true"
+  : true;
+
 export const DB_USER = process.env.DB_USER;
 
 export const DB_PASSWORD = process.env.DB_PASSWORD;

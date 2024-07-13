@@ -5,5 +5,10 @@ dotenv.config({
   example: ".env.example",
 });
 
-const { default: app } = await import("./app.js");
+// INIT DB
+import { initDB } from "#common/database/sequelize.js";
+await initDB();
+
+// INIT APP
+import app from "./app.js";
 await app.start();

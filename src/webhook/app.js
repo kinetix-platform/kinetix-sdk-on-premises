@@ -6,10 +6,6 @@ import logger from "#common/services/logger.js";
 import { PORT } from "#common/config/constants.js";
 import routers from "./routers/index.js";
 
-const { associateModels } = await import("#common/database/sequelize.js");
-
-await associateModels();
-
 const app = express();
 app.set("trust proxy", 1);
 app.use(express.json());

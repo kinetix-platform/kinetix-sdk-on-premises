@@ -1,5 +1,5 @@
 import Sequelize from "sequelize";
-import sequelize from "../sequelize.js";
+import { sequelize } from "../sequelize.js";
 
 const { Model, DataTypes } = Sequelize;
 
@@ -42,7 +42,7 @@ UserEmote.init(
       allowNull: true,
     },
     moderation: {
-      type: DataTypes.JSONB,
+      type: DataTypes.JSON,
       field: "moderation",
       allowNull: true,
     },

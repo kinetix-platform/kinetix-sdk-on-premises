@@ -1,5 +1,5 @@
 import Sequelize from "sequelize";
-import sequelize from "../sequelize.js";
+import { sequelize } from "../sequelize.js";
 
 const { Model, DataTypes } = Sequelize;
 
@@ -46,7 +46,7 @@ VirtualWorld.init(
       allowNull: false,
     },
     configuration: {
-      type: DataTypes.JSONB,
+      type: DataTypes.JSON,
       allowNull: true,
       field: "configuration",
     },
