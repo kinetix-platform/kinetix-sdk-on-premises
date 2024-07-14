@@ -52,7 +52,12 @@ UserEmote.init(
   {
     indexes: [],
     sequelize,
-    modelName: "users_emotes",
+    modelName: "user_emote",
+    paranoid: true,
+    timestamps: true,
+    createdAt: "created_at",
+    updatedAt: "updated_at",
+    deletedAt: "deleted_at",
   },
 );
 

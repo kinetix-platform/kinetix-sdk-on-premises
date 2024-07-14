@@ -21,9 +21,8 @@ export class UsersService extends CrudService {
       include: [
         {
           model: VWModel,
-          as: "virtualWorlds",
+          as: "virtualWorld",
           attributes: [],
-          where: { id: vw.id },
           required: true,
         },
         {

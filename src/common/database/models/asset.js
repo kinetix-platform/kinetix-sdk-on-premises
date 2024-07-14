@@ -52,6 +52,11 @@ Asset.init(
     indexes: [],
     sequelize,
     modelName: "asset",
+    paranoid: true,
+    timestamps: true,
+    createdAt: "created_at",
+    updatedAt: "updated_at",
+    deletedAt: "deleted_at",
   },
 );
 

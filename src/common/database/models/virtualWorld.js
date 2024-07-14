@@ -5,6 +5,9 @@ const { Model, DataTypes } = Sequelize;
 
 class VirtualWorld extends Model {
   static associate(models) {
+    VirtualWorld.hasMany(models.Asset, {
+      as: "assets",
+    });
     VirtualWorld.hasMany(models.Key, {
       as: "keys",
     });
@@ -53,7 +56,12 @@ VirtualWorld.init(
   {
     indexes: [],
     sequelize,
-    modelName: "virtual_worlds",
+    modelName: "virtual_world",
+    paranoid: true,
+    timestamps: true,
+    createdAt: "created_at",
+    updatedAt: "updated_at",
+    deletedAt: "deleted_at",
   },
 );
 

@@ -44,7 +44,12 @@ User.init(
   {
     indexes: [],
     sequelize,
-    modelName: "users",
+    modelName: "user",
+    paranoid: true,
+    timestamps: true,
+    createdAt: "created_at",
+    updatedAt: "updated_at",
+    deletedAt: "deleted_at",
   },
 );
 

@@ -5,8 +5,15 @@ const { Model, DataTypes } = Sequelize;
 
 class VirtualWorldToken extends Model {
   static associate(models) {
-    VirtualWorldToken.belongsTo(models.VirtualWorld, { onDelete: "CASCADE" });
-    VirtualWorldToken.belongsTo(models.User, { onDelete: "CASCADE" });
+    VirtualWorldToken.belongsTo(models.VirtualWorld, { 
+      as: 'virtualWorld' 
+    });
+    VirtualWorldToken.belongsTo(models.User, { 
+      as: 'user' 
+    });
+    VirtualWorldToken.hasOne(models.Process, { 
+      as: 'process' 
+    });
   }
 }
 
@@ -41,7 +48,12 @@ VirtualWorldToken.init(
   {
     indexes: [],
     sequelize,
-    modelName: "virtual_worlds_tokens",
+    modelName: "token",
+    paranoid: true,
+    timestamps: true,
+    createdAt: "created_at",
+    updatedAt: "updated_at",
+    deletedAt: "deleted_at",
   },
 );
 

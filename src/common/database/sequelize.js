@@ -101,7 +101,7 @@ export const sequelize = initSequelize();
 
 export const sequelizeAutoSync = async (sync = false) => {
   if (sync) {
-    await sequelize.sync({ alter: true });
+    await sequelize.sync({ /*alter: true,*/ force: true }); // NEED TO BE CHANGE AFTER DB SCHEMA IS FINALISED
     logger.info("All models were synchronized successfully.");
   }
 };

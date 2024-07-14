@@ -24,8 +24,7 @@ class Controller {
         );
       }
       const existingKeys = await vw?.getKeys({ raw: true });
-      const notDeletedKeys = existingKeys.filter((key) => !key.isDeleted);
-      if (notDeletedKeys.length >= (MAX_VW_KEYS_COUNT || 1)) {
+      if (existingKeys.length >= (MAX_VW_KEYS_COUNT || 1)) {
         return next(
           new HttpError(null, {}, FORBIDDEN, "Maximum allowed keys."),
         );
@@ -42,14 +41,10 @@ class Controller {
 
   async listKeys(req, res, next) {
     try {
-      const { vw, query } = req;
-      const { all } = query;
+      const { vw } = req;
       const filter = {
         virtualWorldId: vw.id,
       };
-      if (!all) {
-        filter.isDeleted = false;
-      }
       const keys = await keyService.getAll(filter);
       res.send(keys);
     } catch (e) {
@@ -80,7 +75,6 @@ class Controller {
       const { user } = req;
       const virtualWorlds = await vwService.getAll({
         cognitoUuid: user.username,
-        isDeleted: false,
       });
       res.send(virtualWorlds);
     } catch (e) {
@@ -98,7 +92,6 @@ class Controller {
 
       const existingVirtualWorlds = await vwService.getAll({
         cognitoUuid: user.username,
-        isDeleted: false,
       });
       if (existingVirtualWorlds.length >= (MAX_VW_COUNT || 1)) {
         return next(
@@ -178,8 +171,7 @@ class Controller {
   async delete(req, res, next) {
     try {
       const { vw } = req;
-      vw.isDeleted = true;
-      await vw.save();
+      await vw.destroy();
 
       const keys = await vw.getKeys();
       await Promise.all(keys.map((k) => cacheService.delVWKey(k.uuid)));
@@ -204,8 +196,7 @@ class Controller {
       const { keyUuid } = params;
       const keys = await vw?.getKeys();
       const key = keys.find((k) => k.uuid === keyUuid);
-      key.isDeleted = true;
-      await key.save();
+      await key.destroy();
       await cacheService.delVWKey(keyUuid);
       res.send({
         message: "Key deleted.",
@@ -224,7 +215,7 @@ class Controller {
   async getUsers(req, res, next) {
     try {
       const { vw } = req;
-      const users = await userService.getAllFromVW(vw);
+      const users = await vw.getUsers();
       return res.send(users);
     } catch (e) {
       logger.error(e.message, e);

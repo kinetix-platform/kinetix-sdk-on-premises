@@ -29,7 +29,7 @@ export class UserEmotesService extends CrudService {
           required: true,
           include: {
             model: VWModel,
-            as: "virtualWorlds",
+            as: "virtualWorld",
             required: true,
             ...(vwUuid && { where: { uuid: vwUuid } }),
           },

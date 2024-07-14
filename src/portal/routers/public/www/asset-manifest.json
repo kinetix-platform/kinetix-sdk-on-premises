@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "src/css/main.84a194e2c3fa92bb7463.css",
-    "main.js": "src/bundle.bbfa535d8410819f7928.js",
-    "runtime~main.js": "src/bundle.6943ce051f95f5fba765.js",
+    "main.css": "src/css/main.4b0e3871893098dc474d.css",
+    "main.js": "src/bundle.06ff6bb13e37727c29fc.js",
+    "runtime~main.js": "src/bundle.d308bf4064ea18df3756.js",
     "bundle.js": "src/bundle.250c1d1848ea876211d3.js",
-    "css/239.css": "src/css/239.68933186d0c1439f76c9.css",
+    "css/239.css": "src/css/239.6b219d848b9228ba5244.css",
     "process_onboarding.mp4": "src/831d9e9c7bb092c74563.mp4",
     "sam.gif": "src/c3d2d7693ff7ea3d71e8.gif",
     "disconnected-bg.png": "src/70fd8961c4a3f80fef0b.png",
@@ -24,10 +24,10 @@
     "robots.txt": "src/robots.txt"
   },
   "entrypoints": [
-    "bundle.6943ce051f95f5fba765.js",
-    "css/239.68933186d0c1439f76c9.css",
-    "bundle.6a2c17a70357453c3133.js",
-    "css/main.84a194e2c3fa92bb7463.css",
-    "bundle.bbfa535d8410819f7928.js"
+    "bundle.d308bf4064ea18df3756.js",
+    "css/239.6b219d848b9228ba5244.css",
+    "bundle.96796dcfd6e04a251f03.js",
+    "css/main.4b0e3871893098dc474d.css",
+    "bundle.06ff6bb13e37727c29fc.js"
   ]
 }
