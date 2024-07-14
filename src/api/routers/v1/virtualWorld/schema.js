@@ -1,20 +1,8 @@
 import { Joi } from "#common/middlewares/validator.js";
 
-export const addEmotes = {
-  body: Joi.object().keys({
-    uuids: Joi.array().items(Joi.string().uuid().required()).required(),
-  }),
-};
-
 export const createUser = {
   body: Joi.object().keys({
     id: Joi.string().required(),
-  }),
-};
-
-export const getEmotes = {
-  query: Joi.object().keys({
-    mature: Joi.boolean(),
   }),
 };
 

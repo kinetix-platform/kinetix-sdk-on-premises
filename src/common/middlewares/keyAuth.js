@@ -1,11 +1,9 @@
-import moment from "moment";
 import httpStatus from "http-status";
 import VirtualWorldModel from "#common/database/models/virtualWorld.js";
 import KeyModel from "#common/database/models/key.js";
 import keyService from "#common/services/repository/key.js";
 import HttpError from "../../common/helpers/error.js";
 import cacheService from "#common/services/cache.js";
-import { getCachedUsages, mergeUsages } from "#common/services/usage.js";
 
 const { FORBIDDEN, UNAUTHORIZED } = httpStatus;
 
@@ -64,19 +62,6 @@ export default async (req, res, next) => {
       new HttpError(null, {}, FORBIDDEN, "Wrong API key", "wrongApiKey"),
     );
   }
-
-  const startOfMonth = moment().utcOffset(0).startOf("months");
-  const cachedUsages = await getCachedUsages(vw, startOfMonth);
-  const storedUsages = await vw.getUsages({
-    where: { periodStart: startOfMonth },
-  });
-  // Current usage is the stored usage + the sum of all instances cached usages.
-  vw.usage = mergeUsages([
-    ...cachedUsages,
-    ...(storedUsages
-      ? storedUsages.map((storedUsage) => storedUsage.dataValues)
-      : []),
-  ]);
 
   vw.keyId = theKey.id;
   await cacheService.setVWKey(key, {

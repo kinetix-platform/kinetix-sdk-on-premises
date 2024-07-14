@@ -1,22 +1,14 @@
 import httpStatus from "http-status";
 import vwService from "#common/services/repository/virtualWorld.js";
-import storeService from "#common/services/store.js";
 import userService from "#common/services/repository/user.js";
 import keyService from "#common/services/repository/key.js";
 import HttpError from "../helpers/error.js";
 import logger from "#common/services/logger.js";
-import moment from "moment";
 import virtualWorldService from "#common/services/repository/virtualWorld.js";
 import cacheService from "#common/services/cache.js";
 
-const {
-  FORBIDDEN,
-  INTERNAL_SERVER_ERROR,
-  OK,
-  BAD_REQUEST,
-  NOT_FOUND,
-  CONFLICT,
-} = httpStatus;
+const { FORBIDDEN, INTERNAL_SERVER_ERROR, BAD_REQUEST, NOT_FOUND, CONFLICT } =
+  httpStatus;
 
 const { MAX_VW_KEYS_COUNT, MAX_VW_COUNT } = process.env;
 
@@ -77,68 +69,6 @@ class Controller {
       });
     } catch (e) {
       logger.error("Get VW failed", e);
-      return next(
-        new HttpError(null, {}, INTERNAL_SERVER_ERROR, "An error occured."),
-      );
-    }
-  }
-
-  async listUsage(req, res, next) {
-    try {
-      const { vw } = req;
-      let usages = await vw.getUsages({
-        order: [["periodStart", "DESC"]],
-      });
-      const startOfMonth = moment().utcOffset(0).startOf("months");
-      // Fetching stored caches for every instances, for every API keys of the matching (vw/period) groups
-      const caches = await cacheService.scan(
-        `*usages:*:${vw.uuid}:${startOfMonth.unix()}:*`,
-      );
-      const cachedUsages = await Promise.all(
-        caches.map(async (rawKey) => {
-          const key = rawKey.split(":").slice(1).join(":");
-          return cacheService.get(key);
-        }),
-      );
-      if (cachedUsages.length) {
-        // For each stored usage, find matching cached usage (if any) and merge
-        usages = usages.map((usage) => {
-          cachedUsages.forEach((cachedUsage) => {
-            if (
-              cachedUsage.keyId == usage.keyId &&
-              cachedUsage.periodStart === usage.periodStart.toISOString()
-            ) {
-              Object.entries(cachedUsage).forEach(([key, value]) => {
-                if (
-                  key.toLowerCase().includes("id") ||
-                  typeof value !== "number"
-                ) {
-                  if (!usage[key]) {
-                    usage[key] = value;
-                  }
-                  return usage;
-                }
-                usage[key] = usage[key] ? usage[key] + value : value;
-                return usage;
-              });
-              cachedUsage.merged = true;
-            }
-          });
-          return usage;
-        });
-        // Then merge with the remaining cached usages not matching any stored usages.
-        usages = [
-          ...usages,
-          ...cachedUsages.filter((cachedUsage) => !cachedUsage.merged),
-        ];
-      }
-      if (!usages.length) {
-        res.send([]);
-      } else {
-        res.send(usages);
-      }
-    } catch (e) {
-      logger.error("List usages failed", e);
       return next(
         new HttpError(null, {}, INTERNAL_SERVER_ERROR, "An error occured."),
       );
@@ -336,113 +266,6 @@ class Controller {
     } catch {
       return next(
         new HttpError(null, {}, INTERNAL_SERVER_ERROR, "An error occured."),
-      );
-    }
-  }
-
-  async addEmotes(req, res, next) {
-    try {
-      const { vw } = req;
-      const { uuids } = req.body;
-      const resp = await Promise.allSettled(
-        uuids.map(async (uuid) => {
-          try {
-            await storeService.getEmote(uuid);
-            await vwService.createEmote(vw, uuid);
-          } catch (e) {
-            const cause =
-              e.response?.statusText === "Not Found"
-                ? "Emote does not exist"
-                : e.original.detail.includes("already exists")
-                  ? "Emote already associated"
-                  : "Unknown error";
-            throw new Error(uuid, { cause });
-          }
-        }),
-      );
-      const failedUuids = resp
-        .filter((r) => r.status === "rejected")
-        .reduce(
-          (acc, f) => ({
-            ...acc,
-            [f.reason.message]: f.reason.cause,
-          }),
-          {},
-        );
-      const errorLength = Object.keys(failedUuids).length;
-      const status = !errorLength ? "success" : "error";
-      const statusMap = {
-        success: OK,
-        error: FORBIDDEN,
-      };
-      res.status(statusMap[status]).send({
-        status,
-        data: { failed: failedUuids },
-      });
-    } catch (e) {
-      logger.error(e.message, e);
-      return next(
-        new HttpError(null, {}, INTERNAL_SERVER_ERROR, "An error occured"),
-      );
-    }
-  }
-
-  async removeEmotes(req, res, next) {
-    try {
-      const { vw } = req;
-      const { uuids } = req.body;
-      const resp = await Promise.allSettled(
-        uuids.map(async (uuid) => {
-          try {
-            await vwService.hasEmote(vw, uuid);
-            const [emote] = await vw.getEmotes({ where: { emoteUuid: uuid } });
-            await emote.destroy();
-          } catch (e) {
-            const cause =
-              e.response?.statusText === "Not Found"
-                ? "Emote does not exist"
-                : e.original.detail.includes("already exists")
-                  ? "Emote already associated"
-                  : "Unknown error";
-            throw new Error(uuid, { cause });
-          }
-        }),
-      );
-      const failedUuids = resp
-        .filter((r) => r.status === "rejected")
-        .reduce(
-          (acc, f) => ({
-            ...acc,
-            [f.reason.message]: f.reason.cause,
-          }),
-          {},
-        );
-      const errorLength = Object.keys(failedUuids).length;
-      const status = !errorLength ? "success" : "error";
-      const statusMap = {
-        success: OK,
-        error: FORBIDDEN,
-      };
-      res.status(statusMap[status]).send({
-        status,
-        data: { failed: failedUuids },
-      });
-    } catch (e) {
-      logger.error(e.message, e);
-      return next(
-        new HttpError(null, {}, INTERNAL_SERVER_ERROR, "An error occured"),
-      );
-    }
-  }
-
-  async getEmotes(req, res, next) {
-    try {
-      const { vw } = req;
-      const emotes = await storeService.getEmoteGallery(vw);
-      res.send(emotes);
-    } catch {
-      return next(
-        new HttpError(null, {}, INTERNAL_SERVER_ERROR, "An error occured"),
       );
     }
   }

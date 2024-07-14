@@ -5,9 +5,15 @@ const { Model, DataTypes } = Sequelize;
 
 class Process extends Model {
   static associate(models) {
-    Process.belongsTo(models.User, { as: "user" });
-    Process.belongsTo(models.VirtualWorld, { as: "virtualWorld" });
-    Process.belongsTo(models.Key, { as: "key" });
+    Process.belongsTo(models.User, {
+      as: "user",
+    });
+    Process.belongsTo(models.VirtualWorld, {
+      as: "virtualWorld",
+    });
+    Process.belongsTo(models.Key, {
+      as: "key",
+    });
   }
 }
 
@@ -42,12 +48,10 @@ Process.init(
     name: {
       type: DataTypes.STRING(255),
       allowNull: false,
-      field: "name",
     },
     step: {
       type: DataTypes.STRING(255),
       allowNull: false,
-      field: "step",
     },
     mlEndedAt: {
       type: DataTypes.DATE,
@@ -74,19 +78,16 @@ Process.init(
       type: DataTypes.BOOLEAN,
       allowNull: false,
       default: false,
-      field: "maturity",
     },
     validated: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       default: false,
-      field: "validated",
     },
     rejected: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       default: false,
-      field: "rejected",
     },
     parentId: {
       type: DataTypes.INTEGER,
@@ -97,7 +98,7 @@ Process.init(
   {
     indexes: [],
     sequelize,
-    modelName: "processes",
+    modelName: "process",
   },
 );
 

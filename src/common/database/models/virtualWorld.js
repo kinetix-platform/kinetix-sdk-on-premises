@@ -5,19 +5,17 @@ const { Model, DataTypes } = Sequelize;
 
 class VirtualWorld extends Model {
   static associate(models) {
-    VirtualWorld.belongsToMany(models.User, {
-      as: "users",
-      through: models.VirtualWorldUser,
+    VirtualWorld.hasMany(models.Key, {
+      as: "keys",
     });
-    VirtualWorld.hasMany(models.Key, { as: "keys", onDelete: "CASCADE" });
-    VirtualWorld.hasMany(models.Usage, { as: "usages" });
+    VirtualWorld.hasMany(models.User, {
+      as: "users",
+    });
     VirtualWorld.hasMany(models.VirtualWorldToken, {
       as: "tokens",
-      onDelete: "CASCADE",
     });
     VirtualWorld.hasMany(models.Process, {
       as: "processes",
-      onDelete: "CASCADE",
     });
   }
 }
@@ -47,8 +45,9 @@ VirtualWorld.init(
     },
     configuration: {
       type: DataTypes.JSON,
-      allowNull: true,
+      allowNull: false,
       field: "configuration",
+      defaultValue: {},
     },
   },
   {

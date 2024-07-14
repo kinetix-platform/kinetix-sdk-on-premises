@@ -3,7 +3,6 @@ import CrudService from "./crud.js";
 import VirtualWorld from "#common/database/models/virtualWorld.js";
 import Key from "#common/database/models/key.js";
 import User from "#common/database/models/user.js";
-import VirtualWorldUser from "#common/database/models/virtualWorldUser.js";
 
 export class VirtualWorldService extends CrudService {
   constructor() {
@@ -51,21 +50,9 @@ export class VirtualWorldService extends CrudService {
   }
 
   async createUser(vw, virtualWorldId) {
-    const user = await User.create({
-      virtualWorldId,
+    return vw.createUser({
+      externalId: virtualWorldId,
     });
-    try {
-      await VirtualWorldUser.create({
-        userId: user.id,
-        externalId: virtualWorldId,
-        virtualWorldId: vw.id,
-      });
-    } catch {
-      await user.destroy();
-      return null;
-    }
-
-    return user;
   }
 
   async hasUser(virtualWorld, vwUserId) {

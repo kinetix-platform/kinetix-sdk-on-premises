@@ -3,21 +3,21 @@ import { sequelize } from "../sequelize.js";
 
 const { Model, DataTypes } = Sequelize;
 
-class User extends Model {
+class Asset extends Model {
   static associate(models) {
-    User.belongsTo(models.VirtualWorld, {
+    Asset.belongsTo(models.VirtualWorld, {
       as: "virtualWorld",
     });
-    User.hasMany(models.UserEmote, {
-      as: "emotes",
+    Asset.hasMany(models.File, {
+      as: "files",
     });
-    User.hasMany(models.Process, {
-      as: "processes",
+    Asset.beforeDestroy(async (asset) => {
+      await models.File.destroy({ where: { assetId: asset.id } });
     });
   }
 }
 
-User.init(
+Asset.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -32,20 +32,27 @@ User.init(
     },
     virtualWorldId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
       field: "vw_id",
-    },
-    externalId: {
-      type: DataTypes.STRING(255),
-      field: "external_id",
       allowNull: false,
+    },
+    name: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+    },
+    type: {
+      type: DataTypes.ENUM,
+      allowNull: false,
+      values: ["video", "emote"],
+    },
+    metadata: {
+      type: DataTypes.JSON,
     },
   },
   {
     indexes: [],
     sequelize,
-    modelName: "users",
+    modelName: "asset",
   },
 );
 
-export default User;
+export default Asset;

@@ -5,7 +5,9 @@ const { Model, DataTypes } = Sequelize;
 
 class UserEmote extends Model {
   static associate(models) {
-    UserEmote.belongsTo(models.User, { as: "user", onDelete: "CASCADE" });
+    UserEmote.belongsTo(models.User, {
+      as: "user",
+    });
   }
 }
 
@@ -27,7 +29,7 @@ UserEmote.init(
       allowNull: false,
     },
     deletionReason: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       field: "deletion_reason",
       allowNull: true,
     },
@@ -37,7 +39,7 @@ UserEmote.init(
       allowNull: true,
     },
     validatedBy: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       field: "validated_by",
       allowNull: true,
     },

@@ -10,7 +10,9 @@ class Key extends Model {
       as: "virtualWorld",
       onDelete: "CASCADE",
     });
-    Key.hasMany(models.Process, { as: "processes" });
+    Key.hasMany(models.Process, {
+      as: "processes",
+    });
   }
 }
 
@@ -57,7 +59,7 @@ Key.init(
   {
     indexes: [],
     sequelize,
-    modelName: "keys",
+    modelName: "key",
   },
 );
 
