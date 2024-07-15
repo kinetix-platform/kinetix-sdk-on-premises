@@ -12,7 +12,7 @@ export const COGNITO_CLIENT_ID =
 export const COGNITO_USER_POOL_ID =
   process.env.COGNITO_USER_POOL_ID || "eu-west-1_wv8KnjgcT";
 
-export const COMPATIBLE_DB_DIALECTS = ["postgres", "mysql", "mariadb"];
+export const COMPATIBLE_DB_DIALECTS = ["postgres", "mysql", "mariadb", "mssql"];
 
 export const DB_AUTO_SYNC = process.env.DB_AUTO_SYNC
   ? process.env.DB_AUTO_SYNC === "true"

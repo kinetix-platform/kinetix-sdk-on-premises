@@ -1,0 +1,108 @@
+name: kinetix
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:latest
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: kinet!x-p@ssw0rd
+    ports:
+      - '1433:1433'
+    volumes:
+      - ./db:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P kinet!x-p@ssw0rd -Q 'SELECT 1'"]
+      interval: 10s
+      retries: 15
+
+  s3:
+    image: minio/minio
+    command: ["server", "/data", "--console-address", ":9001"]
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - ./s3:/data
+
+  cache:
+    image: redis:alpine
+    ports:
+      - '6379:6379'
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kinetix-api
+    command: ["npm", "run", "start:api"]
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_started
+      s3:
+        condition: service_started
+    ports:
+      - "4000:4000"
+    environment:
+      CACHE_REDIS_ENDPOINTS: "redis:6379"
+      DB_DIALECT: mssql
+      DB_HOST: db
+      DB_PORT: 1433
+      DB_USER: sa
+      DB_PASSWORD: "kinet!x-p@ssw0rd"
+      DB_NAME: tempdb
+      S3_BUCKET:
+      DB_AUTO_SYNC: false
+
+  portal:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kinetix-portal
+    command: ["npm", "run", "start:portal"]
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_started
+      s3:
+        condition: service_started
+    ports:
+      - "4001:4000"
+    environment:
+      CACHE_REDIS_ENDPOINTS: "redis:6379"
+      DB_DIALECT: mssql
+      DB_HOST: db
+      DB_PORT: 1433
+      DB_USER: sa
+      DB_PASSWORD: "kinet!x-p@ssw0rd"
+      DB_NAME: tempdb
+      S3_BUCKET:
+      DB_AUTO_SYNC: false
+
+  webhook:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kinetix-webhook
+    command: ["npm", "run", "start:webhook"]
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_started
+      s3:
+        condition: service_started
+    ports:
+      - "4002:4000"
+    environment:
+      CACHE_REDIS_ENDPOINTS: "redis:6379"
+      DB_AUTO_SYNC: false
+      DB_DIALECT: mssql
+      DB_HOST: db
+      DB_PORT: 1433
+      DB_USER: sa
+      DB_PASSWORD: "kinet!x-p@ssw0rd"
+      DB_NAME: tempdb
+      S3_BUCKET:
