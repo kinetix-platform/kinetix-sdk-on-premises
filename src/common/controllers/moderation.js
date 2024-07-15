@@ -111,7 +111,6 @@ class Controller {
 
       res.send({ status: "success", message: "Emote successfully validated." });
     } catch (e) {
-      console.log(e);
       logger.error("Error during addEmote", e);
       return next(
         new HttpError(null, e, INTERNAL_SERVER_ERROR, "An error occured"),

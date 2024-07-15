@@ -1,6 +1,5 @@
 import httpStatus from "http-status";
 import vwService from "#common/services/repository/virtualWorld.js";
-import userService from "#common/services/repository/user.js";
 import keyService from "#common/services/repository/key.js";
 import HttpError from "../helpers/error.js";
 import logger from "#common/services/logger.js";
@@ -129,12 +128,6 @@ class Controller {
       if (name) {
         storedVW.name = name;
       }
-
-      console.log(storedVW?.configuration?.defaultAvatarUuid);
-      console.log(defaultAvatarUuid);
-      console.log(
-        storedVW?.configuration?.defaultAvatarUuid !== defaultAvatarUuid,
-      );
 
       if (storedVW?.configuration?.defaultAvatarUuid !== defaultAvatarUuid) {
         mustClearCacheEmotesUsers = true;

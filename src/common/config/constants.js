@@ -1,4 +1,5 @@
 import dotenv from "dotenv-safe";
+import logger from "#common/services/logger.js";
 
 dotenv.config({
   allowEmptyValues: true,
@@ -12,7 +13,22 @@ export const COGNITO_CLIENT_ID =
 export const COGNITO_USER_POOL_ID =
   process.env.COGNITO_USER_POOL_ID || "eu-west-1_wv8KnjgcT";
 
-export const COMPATIBLE_DB_DIALECTS = ["postgres", "mysql", "mariadb", "mssql"];
+export const COMPATIBLE_DB_DIALECTS = [
+  "postgres",
+  "mysql",
+  "mariadb",
+  "mssql",
+  "oracle",
+];
+
+export const IN_BETA_DB_DIALECTS = ["mssql", "oracle"];
+
+export const DB_DIALECTS_PORTS = {
+  postgres: 5432,
+  mysql: 3306,
+  mariadb: 3306,
+  mssql: 1521,
+};
 
 export const DB_AUTO_SYNC = process.env.DB_AUTO_SYNC
   ? process.env.DB_AUTO_SYNC === "true"
@@ -29,12 +45,6 @@ export const DB_HOST = process.env.DB_HOST;
 export const DB_PORT = process.env.DB_PORT;
 
 export const DB_DIALECT = process.env.DB_DIALECT;
-
-if (!COMPATIBLE_DB_DIALECTS.includes(DB_DIALECT)) {
-  throw new Error(
-    `${DB_DIALECT} is not supported, please use one of this supported dialect ${COMPATIBLE_DB_DIALECTS.join(", ")}`,
-  );
-}
 
 export const DB_LOGGING = process.env.DB_LOGGING
   ? process.env.DB_LOGGING == "true"
@@ -56,8 +66,9 @@ export const DB_HOST_REPLICA = process.env.DB_HOST_REPLICA;
 
 export const NODE_ENV = process.env.NODE_ENV || "dev";
 
-export const CACHE_REDIS_ENDPOINTS =
-  process.env.CACHE_REDIS_ENDPOINTS.split(";");
+export const CACHE_REDIS_ENDPOINTS = process.env.CACHE_REDIS_ENDPOINTS
+  ? process.env.CACHE_REDIS_ENDPOINTS.split(";")
+  : null;
 
 export const DEFAULT_RENEWAL_TTL = process.env.DEFAULT_RENEWAL_TTL
   ? parseInt(process.env.DEFAULT_RENEWAL_TTL, 10)
@@ -65,7 +76,15 @@ export const DEFAULT_RENEWAL_TTL = process.env.DEFAULT_RENEWAL_TTL
 
 export const DISABLE_CACHE = process.env.DISABLE_CACHE
   ? process.env.DISABLE_CACHE == "true"
-  : false;
+  : CACHE_REDIS_ENDPOINTS
+    ? false
+    : true;
+
+if (DISABLE_CACHE) {
+  logger.warn(
+    `cache is disabled, this is not recommended for production usage`,
+  );
+}
 
 export const PORT = process.env.PORT ? parseInt(process.env.PORT) : 4000;
 
@@ -80,3 +99,13 @@ export const PORTAL_CORS_ORIGINS = process.env.PORTAL_CORS_ORIGINS
 export const EXPOSE_SWAGGER = process.env.EXPOSE_SWAGGER
   ? process.env.EXPOSE_SWAGGER === "true"
   : true;
+
+if (!COMPATIBLE_DB_DIALECTS.includes(DB_DIALECT)) {
+  throw new Error(
+    `${DB_DIALECT} is not supported, please use one of this supported dialect ${COMPATIBLE_DB_DIALECTS.join(", ")}`,
+  );
+}
+
+if (IN_BETA_DB_DIALECTS.includes(DB_DIALECT)) {
+  logger.warn(`${DB_DIALECT} is currently in beta`);
+}

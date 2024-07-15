@@ -1,21 +1,32 @@
 import winston from "winston";
 import os from "os";
+import fs from "fs";
+//import package_json from '../../../package.json';
 
-const {
-  ENV_NAME,
-  SERVICE_NAME,
-  npm_package_version: NPM_PACKAGE_VERSION,
-} = process.env;
+const NPM_PACKAGE_VERSION = JSON.parse(
+  fs.readFileSync("./package.json"),
+).version;
+
+const { LOG_FORMAT = "human" } = process.env;
+
+const logFormat = winston.format.printf(({ level, message, timestamp }) => {
+  return `${timestamp}:${level}: ${message}`;
+});
 
 class Logger {
   constructor() {
     this.logger = winston.createLogger({
-      format: winston.format.json(),
+      format:
+        LOG_FORMAT === "json"
+          ? winston.format.json()
+          : winston.format.combine(
+              winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+              winston.format.colorize(),
+              logFormat,
+            ),
       level: "http",
       defaultMeta: {
-        ...(SERVICE_NAME && { service: SERVICE_NAME }),
         ...(NPM_PACKAGE_VERSION && { version: NPM_PACKAGE_VERSION }),
-        ...(ENV_NAME && { env: ENV_NAME }),
         hostname: os.hostname(),
       },
       transports: [new winston.transports.Console()],
@@ -35,7 +46,14 @@ class Logger {
   }
 
   http(message, data) {
-    this.logger.http(message, Logger.removeSensitiveData(data));
+    const { originalUrl, method, status, duration } = data;
+
+    this.logger.http(
+      LOG_FORMAT === "json"
+        ? message
+        : `${method} ${originalUrl} ${status} ${duration}ms`,
+      Logger.removeSensitiveData(data),
+    );
   }
 
   info(message, data) {
@@ -48,33 +66,6 @@ class Logger {
 
   error(message, data) {
     this.logger.error(message, Logger.removeSensitiveData(data));
-  }
-
-  req(level, message, req) {
-    const {
-      headers,
-      body,
-      query,
-      originalUrl,
-      method,
-      ip,
-      error,
-      status,
-      duration,
-      contentLength,
-    } = req;
-    this[level]?.(message, {
-      headers,
-      body,
-      query,
-      originalUrl,
-      method,
-      ip,
-      error,
-      status,
-      duration,
-      contentLength,
-    });
   }
 }
 

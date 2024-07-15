@@ -26,32 +26,10 @@ Use the DB_DIALECT environment variable to select the wanted database engine, co
 Postgres configuration example:
 
 ```sh
-DB_DIALECT="postgres"
-DB_HOST="localhost"
-DB_PORT="5432"
-DB_NAME="kinetix"
-DB_USER="postgres"
-DB_PASSWORD="postgres"
-```
-
-MariaDB configuration example:
-
-```sh
-DB_DIALECT="postgres"
-DB_HOST="localhost"
-DB_PORT="5432"
-DB_NAME="kinetix"
-DB_USER="postgres"
-DB_PASSWORD="postgres"
-```
-
-MySQL configuration example:
-
-```sh
-DB_DIALECT="postgres"
-DB_HOST="localhost"
-DB_PORT="5432"
-DB_NAME="kinetix"
-DB_USER="postgres"
-DB_PASSWORD="postgres"
+DB_DIALECT="< postgres | mysql | mariadb | mssql | oracle >"
+DB_HOST="< hostname >"
+DB_PORT="< port >" # If not provided, the default port corresponding to the provided dialect will be set automatically
+DB_NAME="< database name >"
+DB_USER="< database user >"
+DB_PASSWORD="< database user password >"
 ```

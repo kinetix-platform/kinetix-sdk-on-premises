@@ -367,8 +367,7 @@ class Controller {
       const preparedPath = videoAsset
         ? `user-data/${videoAsset.uuid}-prepared.mp4`
         : "";
-      const animationPath = `user-data/${animation.uuid}-animation.json`;
-      console.log(animationPath);
+
       if (!text) {
         try {
           logger.info(`running transcode ${uuid}`);
@@ -663,8 +662,7 @@ class Controller {
           ...updatedProcess,
         },
       });
-    } catch (e) {
-      console.log(e);
+    } catch {
       return next(
         new HttpError(null, {}, INTERNAL_SERVER_ERROR, "An error occured."),
       );
