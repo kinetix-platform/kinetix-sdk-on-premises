@@ -6,6 +6,14 @@ dotenv.config({
   example: ".env.example",
 });
 
+export const COGNITO_CLIENT_ID =
+  process.env.COGNITO_CLIENT_ID || "4vlnjvh4c64gh9qsbio5eiggc5";
+
+export const COGNITO_USER_POOL_ID =
+  process.env.COGNITO_USER_POOL_ID || "eu-west-1_wv8KnjgcT";
+
+export const COMPATIBLE_DB_DIALECTS = ["postgres", "mysql", "mariadb"];
+
 export const DB_AUTO_SYNC = process.env.DB_AUTO_SYNC
   ? process.env.DB_AUTO_SYNC === "true"
   : true;
@@ -21,6 +29,12 @@ export const DB_HOST = process.env.DB_HOST;
 export const DB_PORT = process.env.DB_PORT;
 
 export const DB_DIALECT = process.env.DB_DIALECT;
+
+if (!COMPATIBLE_DB_DIALECTS.includes(DB_DIALECT)) {
+  throw new Error(
+    `${DB_DIALECT} is not supported, please use one of this supported dialect ${COMPATIBLE_DB_DIALECTS.join(", ")}`,
+  );
+}
 
 export const DB_LOGGING = process.env.DB_LOGGING
   ? process.env.DB_LOGGING == "true"
