@@ -1,5 +1,8 @@
 # kinetix-sdk-on-premise
 
+> [!WARNING]  
+> This version is in its early stages, and we are actively addressing bugs to enhance its reliability.
+
 ## Quick start
 
 To start a new project from scratch with all the infrastructure components and an postgres database
