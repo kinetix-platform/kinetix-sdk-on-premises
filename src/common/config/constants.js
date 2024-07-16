@@ -7,13 +7,21 @@ dotenv.config({
   example: ".env.example",
 });
 
+// GLOBAL
+
+export const NODE_ENV = process.env.NODE_ENV || "production";
+
+// COGNITO
+
 export const COGNITO_CLIENT_ID =
   process.env.COGNITO_CLIENT_ID || "4vlnjvh4c64gh9qsbio5eiggc5";
 
 export const COGNITO_USER_POOL_ID =
   process.env.COGNITO_USER_POOL_ID || "eu-west-1_wv8KnjgcT";
 
-export const COMPATIBLE_DB_DIALECTS = [
+// DATABASE CONFIGURATION
+
+const COMPATIBLE_DB_DIALECTS = [
   "postgres",
   "mysql",
   "mariadb",
@@ -21,18 +29,25 @@ export const COMPATIBLE_DB_DIALECTS = [
   "oracle",
 ];
 
-export const IN_BETA_DB_DIALECTS = ["mssql", "oracle"];
+const IN_BETA_DB_DIALECTS = ["mssql", "oracle"];
 
-export const DB_DIALECTS_PORTS = {
+const DB_DIALECTS_PORTS = {
   postgres: 5432,
   mysql: 3306,
   mariadb: 3306,
-  mssql: 1521,
+  mssql: 1433,
+  oracle: 1521,
 };
+
+export const DB_DIALECT = process.env.DB_DIALECT;
 
 export const DB_AUTO_SYNC = process.env.DB_AUTO_SYNC
   ? process.env.DB_AUTO_SYNC === "true"
   : true;
+
+export const DB_PORT = process.env.DB_PORT
+  ? process.env.DB_PORT
+  : DB_DIALECTS_PORTS[DB_DIALECT];
 
 export const DB_USER = process.env.DB_USER;
 
@@ -41,10 +56,6 @@ export const DB_PASSWORD = process.env.DB_PASSWORD;
 export const DB_NAME = process.env.DB_NAME;
 
 export const DB_HOST = process.env.DB_HOST;
-
-export const DB_PORT = process.env.DB_PORT;
-
-export const DB_DIALECT = process.env.DB_DIALECT;
 
 export const DB_LOGGING = process.env.DB_LOGGING
   ? process.env.DB_LOGGING == "true"
@@ -64,14 +75,24 @@ export const DB_POOL_IDLE = process.env.DB_POOL_IDLE
 
 export const DB_HOST_REPLICA = process.env.DB_HOST_REPLICA;
 
-export const NODE_ENV = process.env.NODE_ENV || "dev";
+if (!COMPATIBLE_DB_DIALECTS.includes(DB_DIALECT)) {
+  throw new Error(
+    `${DB_DIALECT} is not supported, please use one of this supported dialects ${COMPATIBLE_DB_DIALECTS.join(", ")}`,
+  );
+}
+
+if (IN_BETA_DB_DIALECTS.includes(DB_DIALECT)) {
+  logger.warn(`${DB_DIALECT} is currently in beta`);
+}
+
+// CACHE
 
 export const CACHE_REDIS_ENDPOINTS = process.env.CACHE_REDIS_ENDPOINTS
   ? process.env.CACHE_REDIS_ENDPOINTS.split(";")
   : null;
 
-export const DEFAULT_RENEWAL_TTL = process.env.DEFAULT_RENEWAL_TTL
-  ? parseInt(process.env.DEFAULT_RENEWAL_TTL, 10)
+export const DEFAULT_CACHE_TTL = process.env.DEFAULT_CACHE_TTL
+  ? parseInt(process.env.DEFAULT_CACHE_TTL, 10)
   : 300;
 
 export const DISABLE_CACHE = process.env.DISABLE_CACHE
@@ -80,32 +101,44 @@ export const DISABLE_CACHE = process.env.DISABLE_CACHE
     ? false
     : true;
 
-if (DISABLE_CACHE) {
+if (DISABLE_CACHE && NODE_ENV === "production") {
   logger.warn(
-    `cache is disabled, this is not recommended for production usage`,
+    `Cache is disabled, this is not recommended for production usage`,
   );
 }
+
+// EXPRESS
 
 export const PORT = process.env.PORT ? parseInt(process.env.PORT) : 4000;
 
-export const API_CORS_ORIGINS = process.env.API_CORS_ORIGINS
-  ? process.env.API_CORS_ORIGINS.split(";")
+export const CORS_ORIGINS = process.env.CORS_ORIGINS
+  ? process.env.CORS_ORIGINS.split(";")
   : ["*"];
 
-export const PORTAL_CORS_ORIGINS = process.env.PORTAL_CORS_ORIGINS
-  ? process.PORTAL_CORS_ORIGINS.split(";")
-  : ["*"];
-
-export const EXPOSE_SWAGGER = process.env.EXPOSE_SWAGGER
+export const API_EXPOSE_SWAGGER = process.env.EXPOSE_SWAGGER
   ? process.env.EXPOSE_SWAGGER === "true"
   : true;
 
-if (!COMPATIBLE_DB_DIALECTS.includes(DB_DIALECT)) {
-  throw new Error(
-    `${DB_DIALECT} is not supported, please use one of this supported dialect ${COMPATIBLE_DB_DIALECTS.join(", ")}`,
+if (NODE_ENV === "production" && API_EXPOSE_SWAGGER) {
+  logger.warn(
+    `Swagger is exposed, this is not recommended for production usage`,
   );
 }
 
-if (IN_BETA_DB_DIALECTS.includes(DB_DIALECT)) {
-  logger.warn(`${DB_DIALECT} is currently in beta`);
+// S3
+
+const COMPATIBLE_S3_CLIENT = ["fs", "s3", "minio"];
+
+export const S3_CLIENT = process.env.S3_CLIENT;
+
+if (!COMPATIBLE_S3_CLIENT.includes(S3_CLIENT)) {
+  throw new Error(
+    `${S3_CLIENT} is not supported, please use one of this supported s3 clients ${COMPATIBLE_S3_CLIENT.join(", ")}`,
+  );
+}
+
+if (NODE_ENV == "production" && S3_CLIENT === "fs") {
+  logger.warn(
+    `Using local file storage is not recommended for production usage`,
+  );
 }

@@ -50,7 +50,6 @@ services:
       CACHE_REDIS_ENDPOINTS: "redis:6379"
       DB_DIALECT: mysql
       DB_HOST: db
-      DB_PORT: 3306
       DB_USER: kinetix
       DB_PASSWORD: password
       DB_NAME: kinetix
@@ -75,7 +74,6 @@ services:
       CACHE_REDIS_ENDPOINTS: "redis:6379"
       DB_DIALECT: mysql
       DB_HOST: db
-      DB_PORT: 3306
       DB_USER: kinetix
       DB_PASSWORD: password
       DB_NAME: kinetix
@@ -100,7 +98,6 @@ services:
       CACHE_REDIS_ENDPOINTS: "redis:6379"
       DB_DIALECT: mysql
       DB_HOST: db
-      DB_PORT: 3306
       DB_USER: kinetix
       DB_PASSWORD: password
       DB_NAME: kinetix

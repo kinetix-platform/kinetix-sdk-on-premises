@@ -1,7 +1,7 @@
 import Redis from "ioredis";
 import {
   CACHE_REDIS_ENDPOINTS,
-  DEFAULT_RENEWAL_TTL,
+  DEFAULT_CACHE_TTL,
   DISABLE_CACHE,
   NODE_ENV,
 } from "#common/config/constants.js";
@@ -20,14 +20,15 @@ class CacheService {
         })),
         DEFAULT_REDIS_OPTIONS,
       );
-    } else if (endpoints.length === 0) {
+    } else if (endpoints.length === 1) {
       this.client = new Redis(endpoints[0], DEFAULT_REDIS_OPTIONS);
     } else {
       this.disableCache = true;
     }
 
     if (this.client) {
-      this.client.on("error", (err) => logger.error("Redis Client Error", err));
+      this.client.on("connect", () => logger.info("Cache connected"));
+      this.client.on("error", (err) => logger.error("Cache client error", err));
     }
   }
 
@@ -39,7 +40,7 @@ class CacheService {
     await this.client.connect();
   }
 
-  async set(key, value, expire = DEFAULT_RENEWAL_TTL) {
+  async set(key, value, expire = DEFAULT_CACHE_TTL) {
     if (this.disableCache) {
       return;
     }
@@ -109,7 +110,7 @@ class CacheService {
     return result[1];
   }
 
-  async setEmotesVWUser(vwUuid, userVwId, value, expire = DEFAULT_RENEWAL_TTL) {
+  async setEmotesVWUser(vwUuid, userVwId, value, expire = DEFAULT_CACHE_TTL) {
     return this.set(`emotesUser:${vwUuid}:${userVwId}`, value, expire);
   }
 
@@ -132,7 +133,7 @@ class CacheService {
     return this.ttl(`emotesUser:${vwUuid}:${userVwId}`);
   }
 
-  async setVWKey(key, value, expire = DEFAULT_RENEWAL_TTL) {
+  async setVWKey(key, value, expire = DEFAULT_CACHE_TTL) {
     return this.set(`vwKey:${key}`, value, expire);
   }
 
@@ -148,12 +149,7 @@ class CacheService {
     return this.ttl(`vwKey:${key}`);
   }
 
-  async setEmoteMetadata(
-    vwUuid,
-    emoteUuid,
-    value,
-    expire = DEFAULT_RENEWAL_TTL,
-  ) {
+  async setEmoteMetadata(vwUuid, emoteUuid, value, expire = DEFAULT_CACHE_TTL) {
     return this.set(`emoteMetadata:${vwUuid}:${emoteUuid}`, value, expire);
   }
 

@@ -67,6 +67,10 @@ class Logger {
   error(message, data) {
     this.logger.error(message, Logger.removeSensitiveData(data));
   }
+
+  debug(message, data) {
+    this.logger.debug(message, Logger.removeSensitiveData(data));
+  }
 }
 
 export default new Logger();

@@ -48,7 +48,6 @@ services:
       CACHE_REDIS_ENDPOINTS: "redis:6379"
       DB_DIALECT: oracle
       DB_HOST: db
-      DB_PORT: 1521
       DB_USER: sys
       DB_PASSWORD: "Kinetix-passw0rd"
       DB_NAME: kinetix
@@ -74,7 +73,6 @@ services:
       CACHE_REDIS_ENDPOINTS: "redis:6379"
       DB_DIALECT: oracle
       DB_HOST: db
-      DB_PORT: 1521
       DB_USER: sys
       DB_PASSWORD: "Kinetix-passw0rd"
       DB_NAME: kinetix
@@ -101,7 +99,6 @@ services:
       DB_AUTO_SYNC: false
       DB_DIALECT: oracle
       DB_HOST: db
-      DB_PORT: 1521
       DB_USER: sys
       DB_PASSWORD: "Kinetix-passw0rd"
       DB_NAME: kinetix
