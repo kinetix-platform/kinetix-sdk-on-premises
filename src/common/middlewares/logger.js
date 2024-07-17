@@ -1,4 +1,4 @@
-import logger from "#common/services/logger.js";
+import logger from "#common/helpers/logger.js";
 
 const allowedHeaders = [
   "host",

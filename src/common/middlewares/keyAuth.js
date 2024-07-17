@@ -3,7 +3,7 @@ import VirtualWorldModel from "#common/database/models/virtualWorld.js";
 import KeyModel from "#common/database/models/key.js";
 import keyService from "#common/services/repository/key.js";
 import HttpError from "../../common/helpers/error.js";
-import cacheService from "#common/services/cache.js";
+import cacheService from "#common/services/cache/index.js";
 
 const { FORBIDDEN, UNAUTHORIZED } = httpStatus;
 

@@ -4,7 +4,7 @@ import { createTerminus } from "@godaddy/terminus";
 import cookieParser from "cookie-parser";
 import loggerMiddleware from "#common/middlewares/logger.js";
 import errorMiddleware from "#common/middlewares/error.js";
-import logger from "#common/services/logger.js";
+import logger from "#common/helpers/logger.js";
 import { PORT, CORS_ORIGINS } from "#common/config/constants.js";
 import routers from "./routers/index.js";
 

@@ -8,7 +8,7 @@ import {
   DB_LOGGING,
   DB_AUTO_SYNC,
 } from "#common/config/constants.js";
-import logger from "#common/services/logger.js";
+import logger from "#common/helpers/logger.js";
 
 const { host, replicaHost, port, username, password, database, dialect } =
   sequelizeConfig;

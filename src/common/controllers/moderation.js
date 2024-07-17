@@ -5,9 +5,9 @@ import userEmotesService from "#common/services/repository/userEmotes.js";
 import storeService from "#common/services/store.js";
 import processService from "#common/services/repository/process.js";
 import { setPaginationHeaders } from "#common/services/pagination.js";
-import logger from "#common/services/logger.js";
+import logger from "#common/helpers/logger.js";
 import kinetixService from "#common/services/kinetix.js";
-import cacheService from "#common/services/cache.js";
+import cacheService from "#common/services/cache/index.js";
 
 const { INTERNAL_SERVER_ERROR, NOT_FOUND } = httpStatus;
 

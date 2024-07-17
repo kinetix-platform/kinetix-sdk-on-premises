@@ -1,11 +1,11 @@
 import Redis from "ioredis";
 import {
-  CACHE_REDIS_ENDPOINTS,
+  CACHE_ENDPOINTS,
   DEFAULT_CACHE_TTL,
   DISABLE_CACHE,
   NODE_ENV,
 } from "#common/config/constants.js";
-import logger from "./logger.js";
+import logger from "../../helpers/logger.js";
 
 class CacheService {
   constructor(endpoints, disableCache = false) {
@@ -166,6 +166,6 @@ class CacheService {
   }
 }
 
-const cacheService = new CacheService(CACHE_REDIS_ENDPOINTS, DISABLE_CACHE);
+const cacheService = new CacheService(CACHE_ENDPOINTS, DISABLE_CACHE);
 
 export default cacheService;

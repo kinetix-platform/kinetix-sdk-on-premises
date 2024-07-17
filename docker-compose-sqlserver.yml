@@ -45,7 +45,7 @@ services:
     ports:
       - "4000:4000"
     environment:
-      CACHE_REDIS_ENDPOINTS: "redis:6379"
+      CACHE_ENDPOINTS: "redis:6379"
       DB_DIALECT: mssql
       DB_HOST: db
       DB_USER: sa
@@ -70,7 +70,7 @@ services:
     ports:
       - "4001:4000"
     environment:
-      CACHE_REDIS_ENDPOINTS: "redis:6379"
+      CACHE_ENDPOINTS: "redis:6379"
       DB_DIALECT: mssql
       DB_HOST: db
       DB_USER: sa
@@ -95,7 +95,7 @@ services:
     ports:
       - "4002:4000"
     environment:
-      CACHE_REDIS_ENDPOINTS: "redis:6379"
+      CACHE_ENDPOINTS: "redis:6379"
       DB_AUTO_SYNC: false
       DB_DIALECT: mssql
       DB_HOST: db

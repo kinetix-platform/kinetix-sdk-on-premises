@@ -1,7 +1,7 @@
 import httpStatus from "http-status";
 import virtualWorldService from "#common/services/repository/virtualWorld.js";
 import HttpError from "../../common/helpers/error.js";
-import cacheService from "#common/services/cache.js";
+import cacheService from "#common/services/cache/index.js";
 
 const { FORBIDDEN, UNAUTHORIZED } = httpStatus;
 export default (deleteToken) => async (req, res, next) => {

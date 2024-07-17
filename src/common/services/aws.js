@@ -1,6 +1,6 @@
 import { S3 } from "@aws-sdk/client-s3";
 import fs from "fs";
-import logger from "./logger.js";
+import logger from "../helpers/logger.js";
 
 const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, S3_BUCKET } = process.env;
 

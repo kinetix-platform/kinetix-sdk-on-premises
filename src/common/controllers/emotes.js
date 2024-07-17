@@ -1,5 +1,5 @@
 import httpStatus from "http-status";
-import logger from "#common/services/logger.js";
+import logger from "#common/helpers/logger.js";
 import HttpError from "../../common/helpers/error.js";
 import storeService from "#common/services/store.js";
 

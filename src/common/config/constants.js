@@ -1,5 +1,5 @@
 import dotenv from "dotenv-safe";
-import logger from "#common/services/logger.js";
+import logger from "#common/helpers/logger.js";
 
 dotenv.config({
   allowEmptyValues: true,
@@ -77,7 +77,7 @@ export const DB_HOST_REPLICA = process.env.DB_HOST_REPLICA;
 
 if (!COMPATIBLE_DB_DIALECTS.includes(DB_DIALECT)) {
   throw new Error(
-    `${DB_DIALECT} is not supported, please use one of this supported dialects ${COMPATIBLE_DB_DIALECTS.join(", ")}`,
+    `${DB_DIALECT} is not supported, please use one of this supported database engines: ${COMPATIBLE_DB_DIALECTS.join(", ")}`,
   );
 }
 
@@ -87,19 +87,29 @@ if (IN_BETA_DB_DIALECTS.includes(DB_DIALECT)) {
 
 // CACHE
 
-export const CACHE_REDIS_ENDPOINTS = process.env.CACHE_REDIS_ENDPOINTS
-  ? process.env.CACHE_REDIS_ENDPOINTS.split(";")
+const COMPATIBLE_CACHE_STORES = ["redis", "memcached"]
+
+export const CACHE_STORE = process.env.CACHE_STORE;
+
+export const CACHE_ENDPOINTS = process.env.CACHE_ENDPOINTS
+  ? process.env.CACHE_ENDPOINTS.split(";")
   : null;
+
+export const DISABLE_CACHE = process.env.DISABLE_CACHE
+  ? process.env.DISABLE_CACHE == "true"
+  : CACHE_ENDPOINTS
+    ? false
+    : true;
+
+if (!DISABLE_CACHE && !COMPATIBLE_CACHE_STORES.includes(CACHE_STORE)) {
+  throw new Error(
+    `${CACHE_STORE} is not supported, please use one of this supported cache stores: ${COMPATIBLE_CACHE_STORES.join(", ")}`,
+  );
+}
 
 export const DEFAULT_CACHE_TTL = process.env.DEFAULT_CACHE_TTL
   ? parseInt(process.env.DEFAULT_CACHE_TTL, 10)
   : 300;
-
-export const DISABLE_CACHE = process.env.DISABLE_CACHE
-  ? process.env.DISABLE_CACHE == "true"
-  : CACHE_REDIS_ENDPOINTS
-    ? false
-    : true;
 
 if (DISABLE_CACHE && NODE_ENV === "production") {
   logger.warn(
@@ -110,6 +120,8 @@ if (DISABLE_CACHE && NODE_ENV === "production") {
 // EXPRESS
 
 export const PORT = process.env.PORT ? parseInt(process.env.PORT) : 4000;
+
+export const EXPOSE_SWAGGER = process.env.EXPOSE_SWAGGER ? process.env.EXPOSE_SWAGGER === "true" : NODE_ENV === "production"
 
 export const CORS_ORIGINS = process.env.CORS_ORIGINS
   ? process.env.CORS_ORIGINS.split(";")
@@ -127,13 +139,13 @@ if (NODE_ENV === "production" && API_EXPOSE_SWAGGER) {
 
 // S3
 
-const COMPATIBLE_S3_CLIENT = ["fs", "s3", "minio"];
+const COMPATIBLE_S3_CLIENT = ["fs", "aws", "minio"];
 
 export const S3_CLIENT = process.env.S3_CLIENT;
 
 if (!COMPATIBLE_S3_CLIENT.includes(S3_CLIENT)) {
   throw new Error(
-    `${S3_CLIENT} is not supported, please use one of this supported s3 clients ${COMPATIBLE_S3_CLIENT.join(", ")}`,
+    `${S3_CLIENT} is not supported, please use one of this supported s3 clients: ${COMPATIBLE_S3_CLIENT.join(", ")}`,
   );
 }
 

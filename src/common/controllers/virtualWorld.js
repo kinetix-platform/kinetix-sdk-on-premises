@@ -2,9 +2,9 @@ import httpStatus from "http-status";
 import vwService from "#common/services/repository/virtualWorld.js";
 import keyService from "#common/services/repository/key.js";
 import HttpError from "../helpers/error.js";
-import logger from "#common/services/logger.js";
+import logger from "#common/helpers/logger.js";
 import virtualWorldService from "#common/services/repository/virtualWorld.js";
-import cacheService from "#common/services/cache.js";
+import cacheService from "#common/services/cache/index.js";
 
 const { FORBIDDEN, INTERNAL_SERVER_ERROR, BAD_REQUEST, NOT_FOUND, CONFLICT } =
   httpStatus;

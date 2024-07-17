@@ -1,9 +1,9 @@
 import axios from "axios";
 import hmac from "./hmac.js";
 import _ from "lodash";
-import logger from "./logger.js";
+import logger from "../helpers/logger.js";
 import signRequest from "./hmac.js";
-import cacheService from "./cache.js";
+import cacheService from "./cache/index.js";
 
 const { KINETIX_BACKEND } = process.env;
 

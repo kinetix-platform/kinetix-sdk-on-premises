@@ -1,12 +1,12 @@
 import { v4 as uuidv4 } from "uuid";
 import httpStatus from "http-status";
-import logger from "#common/services/logger.js";
+import logger from "#common/helpers/logger.js";
 import HttpError from "../../common/helpers/error.js";
 import kinetixService from "#common/services/kinetix.js";
 import awsService from "#common/services/aws.js";
 import vwService from "#common/services/repository/virtualWorld.js";
 import processService from "#common/services/repository/process.js";
-import cacheService from "#common/services/cache.js";
+import cacheService from "#common/services/cache/index.js";
 import userService from "#common/services/repository/user.js";
 import processHelper from "../helpers/process.js";
 import tokenService from "#common/services/repository/token.js";
