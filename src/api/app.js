@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import loggerMiddleware from "#common/middlewares/logger.js";
 import errorMiddleware from "#common/middlewares/error.js";
 import logger from "#common/helpers/logger.js";
-import { PORT, CORS_ORIGINS } from "#common/config/constants.js";
+import { API_PORT, CORS_ORIGINS } from "#common/config/constants.js";
 import routers from "./routers/index.js";
 
 const app = express();
@@ -26,7 +26,7 @@ app.use(errorMiddleware);
 class App {
   async start() {
     await new Promise((resolve) => {
-      const server = app.listen(PORT, () => {
+      const server = app.listen(API_PORT, () => {
         server.timeout = 1000 * 60 * 60;
         server.headersTimeout = 1000 * 60 * 60;
         createTerminus(server, {
@@ -49,7 +49,7 @@ class App {
         resolve(server);
       });
     });
-    logger.info(`API server started on ${PORT}`);
+    logger.info(`API server started on ${API_PORT}`);
   }
 
   async stop() {

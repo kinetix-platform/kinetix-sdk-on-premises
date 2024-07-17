@@ -2,8 +2,8 @@ import express from "express";
 import { createTerminus } from "@godaddy/terminus";
 import loggerMiddleware from "#common/middlewares/logger.js";
 import errorMiddleware from "#common/middlewares/error.js";
-import logger from "#common/services/logger.js";
-import { PORT } from "#common/config/constants.js";
+import logger from "#common/helpers/logger.js";
+import { WEBHOOK_PORT } from "#common/config/constants.js";
 import routers from "./routers/index.js";
 
 const app = express();
@@ -17,7 +17,7 @@ app.use(errorMiddleware);
 class App {
   async start() {
     await new Promise((resolve) => {
-      const server = app.listen(PORT, () => {
+      const server = app.listen(WEBHOOK_PORT, () => {
         server.timeout = 1000 * 60 * 60;
         server.headersTimeout = 1000 * 60 * 60;
         createTerminus(server, {
@@ -40,7 +40,7 @@ class App {
         resolve(server);
       });
     });
-    logger.info(`Webhook server started on ${PORT}`);
+    logger.info(`Webhook server started on ${WEBHOOK_PORT}`);
   }
 
   async stop() {

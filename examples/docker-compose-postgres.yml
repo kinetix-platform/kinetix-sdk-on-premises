@@ -2,18 +2,17 @@ name: kinetix
 
 services:
   db:
-    image: mysql:lts
+    image: postgres:alpine
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_USER: kinetix
-      MYSQL_PASSWORD: password
-      MYSQL_DATABASE: kinetix
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: kinetix
     ports:
-      - '3306:3306'
+      - '5432:5432'
     volumes:
-      - ./db:/var/lib/mysql
+      - ./db:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -ppassword"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d kinetix"]
       interval: 10s
       retries: 3
 
@@ -48,12 +47,12 @@ services:
       - "4000:4000"
     environment:
       CACHE_ENDPOINTS: "redis:6379"
-      DB_DIALECT: mysql
+      DB_DIALECT: postgres
       DB_HOST: db
-      DB_USER: kinetix
+      DB_USER: postgres
       DB_PASSWORD: password
       DB_NAME: kinetix
-      S3_BUCKET:
+      FILES_HOSTING_SERVICE: "aws"
 
   portal:
     build:
@@ -72,12 +71,12 @@ services:
       - "4001:4000"
     environment:
       CACHE_ENDPOINTS: "redis:6379"
-      DB_DIALECT: mysql
+      DB_DIALECT: postgres
       DB_HOST: db
-      DB_USER: kinetix
+      DB_USER: postgres
       DB_PASSWORD: password
       DB_NAME: kinetix
-      S3_BUCKET:
+      FILES_HOSTING_SERVICE: "aws"
 
   webhook:
     build:
@@ -96,9 +95,9 @@ services:
       - "4002:4000"
     environment:
       CACHE_ENDPOINTS: "redis:6379"
-      DB_DIALECT: mysql
+      DB_DIALECT: postgres
       DB_HOST: db
-      DB_USER: kinetix
+      DB_USER: postgres
       DB_PASSWORD: password
       DB_NAME: kinetix
-      S3_BUCKET:
+      FILES_HOSTING_SERVICE: "aws"

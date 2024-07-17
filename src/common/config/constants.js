@@ -73,8 +73,6 @@ export const DB_POOL_IDLE = process.env.DB_POOL_IDLE
   ? parseInt(DB_POOL_IDLE, 10)
   : 30000;
 
-export const DB_HOST_REPLICA = process.env.DB_HOST_REPLICA;
-
 if (!COMPATIBLE_DB_DIALECTS.includes(DB_DIALECT)) {
   throw new Error(
     `${DB_DIALECT} is not supported, please use one of this supported database engines: ${COMPATIBLE_DB_DIALECTS.join(", ")}`,
@@ -85,9 +83,22 @@ if (IN_BETA_DB_DIALECTS.includes(DB_DIALECT)) {
   logger.warn(`${DB_DIALECT} is currently in beta`);
 }
 
+// DB REPLICA CONFIGURATION
+
+export const DB_REPLICA_HOST = process.env.DB_REPLICA_HOST;
+
+export const DB_REPLICA_PORT = process.env.DB_REPLICA_PORT || DB_PORT;
+
+export const DB_REPLICA_USER = process.env.DB_REPLICA_USER || DB_USER;
+
+export const DB_REPLICA_PASSWORD =
+  process.env.DB_REPLICA_PASSWORD || DB_PASSWORD;
+
+export const DB_REPLICA_NAME = process.env.DB_REPLICA_NAME || DB_NAME;
+
 // CACHE
 
-const COMPATIBLE_CACHE_STORES = ["redis", "memcached"]
+const COMPATIBLE_CACHE_STORES = ["redis", "memcached"];
 
 export const CACHE_STORE = process.env.CACHE_STORE;
 
@@ -119,9 +130,17 @@ if (DISABLE_CACHE && NODE_ENV === "production") {
 
 // EXPRESS
 
-export const PORT = process.env.PORT ? parseInt(process.env.PORT) : 4000;
+export const PORT = process.env.PORT ? parseInt(process.env.PORT) : null;
 
-export const EXPOSE_SWAGGER = process.env.EXPOSE_SWAGGER ? process.env.EXPOSE_SWAGGER === "true" : NODE_ENV === "production"
+export const API_PORT = PORT || 4000;
+
+export const PORTAL_PORT = PORT || 40001;
+
+export const WEBHOOK_PORT = PORT || 4002;
+
+export const EXPOSE_SWAGGER = process.env.EXPOSE_SWAGGER
+  ? process.env.EXPOSE_SWAGGER === "true"
+  : NODE_ENV === "production";
 
 export const CORS_ORIGINS = process.env.CORS_ORIGINS
   ? process.env.CORS_ORIGINS.split(";")
@@ -139,18 +158,22 @@ if (NODE_ENV === "production" && API_EXPOSE_SWAGGER) {
 
 // S3
 
-const COMPATIBLE_S3_CLIENT = ["fs", "aws", "minio"];
+const COMPATIBLE_FILES_HOSTING_SERVICES = ["fs", "minio", "aws"];
 
-export const S3_CLIENT = process.env.S3_CLIENT;
+export const FILES_HOSTING_SERVICE = process.env.FILES_HOSTING_SERVICE;
 
-if (!COMPATIBLE_S3_CLIENT.includes(S3_CLIENT)) {
+if (!COMPATIBLE_FILES_HOSTING_SERVICES.includes(FILES_HOSTING_SERVICE)) {
   throw new Error(
-    `${S3_CLIENT} is not supported, please use one of this supported s3 clients: ${COMPATIBLE_S3_CLIENT.join(", ")}`,
+    `${FILES_HOSTING_SERVICE} is not supported, please use one of this supported s3 clients: ${COMPATIBLE_FILES_HOSTING_SERVICES.join(", ")}`,
   );
 }
 
-if (NODE_ENV == "production" && S3_CLIENT === "fs") {
+if (NODE_ENV == "production" && FILES_HOSTING_SERVICE === "fs") {
   logger.warn(
     `Using local file storage is not recommended for production usage`,
   );
 }
+
+export const S3_BUCKET = process.env.S3_BUCKET;
+
+export const LOCAL_FS_TARGET = process.env.LOCAL_FS_TARGET;

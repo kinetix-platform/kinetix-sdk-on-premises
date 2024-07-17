@@ -2,20 +2,18 @@ name: kinetix
 
 services:
   db:
-    image: mariadb:lts
+    image: container-registry.oracle.com/database/free:latest
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_USER: kinetix
-      MYSQL_PASSWORD: password
-      MYSQL_DATABASE: kinetix
+      ORACLE_PWD: "Kinetix-passw0rd"
+      ORACLE_PDB: "kinetix"
     ports:
-      - '3306:3306'
+      - '1521:1521'
     volumes:
-      - ./db:/var/lib/mysql
+      - ./db:/opt/oracle/oradata
     healthcheck:
-      test: ["CMD-SHELL", "mariadb-admin ping --password=password"]
+      test: ["CMD-SHELL", "echo 'SELECT 1 FROM DUAL;' | sqlplus -S / as sysdba"]
       interval: 10s
-      retries: 3
+      retries: 15
 
   s3:
     image: minio/minio
@@ -48,12 +46,12 @@ services:
       - "4000:4000"
     environment:
       CACHE_ENDPOINTS: "redis:6379"
-      DB_DIALECT: mariadb
+      DB_DIALECT: oracle
       DB_HOST: db
-      DB_USER: kinetix
-      DB_PASSWORD: password
+      DB_USER: sys
+      DB_PASSWORD: "Kinetix-passw0rd"
       DB_NAME: kinetix
-      S3_BUCKET:
+      FILES_HOSTING_SERVICE: "aws"
 
   portal:
     build:
@@ -72,12 +70,12 @@ services:
       - "4001:4000"
     environment:
       CACHE_ENDPOINTS: "redis:6379"
-      DB_DIALECT: mariadb
+      DB_DIALECT: oracle
       DB_HOST: db
-      DB_USER: kinetix
-      DB_PASSWORD: password
+      DB_USER: sys
+      DB_PASSWORD: "Kinetix-passw0rd"
       DB_NAME: kinetix
-      S3_BUCKET:
+      FILES_HOSTING_SERVICE: "aws"
 
   webhook:
     build:
@@ -96,9 +94,10 @@ services:
       - "4002:4000"
     environment:
       CACHE_ENDPOINTS: "redis:6379"
-      DB_DIALECT: mariadb
+      DB_AUTO_SYNC: false
+      DB_DIALECT: oracle
       DB_HOST: db
-      DB_USER: kinetix
-      DB_PASSWORD: password
+      DB_USER: sys
+      DB_PASSWORD: "Kinetix-passw0rd"
       DB_NAME: kinetix
-      S3_BUCKET:
+      FILES_HOSTING_SERVICE: "aws"

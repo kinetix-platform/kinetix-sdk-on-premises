@@ -5,7 +5,7 @@ import {
   DB_HOST,
   DB_PORT,
   DB_DIALECT,
-  DB_HOST_REPLICA,
+  DB_REPLICA_HOST,
   DB_LOGGING,
 } from "./constants.js";
 
@@ -19,8 +19,8 @@ const options = {
   logging: DB_LOGGING !== "false",
 };
 
-if (DB_HOST_REPLICA) {
-  options.replicaHost = DB_HOST_REPLICA;
+if (DB_REPLICA_HOST) {
+  options.replicaHost = DB_REPLICA_HOST;
 }
 
 export default options;
