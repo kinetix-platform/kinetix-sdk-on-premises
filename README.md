@@ -1,4 +1,4 @@
-# kinetix-sdk-on-premise
+# kinetix-sdk-on-premises
 
 > [!WARNING]  
 > This version is in its early stages, and we are actively addressing bugs to enhance its reliability.
