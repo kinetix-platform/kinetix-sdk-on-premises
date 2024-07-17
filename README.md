@@ -59,8 +59,8 @@ DB_REPLICA
 
 We support the belowed cache engines :
 
-- Redis
-- Memcached
+- [Redis](https://redis.io/)
+- [Memcached](https://memcached.org/)
 
 Use the DB_DIALECT environment variable to select the wanted database engine,
 correct values are "postgres", "mariadb", "mysql", "mssql", "oracle".
