@@ -22,6 +22,10 @@ To start from scratch with all the infrastructure components and apis :
 docker compose up
 ```
 
+> [!IMPORTANT]
+> Do not forget to update your game build to target your own new infrastructure
+> ![unity capture](./docs/images/unity-base-url.png)
+
 ## Components
 
 Database
