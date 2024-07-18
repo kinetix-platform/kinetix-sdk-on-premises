@@ -1,4 +1,4 @@
-# kinetix-sdk-on-premises
+# Kinetix SDK Server (On-premises deployment)
 
 > [!WARNING]  
 > This code is currently in the development phase.
@@ -8,13 +8,13 @@
 Welcome to the Kinetix Emote Generation Platform.
 Our AI-powered infrastructure generates dynamic and expressive emotes for in-game characters, enhancing the gaming experience.
 
-## Overview
+# Overview
 
 Kinetix has made it easy to create in-game emotes using AI.
 Our platform, previously available only as a SaaS product, now also supports on-premises deployment.
 Here you will find everything related to on-premises deployment.
 
-## Quick start
+# Quick start
 
 To start from scratch with all the infrastructure components and apis :
 
@@ -26,32 +26,37 @@ docker compose up
 > Do not forget to update your game build to target your own new infrastructure
 > ![unity capture](./docs/images/unity-base-url.png)
 
-## Components
+## Run locally from the sources
 
-Database
-Cache engine
-Files services
-Core API
-Dev Portal
-Webhook
+You will need to have installed on your local computer:
 
-### Build from the sources
-
-To start only the infrastructure components without the apis (mainly for dev purposes)
+- [nodeJS](https://nodejs.org/)(mininum )
+- [docker](https://www.docker.com/)
 
 ```sh
-docker compose up db cache s3
-```
-
-Install dependencies
-
-```sh
+git clone https://github.com/kinetix-platform/kinetix-sdk-on-premises.git
 npm install
+cp .env.local .env
+docker compose up db cache s3 -d
+pm2 start ecosystem.config.cjs
 ```
 
-To run all the ecosystem except the infrastructures components
+When you are down, to shut down
 
-### Database setup
+```sh
+pm2 stop all
+docker compose down
+```
+
+We love using [PM2](https://pm2.keymetrics.io/) as process manager, but you can run everything manually.
+
+```sh
+npm run start:api
+npm run start:portal
+npm start:webhook"
+```
+
+## Database setup
 
 We support the belowed databases:
 
@@ -78,7 +83,7 @@ DB_USER="< database user >"
 DB_PASSWORD="< database user password >"
 ```
 
-### Cache setup
+## Cache setup
 
 We support the belowed cache engines :
 
@@ -95,30 +100,30 @@ CACHE_STORE="< redis | memcached >"
 CACHE_ENDPOINTS="< hostname:port or hostname1:port1;hostname2:port2>"
 ```
 
-### Files hosting setup
+## Files hosting setup
 
 We support different ways to handle files hosting & distributions.
-We strongly support S3 systems to manage files hosting.
-We support the belowed S3 implementations including cloud providers solution:
+We strongly encourage S3 systems usage to manage files hosting.
+We support the belowed S3 implementations including cloud providers solution (more to come in the future):
 
 - [Min.io](https://min.io/)
 - [AWS S3](https://aws.amazon.com/s3/)
 
-If you are in an case where you do not want to use an S3 solution for your files, you can use your local file system (you can use network mounted disk drives)
+If you are in an case, where you do not want to use an S3 solution for your files, you can use your local file system. Our solution is compatible with network mounted disk drives.
 
-Use the DB_DIALECT environment variable to select the wanted database engine,
-correct values are "fs", "minio", "aws"
+Use the FILES_HOSTING_SERVICE environment variable to select the wanted database engine,
+correct values are "minio", "aws", "fs"
 
 Configuration example:
 
 ```sh
-CACHE_STORE="< minio | aws | fs >"
+FILES_HOSTING_SERVICE="< minio | aws | fs >"
 ```
 
-## Documentation
+# Documentation
 
-For more details, visit our [a documentation](https://stackoverflow.com/questions/19633531/configure-msbuild-output-path), where you'll find guides, API references, and tutorials.
+For more details, visit our [documentation](https://kinetix.gitbook.io/kinetix-sdk-server-on-premises-deployment/), where you'll find guides, API references, and tutorials.
 
-## Support
+# Support
 
 If you need help, please contact us at [ben@kinetix.tech](mailto=ben@kinetix.tech)
