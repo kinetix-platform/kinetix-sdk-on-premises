@@ -1,7 +1,9 @@
 # kinetix-sdk-on-premises
 
 > [!WARNING]  
-> This version is in its early stages, and we are actively addressing bugs to enhance its reliability.
+> This code is currently in the development phase.
+> Not all features are complete, and there may be bugs.
+> It is not ready yet for production deployment.
 
 Welcome to the Kinetix Emote Generation Platform.
 Our AI-powered infrastructure generates dynamic and expressive emotes for in-game characters, enhancing the gaming experience.
@@ -52,7 +54,6 @@ DB_PORT="< port >" # If not provided, the default port corresponding to the prov
 DB_NAME="< database name >"
 DB_USER="< database user >"
 DB_PASSWORD="< database user password >"
-DB_REPLICA
 ```
 
 ### Cache setup
