@@ -1,11 +1,5 @@
 import winston from "winston";
 import os from "os";
-import fs from "fs";
-//import package_json from '../../../package.json';
-
-const NPM_PACKAGE_VERSION = JSON.parse(
-  fs.readFileSync("./package.json"),
-).version;
 
 const { LOG_FORMAT = "human" } = process.env;
 
@@ -26,7 +20,6 @@ class Logger {
             ),
       level: "http",
       defaultMeta: {
-        ...(NPM_PACKAGE_VERSION && { version: NPM_PACKAGE_VERSION }),
         hostname: os.hostname(),
       },
       transports: [new winston.transports.Console()],

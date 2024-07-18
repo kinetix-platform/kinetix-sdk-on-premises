@@ -4,9 +4,6 @@ import express from "express";
 import path from "path";
 import fs from "fs";
 
-const packageJson = JSON.parse(fs.readFileSync("./package.json"));
-
-const { version } = packageJson;
 const { KINETIX_BACKEND, PORT, COGNITO_CLIENT_ID } = process.env;
 const router = express.Router();
 
@@ -35,7 +32,6 @@ const swaggerDefinition = {
   openapi: "3.0.3",
   info: {
     title: "Kinetix SDK API",
-    version: version,
     description,
   },
   servers,

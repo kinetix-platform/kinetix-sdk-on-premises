@@ -30,12 +30,11 @@ services:
     ports:
       - '6379:6379'
 
-  api:
+  aio:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: kinetix-api
-    command: ["npm", "run", "start:api"]
+    container_name: kinetix-aio
     depends_on:
       db:
         condition: service_healthy
@@ -45,59 +44,15 @@ services:
         condition: service_started
     ports:
       - "4000:4000"
+      - "4001:4001"
+      - "4002:4002"
     environment:
-      CACHE_ENDPOINTS: "redis:6379"
+      CACHE_ENDPOINTS: cache:6379
+      CACHE_STORE: redis
       DB_DIALECT: postgres
       DB_HOST: db
       DB_USER: postgres
       DB_PASSWORD: password
       DB_NAME: kinetix
-      S3_BUCKET:
-
-  portal:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: kinetix-portal
-    command: ["npm", "run", "start:portal"]
-    depends_on:
-      db:
-        condition: service_healthy
-      cache:
-        condition: service_started
-      s3:
-        condition: service_started
-    ports:
-      - "4001:4000"
-    environment:
-      CACHE_ENDPOINTS: "redis:6379"
-      DB_DIALECT: postgres
-      DB_HOST: db
-      DB_USER: postgres
-      DB_PASSWORD: password
-      DB_NAME: kinetix
-      S3_BUCKET:
-
-  webhook:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: kinetix-webhook
-    command: ["npm", "run", "start:webhook"]
-    depends_on:
-      db:
-        condition: service_healthy
-      cache:
-        condition: service_started
-      s3:
-        condition: service_started
-    ports:
-      - "4002:4000"
-    environment:
-      CACHE_ENDPOINTS: "redis:6379"
-      DB_DIALECT: postgres
-      DB_HOST: db
-      DB_USER: postgres
-      DB_PASSWORD: password
-      DB_NAME: kinetix
-      S3_BUCKET:
+      FILES_HOSTING_SERVICE: minio
+      NODE_ENV: dev

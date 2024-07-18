@@ -5,14 +5,7 @@ import validator from "#common/middlewares/validator.js";
 import tokenAuth from "#common/middlewares/tokenAuth.js";
 import keyAuth from "#common/middlewares/keyAuth.js";
 import keyWrite from "#common/middlewares/keyWrite.js";
-import {
-  create,
-  createYT,
-  get,
-  requestToken,
-  getToken,
-  videoDownload,
-} from "./schema.js";
+import { create, get, requestToken, getToken } from "./schema.js";
 import ugeLimitUser from "#common/middlewares/ugeLimitUser.js";
 
 const videoUpload = multer({ dest: "videos/" }).any();
@@ -22,7 +15,7 @@ const router = express.Router();
 router.post(
   "/",
   videoUpload,
-  validator([create, createYT]),
+  validator([create]),
   tokenAuth(true),
   controller.create,
 );
@@ -52,19 +45,6 @@ router.post(
   keyAuth,
   keyWrite,
   controller.retake,
-);
-
-router.post(
-  "/video/info",
-  validator(videoDownload),
-  tokenAuth(false),
-  controller.videoInfo,
-);
-router.post(
-  "/video/download",
-  validator(videoDownload),
-  tokenAuth(false),
-  controller.videoDownload,
 );
 
 export default router;

@@ -34,7 +34,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: kinetix-api
-    command: ["npm", "run", "start:api"]
+    command: ["pm2", "start", "ecosystem.config.cjs", "--only", "kinetix-api"]
     depends_on:
       db:
         condition: service_healthy
@@ -51,14 +51,14 @@ services:
       DB_USER: sys
       DB_PASSWORD: "Kinetix-passw0rd"
       DB_NAME: kinetix
-      FILES_HOSTING_SERVICE: "aws"
+      FILES_HOSTING_SERVICE: "minio"
 
   portal:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: kinetix-portal
-    command: ["npm", "run", "start:portal"]
+    command: ["pm2", "start", "ecosystem.config.cjs", "--only", "kinetix-portal"]
     depends_on:
       db:
         condition: service_healthy
@@ -67,7 +67,7 @@ services:
       s3:
         condition: service_started
     ports:
-      - "4001:4000"
+      - "4001:4001"
     environment:
       CACHE_ENDPOINTS: "redis:6379"
       DB_DIALECT: oracle
@@ -75,14 +75,14 @@ services:
       DB_USER: sys
       DB_PASSWORD: "Kinetix-passw0rd"
       DB_NAME: kinetix
-      FILES_HOSTING_SERVICE: "aws"
+      FILES_HOSTING_SERVICE: "minio"
 
   webhook:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: kinetix-webhook
-    command: ["npm", "run", "start:webhook"]
+    command: ["pm2", "start", "ecosystem.config.cjs", "--only", "kinetix-webhook"]
     depends_on:
       db:
         condition: service_healthy
@@ -91,7 +91,7 @@ services:
       s3:
         condition: service_started
     ports:
-      - "4002:4000"
+      - "4002:4002"
     environment:
       CACHE_ENDPOINTS: "redis:6379"
       DB_AUTO_SYNC: false
@@ -100,4 +100,4 @@ services:
       DB_USER: sys
       DB_PASSWORD: "Kinetix-passw0rd"
       DB_NAME: kinetix
-      FILES_HOSTING_SERVICE: "aws"
+      FILES_HOSTING_SERVICE: "minio"

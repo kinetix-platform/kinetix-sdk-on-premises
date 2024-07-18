@@ -2,20 +2,18 @@ name: kinetix
 
 services:
   db:
-    image: mariadb:lts
+    image: mcr.microsoft.com/mssql/server:latest
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_USER: kinetix
-      MYSQL_PASSWORD: password
-      MYSQL_DATABASE: kinetix
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: kinet!x-p@ssw0rd
     ports:
-      - '3306:3306'
+      - '1433:1433'
     volumes:
-      - ./db:/var/lib/mysql
+      - ./db:/var/opt/mssql
     healthcheck:
-      test: ["CMD-SHELL", "mariadb-admin ping --password=password"]
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P kinet!x-p@ssw0rd -Q 'SELECT 1'"]
       interval: 10s
-      retries: 3
+      retries: 15
 
   s3:
     image: minio/minio
@@ -36,7 +34,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: kinetix-api
-    command: ["npm", "run", "start:api"]
+    command: ["pm2", "start", "ecosystem.config.cjs", "--only", "kinetix-api"]
     depends_on:
       db:
         condition: service_healthy
@@ -48,19 +46,19 @@ services:
       - "4000:4000"
     environment:
       CACHE_ENDPOINTS: "redis:6379"
-      DB_DIALECT: mariadb
+      DB_DIALECT: mssql
       DB_HOST: db
-      DB_USER: kinetix
-      DB_PASSWORD: password
-      DB_NAME: kinetix
-      FILES_HOSTING_SERVICE: "aws"
+      DB_USER: sa
+      DB_PASSWORD: "kinet!x-p@ssw0rd"
+      DB_NAME: tempdb
+      FILES_HOSTING_SERVICE: "minio"
 
   portal:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: kinetix-portal
-    command: ["npm", "run", "start:portal"]
+    command: ["pm2", "start", "ecosystem.config.cjs", "--only", "kinetix-portal"]
     depends_on:
       db:
         condition: service_healthy
@@ -69,22 +67,22 @@ services:
       s3:
         condition: service_started
     ports:
-      - "4001:4000"
+      - "4001:4001"
     environment:
       CACHE_ENDPOINTS: "redis:6379"
-      DB_DIALECT: mariadb
+      DB_DIALECT: mssql
       DB_HOST: db
-      DB_USER: kinetix
-      DB_PASSWORD: password
-      DB_NAME: kinetix
-      FILES_HOSTING_SERVICE: "aws"
+      DB_USER: sa
+      DB_PASSWORD: "kinet!x-p@ssw0rd"
+      DB_NAME: tempdb
+      FILES_HOSTING_SERVICE: "minio"
 
   webhook:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: kinetix-webhook
-    command: ["npm", "run", "start:webhook"]
+    command: ["pm2", "start", "ecosystem.config.cjs", "--only", "kinetix-webhook"]
     depends_on:
       db:
         condition: service_healthy
@@ -93,12 +91,12 @@ services:
       s3:
         condition: service_started
     ports:
-      - "4002:4000"
+      - "4002:4002"
     environment:
       CACHE_ENDPOINTS: "redis:6379"
-      DB_DIALECT: mariadb
+      DB_DIALECT: mssql
       DB_HOST: db
-      DB_USER: kinetix
-      DB_PASSWORD: password
-      DB_NAME: kinetix
-      FILES_HOSTING_SERVICE: "aws"
+      DB_USER: sa
+      DB_PASSWORD: "kinet!x-p@ssw0rd"
+      DB_NAME: tempdb
+      FILES_HOSTING_SERVICE: "minio"

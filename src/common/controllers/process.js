@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import { UGE_TOKEN_EXPIRE } from "#common/config/constants.js";
 import httpStatus from "http-status";
 import logger from "#common/helpers/logger.js";
 import HttpError from "../../common/helpers/error.js";
@@ -12,31 +13,7 @@ import processHelper from "../helpers/process.js";
 import tokenService from "#common/services/repository/token.js";
 
 const { FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND, BAD_REQUEST } = httpStatus;
-const { VWC_URL, S3_BUCKET, UGE_TOKEN_EXPIRE = 300 } = process.env;
-
-const generateErrorMessage = (p) => {
-  if (p?.mlReturnCode === 5) return "Too much characters detected in the video";
-  if (p?.mlReturnCode === 6) return "No character detected in the video";
-  if (p?.mlReturnCode === 7) return "Character too small in the video";
-};
-
-const enrichProcess = async (process) => {
-  let ml;
-  let thumbnailUrl;
-  const errorMessage = generateErrorMessage(process);
-
-  if (process.video && process.step !== "transcode_failed") {
-    const asset = await kinetixService.getAsset(process.video);
-    thumbnailUrl = asset?.data?.files?.find((f) => f.name === "thumbnail")?.url;
-  }
-
-  return {
-    ...process,
-    ...(ml && { ml }),
-    ...(errorMessage && { errorMessage }),
-    ...(thumbnailUrl && { thumbnailUrl }),
-  };
-};
+const { VWC_URL } = process.env;
 
 class Controller {
   async get(req, res, next) {
@@ -132,22 +109,6 @@ class Controller {
       const response = await processService.deleteProcess(uuid);
 
       res.send(response);
-    } catch (e) {
-      logger.error(e.message, e);
-      return next(
-        new HttpError(null, e, INTERNAL_SERVER_ERROR, "An error occured"),
-      );
-    }
-  }
-
-  async getAllByCognito(req, res, next) {
-    try {
-      const { user } = req;
-      const processes = await processService.getProcessesByCognito(user.sub);
-      const enrichProcesses = await Promise.all(
-        processes.toJSON().map((p) => enrichProcess(p)),
-      );
-      return res.send(enrichProcesses);
     } catch (e) {
       logger.error(e.message, e);
       return next(
@@ -411,86 +372,6 @@ class Controller {
       return next(
         new HttpError(null, e, INTERNAL_SERVER_ERROR, "An error occured"),
       );
-    }
-  }
-
-  async videoInfo(req, res, next) {
-    try {
-      const { vw } = req;
-      if (!vw.configuration.allowUGC) {
-        return next(
-          new HttpError(
-            null,
-            {},
-            FORBIDDEN,
-            "Virtual world does not allow UGC",
-            "noUGC",
-          ),
-        );
-      }
-
-      const { formats, thumbnails, automatic_captions, ...info } =
-        await awsService.lambdaYoutube({ url: req.body.url });
-
-      return res.send(info);
-    } catch (e) {
-      if (e instanceof HttpError) {
-        return next(e);
-      } else {
-        logger.error(e.message, e);
-        return next(
-          new HttpError(null, e, INTERNAL_SERVER_ERROR, "An error occured"),
-        );
-      }
-    }
-  }
-
-  async videoDownload(req, res, next) {
-    try {
-      const { vw } = req;
-      if (!vw.configuration.allowUGC) {
-        return next(
-          new HttpError(
-            null,
-            {},
-            FORBIDDEN,
-            "Virtual world does not allow UGC",
-            "noUGC",
-          ),
-        );
-      }
-
-      const videoAsset = await kinetixService.createAsset({
-        name: req.body.url,
-        type: "video",
-        files: [
-          {
-            name: "original",
-            extension: "mp4",
-          },
-          {
-            name: "prepared",
-            extension: "mp4",
-          },
-        ],
-      });
-
-      // CREATE ASSET VIDEO
-      await awsService.lambdaYoutube({
-        url: req.body.url,
-        outputPath: `s3://${S3_BUCKET}/user-data/${videoAsset.uuid}-original.mp4`,
-      });
-
-      return res.send(videoAsset);
-    } catch (e) {
-      if (e instanceof HttpError) {
-        return next(e);
-      } else {
-        logger.error(e.message, e);
-        return next(
-          new HttpError(null, e, INTERNAL_SERVER_ERROR, "An error occured"),
-        );
-      }
     }
   }
 

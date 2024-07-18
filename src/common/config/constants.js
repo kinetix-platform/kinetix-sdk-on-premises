@@ -11,6 +11,10 @@ dotenv.config({
 
 export const NODE_ENV = process.env.NODE_ENV || "production";
 
+export const UGE_TOKEN_EXPIRE = process.env.UGE_TOKEN_EXPIRE
+  ? parseInt(process.env.UGE_TOKEN_EXPIRE, 10)
+  : 3600;
+
 // COGNITO
 
 export const COGNITO_CLIENT_ID =
@@ -43,7 +47,7 @@ export const DB_DIALECT = process.env.DB_DIALECT;
 
 export const DB_AUTO_SYNC = process.env.DB_AUTO_SYNC
   ? process.env.DB_AUTO_SYNC === "true"
-  : true;
+  : false;
 
 export const DB_PORT = process.env.DB_PORT
   ? process.env.DB_PORT
@@ -149,12 +153,6 @@ export const CORS_ORIGINS = process.env.CORS_ORIGINS
 export const API_EXPOSE_SWAGGER = process.env.EXPOSE_SWAGGER
   ? process.env.EXPOSE_SWAGGER === "true"
   : true;
-
-if (NODE_ENV === "production" && API_EXPOSE_SWAGGER) {
-  logger.warn(
-    `Swagger is exposed, this is not recommended for production usage`,
-  );
-}
 
 // S3
 

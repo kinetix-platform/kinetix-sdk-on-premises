@@ -33,7 +33,6 @@ class App {
           healthChecks: {
             "/heathcheck": ({ state }) =>
               Promise.resolve({
-                version: process.env.npm_package_version,
                 ...state,
               }),
           },

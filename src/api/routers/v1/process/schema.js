@@ -33,15 +33,6 @@ const defaultCreate = {
   outputHeight: [Joi.number().min(0), Joi.allow(null)],
 };
 
-export const createYT = {
-  body: Joi.object()
-    .keys({
-      ...defaultCreate,
-      videoUuid: Joi.string().uuid().required(),
-    })
-    .required(),
-  files: Joi.forbidden(),
-};
 export const create = {
   body: Joi.object()
     .keys({
@@ -80,19 +71,4 @@ export const get = {
       uuid: Joi.string().uuid().required(),
     })
     .required(),
-};
-
-export const devRequestToken = {
-  query: Joi.object()
-    .keys({
-      userId: Joi.string().required(),
-      key: Joi.string(),
-    })
-    .required(),
-};
-
-export const videoDownload = {
-  body: Joi.object().keys({
-    url: Joi.string().uri().required(),
-  }),
 };

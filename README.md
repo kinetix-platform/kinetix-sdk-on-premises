@@ -12,22 +12,40 @@ Our AI-powered infrastructure generates dynamic and expressive emotes for in-gam
 
 Kinetix has made it easy to create in-game emotes using AI.
 Our platform, previously available only as a SaaS product, now also supports on-premises deployment.
-Choose the option that best fits your needs.
 Here you will find everything related to on-premises deployment.
 
 ## Quick start
 
-To start a new project from scratch with all the infrastructure components and an postgres database
+To start from scratch with all the infrastructure components and apis :
 
 ```sh
 docker compose up
 ```
+
+## Components
+
+Database
+Cache engine
+Files services
+Core API
+Dev Portal
+Webhook
+
+### Build from the sources
 
 To start only the infrastructure components without the apis (mainly for dev purposes)
 
 ```sh
 docker compose up db cache s3
 ```
+
+Install dependencies
+
+```sh
+npm install
+```
+
+To run all the ecosystem except the infrastructures components
 
 ### Database setup
 
@@ -90,8 +108,7 @@ correct values are "fs", "minio", "aws"
 Configuration example:
 
 ```sh
-CACHE_STORE="< redis | memcached >"
-CACHE_ENDPOINTS="< hostname:port or hostname1:port1;hostname2:port2>"
+CACHE_STORE="< minio | aws | fs >"
 ```
 
 ## Documentation
