@@ -1,0 +1,104 @@
+name: kinetix
+
+services:
+  db:
+    image: mysql:lts
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: kinetix
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: kinetix
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -ppassword"]
+      interval: 10s
+      retries: 3
+
+  s3:
+    image: minio/minio
+    command: ["server", "/data", "--console-address", ":9001"]
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - ./s3:/data
+
+  cache:
+    image: redis:alpine
+    ports:
+      - '6379:6379'
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kinetix-api
+    command: ["pm2", "start", "ecosystem.config.cjs", "--only", "kinetix-api"]
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_started
+      s3:
+        condition: service_started
+    ports:
+      - "4000:4000"
+    environment:
+      CACHE_ENDPOINTS: "redis:6379"
+      DB_DIALECT: mysql
+      DB_HOST: db
+      DB_USER: kinetix
+      DB_PASSWORD: password
+      DB_NAME: kinetix
+      FILES_HOSTING_SERVICE: "minio"
+
+  portal:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kinetix-portal
+    command: ["pm2", "start", "ecosystem.config.cjs", "--only", "kinetix-portal"]
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_started
+      s3:
+        condition: service_started
+    ports:
+      - "4001:4001"
+    environment:
+      CACHE_ENDPOINTS: "redis:6379"
+      DB_DIALECT: mysql
+      DB_HOST: db
+      DB_USER: kinetix
+      DB_PASSWORD: password
+      DB_NAME: kinetix
+      FILES_HOSTING_SERVICE: "minio"
+
+  webhook:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kinetix-webhook
+    command: ["pm2", "start", "ecosystem.config.cjs", "--only", "kinetix-webhook"]
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_started
+      s3:
+        condition: service_started
+    ports:
+      - "4002:4002"
+    environment:
+      CACHE_ENDPOINTS: "redis:6379"
+      DB_DIALECT: mysql
+      DB_HOST: db
+      DB_USER: kinetix
+      DB_PASSWORD: password
+      DB_NAME: kinetix
+      FILES_HOSTING_SERVICE: "minio"

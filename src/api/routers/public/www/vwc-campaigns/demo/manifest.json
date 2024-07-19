@@ -1,0 +1,25 @@
+{
+  "short_name": "Kineportal",
+  "name": "Kineportal",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "touch-logo.svg",
+      "type": "image/svg",
+      "sizes": "192x192"
+    },
+    {
+      "src": "touch-logo.svg",
+      "type": "image/svg",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/index.html",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#000000"
+}

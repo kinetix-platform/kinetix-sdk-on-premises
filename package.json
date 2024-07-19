@@ -1,0 +1,76 @@
+{
+  "name": "kinetix-sdk-on-premise",
+  "version": "0.0.1",
+  "description": "kinetix sdk api on premise hosting",
+  "main": "index.js",
+  "type": "module",
+  "engines": {
+    "node": "20"
+  },
+  "scripts": {
+    "lint": "npx eslint ./src",
+    "live:api": "nodemon ./src/api/index.js",
+    "live:portal": "nodemon ./src/portal/index.js",
+    "live:webhook": "nodemon ./src/webhook/index.js",
+    "postversion": "git push --follow-tags",
+    "pretty": "npx prettier",
+    "prepare": "husky install",
+    "migrate": "npx sequelize-cli db:migrate",
+    "migrate:undo": "npx sequelize-cli db:migrate:undo",
+    "start:api": "node ./src/api/index.js",
+    "start:portal": "node ./src/portal/index.js",
+    "start:webhook": "node ./src/webhook/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.609.0",
+    "@godaddy/terminus": "^4.12.1",
+    "@hapi/joi-date": "^2.0.1",
+    "archiver": "^7.0.0",
+    "aws-jwt-verify": "^4.0.1",
+    "axios": "^1.7.2",
+    "axios-retry": "^4.4.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv-safe": "^9.1.0",
+    "express": "^4.19.2",
+    "http-status": "^1.7.4",
+    "ioredis": "^5.4.1",
+    "joi": "^17.13.3",
+    "lodash": "^4.17.21",
+    "mariadb": "^3.3.1",
+    "moment": "^2.30.1",
+    "moment-duration-format": "^2.3.2",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.10.2",
+    "node-oracledb": "^1.0.2",
+    "pg": "^8.12.0",
+    "pm2": "^5.4.2",
+    "qs": "^6.12.2",
+    "sequelize": "^6.37.3",
+    "sequelize-cli": "^6.6.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "tedious": "^18.2.4",
+    "uuid": "^10.0.0",
+    "winston": "^3.13.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.6.0",
+    "eslint": "^9.6.0",
+    "globals": "^15.8.0",
+    "husky": "^9.0.11",
+    "jest": "^29.7.0",
+    "lint-staged": "^15.2.7",
+    "nodemon": "^3.1.4",
+    "prettier": "^3.3.2"
+  },
+  "imports": {
+    "#*": "./src/*"
+  },
+  "lint-staged": {
+    "*.js": "eslint --fix",
+    "*.{js,css,md}": "prettier --write"
+  }
+}

@@ -1,0 +1,58 @@
+name: kinetix
+
+services:
+  db:
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: kinetix
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d kinetix"]
+      interval: 10s
+      retries: 3
+
+  s3:
+    image: minio/minio
+    command: ["server", "/data", "--console-address", ":9001"]
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - ./s3:/data
+
+  cache:
+    image: redis:alpine
+    ports:
+      - '6379:6379'
+
+  aio:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kinetix-aio
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_started
+      s3:
+        condition: service_started
+    ports:
+      - "4000:4000"
+      - "4001:4001"
+      - "4002:4002"
+    environment:
+      CACHE_ENDPOINTS: cache:6379
+      CACHE_STORE: redis
+      DB_DIALECT: postgres
+      DB_HOST: db
+      DB_USER: postgres
+      DB_PASSWORD: password
+      DB_NAME: kinetix
+      FILES_HOSTING_SERVICE: minio
+      NODE_ENV: dev

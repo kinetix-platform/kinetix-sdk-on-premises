@@ -1,0 +1,33 @@
+{
+  "files": {
+    "main.css": "src/css/main.4b0e3871893098dc474d.css",
+    "main.js": "src/bundle.06ff6bb13e37727c29fc.js",
+    "runtime~main.js": "src/bundle.d308bf4064ea18df3756.js",
+    "bundle.js": "src/bundle.250c1d1848ea876211d3.js",
+    "css/239.css": "src/css/239.6b219d848b9228ba5244.css",
+    "process_onboarding.mp4": "src/831d9e9c7bb092c74563.mp4",
+    "sam.gif": "src/c3d2d7693ff7ea3d71e8.gif",
+    "disconnected-bg.png": "src/70fd8961c4a3f80fef0b.png",
+    "UPLOAD_AVATAR.png": "src/f3b940b591d440fc5bac.png",
+    "USER_GENERATED_EMOTES.png": "src/61bb93ae3f621fbcfd4d.png",
+    "favicon.ico": "src/favicon.ico",
+    "ajax-loader.gif": "src/fb6f3c230cb846e25247.gif",
+    "add_video.png": "src/fbc9ac52073f71a467c6.png",
+    "./index.html": "src/./index.html",
+    "slick.svg": "src/2630a3e3eab21c607e21.svg",
+    "slick.eot": "src/a4e97f5a2a64f0ab1323.eot",
+    "slick.ttf": "src/c94f7671dcc99dce43e2.ttf",
+    "slick.woff": "src/295183786cd8a1389865.woff",
+    "emotes-icon-placeholder.png": "src/43654d227106a055b518.png",
+    "manifest.json": "src/manifest.json",
+    ".htaccess": "src/.htaccess",
+    "robots.txt": "src/robots.txt"
+  },
+  "entrypoints": [
+    "bundle.d308bf4064ea18df3756.js",
+    "css/239.6b219d848b9228ba5244.css",
+    "bundle.96796dcfd6e04a251f03.js",
+    "css/main.4b0e3871893098dc474d.css",
+    "bundle.06ff6bb13e37727c29fc.js"
+  ]
+}
