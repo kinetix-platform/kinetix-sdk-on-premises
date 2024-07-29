@@ -1,44 +1,29 @@
-import Redis from "ioredis";
 import {
   CACHE_STORE,
   CACHE_ENDPOINTS,
   DEFAULT_CACHE_TTL,
   DISABLE_CACHE,
-  NODE_ENV,
 } from "#common/config/constants.js";
-import logger from "../../helpers/logger.js";
+import Memcached from "./memcached.js";
+import Redis from "./redis.js";
 
 class CacheService {
   constructor() {
     this.disableCache = DISABLE_CACHE;
-    const DEFAULT_REDIS_OPTIONS = { keyPrefix: `${NODE_ENV}:` };
 
-    if (CACHE_ENDPOINTS.length > 1) {
-      this.client = new Redis.Cluster(
-        CACHE_ENDPOINTS.map((endpoint) => ({
-          host: endpoint.split(":")[0],
-          port: endpoint.split(":")[1],
-        })),
-        DEFAULT_REDIS_OPTIONS,
-      );
-    } else if (CACHE_ENDPOINTS.length === 1) {
-      this.client = new Redis(CACHE_ENDPOINTS[0], DEFAULT_REDIS_OPTIONS);
-    } else {
-      this.disableCache = true;
+    if (!DISABLE_CACHE) {
+      if (CACHE_ENDPOINTS.length === 0 || CACHE_STORE === "none") {
+        this.disableCache = true;
+      } else {
+        if (CACHE_STORE === "redis") {
+          this.cache = new Redis();
+        } else if (CACHE_STORE === "memcached") {
+          this.cache = new Memcached();
+        } else {
+          this.disableCache = true;
+        }
+      }
     }
-
-    if (this.client) {
-      this.client.on("connect", () => logger.info("Cache connected"));
-      this.client.on("error", (err) => logger.error("Cache client error", err));
-    }
-  }
-
-  async connect() {
-    if (this.disableCache) {
-      return;
-    }
-
-    await this.client.connect();
   }
 
   async set(key, value, expire = DEFAULT_CACHE_TTL) {
@@ -46,10 +31,9 @@ class CacheService {
       return;
     }
 
-    return this.client.set(
+    return this.cache.set(
       key,
       typeof value === "string" ? value : JSON.stringify(value),
-      "EX",
       expire,
     );
   }
@@ -59,7 +43,7 @@ class CacheService {
       return;
     }
 
-    const result = await this.client.get(key);
+    const result = await this.cache.get(key);
     if (result) {
       let value;
       try {
@@ -77,7 +61,7 @@ class CacheService {
       return;
     }
 
-    return this.client.ttl(key);
+    return this.cache.ttl(key);
   }
 
   async del(key) {
@@ -85,7 +69,7 @@ class CacheService {
       return;
     }
 
-    return this.client.del(key);
+    return this.cache.del(key);
   }
 
   async flush() {
@@ -93,7 +77,7 @@ class CacheService {
       return;
     }
 
-    return this.client.flushall();
+    return this.cache.flushall();
   }
 
   async scan(key) {
@@ -101,14 +85,8 @@ class CacheService {
       return;
     }
 
-    const result = await this.client.scan(
-      0,
-      "MATCH",
-      `${NODE_ENV}:${key}`,
-      "COUNT",
-      1000000000000,
-    );
-    return result[1];
+    const results = await this.cache.scan(key);
+    return results;
   }
 
   async setEmotesVWUser(vwUuid, userVwId, value, expire = DEFAULT_CACHE_TTL) {

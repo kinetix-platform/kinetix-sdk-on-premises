@@ -14,6 +14,14 @@ Kinetix has made it easy to create in-game emotes using AI.
 Our platform, previously available only as a SaaS product, now also supports on-premises deployment.
 Here you will find everything related to on-premises deployment.
 
+## Components
+
+Core API with PWA
+
+Dev portal
+
+Webhook server
+
 # Quick start
 
 To start from scratch with all the infrastructure components and apis :
@@ -30,7 +38,7 @@ docker compose up
 
 You will need to have installed on your local computer:
 
-- [nodeJS](https://nodejs.org/)(mininum )
+- [nodeJS](https://nodejs.org/) (minimum v20)
 - [docker](https://www.docker.com/)
 
 ```sh
@@ -90,8 +98,8 @@ We support the belowed cache engines :
 - [Redis](https://redis.io/)
 - [Memcached](https://memcached.org/)
 
-Use the DB_DIALECT environment variable to select the wanted database engine,
-correct values are "postgres", "mariadb", "mysql", "mssql", "oracle".
+Use the CACHE_STORE environment variable to select the wanted database engine,
+correct values are "redis", "memcached".
 
 Configuration example:
 
@@ -100,16 +108,20 @@ CACHE_STORE="< redis | memcached >"
 CACHE_ENDPOINTS="< hostname:port or hostname1:port1;hostname2:port2>"
 ```
 
+> [!TIP]
+> You can run our solution without any cache store, but we do not recommanded it for an production usage
+
 ## Files hosting setup
 
-We support different ways to handle files hosting & distributions.
-We strongly encourage S3 systems usage to manage files hosting.
-We support the belowed S3 implementations including cloud providers solution (more to come in the future):
+We support different ways to handle files hosting.
+We strongly encourage the usage of S3 systems to manage files hosting (more to come in the future).
 
 - [Min.io](https://min.io/)
 - [AWS S3](https://aws.amazon.com/s3/)
 
-If you are in an case, where you do not want to use an S3 solution for your files, you can use your local file system. Our solution is compatible with network mounted disk drives.
+> [!NOTE]  
+> If you are in an case, where you do not want to use an S3 solution for your files, you can use your local file system.
+> Our solution is compatible with network mounted disk drives but you will have to manage a way to serve the files online.
 
 Use the FILES_HOSTING_SERVICE environment variable to select the wanted database engine,
 correct values are "minio", "aws", "fs"

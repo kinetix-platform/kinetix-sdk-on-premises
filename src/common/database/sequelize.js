@@ -102,16 +102,18 @@ export const sequelize = initSequelize();
 export const sequelizeAutoSync = async (sync = false) => {
   if (sync) {
     await sequelize.sync({ /*alter: true,*/ force: true }); // NEED TO BE CHANGE AFTER DB SCHEMA IS FINALISED
-    logger.info("All models were synchronized successfully.");
+    logger.info("Sequelize: All models were synchronized successfully.");
   }
 };
 
 export const initDB = async () => {
   try {
     await sequelize.authenticate();
-    logger.info("Connection has been established successfully.");
+    logger.info("Sequelize: Connection has been established successfully.");
   } catch (error) {
-    logger.error(`Unable to connect to the database: ${error.message}`);
+    logger.error(
+      `Sequelize: Unable to connect to the database: ${error.message}`,
+    );
   }
   const { associateModels } = await import("#common/database/models/index.js");
   await associateModels();

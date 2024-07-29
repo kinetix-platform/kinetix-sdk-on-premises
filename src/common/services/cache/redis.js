@@ -1,17 +1,14 @@
 import Redis from "ioredis";
 import {
-  CACHE_STORE,
   CACHE_ENDPOINTS,
   DEFAULT_CACHE_TTL,
-  DISABLE_CACHE,
   NODE_ENV,
 } from "#common/config/constants.js";
 import logger from "../../helpers/logger.js";
 
-class CacheService {
+class RedisService {
   constructor() {
-    this.disableCache = DISABLE_CACHE;
-    const DEFAULT_REDIS_OPTIONS = { keyPrefix: `${NODE_ENV}:` };
+    const DEFAULT_OPTIONS = { keyPrefix: `${NODE_ENV}:` };
 
     if (CACHE_ENDPOINTS.length > 1) {
       this.client = new Redis.Cluster(
@@ -19,12 +16,10 @@ class CacheService {
           host: endpoint.split(":")[0],
           port: endpoint.split(":")[1],
         })),
-        DEFAULT_REDIS_OPTIONS,
+        DEFAULT_OPTIONS,
       );
-    } else if (CACHE_ENDPOINTS.length === 1) {
-      this.client = new Redis(CACHE_ENDPOINTS[0], DEFAULT_REDIS_OPTIONS);
     } else {
-      this.disableCache = true;
+      this.client = new Redis(CACHE_ENDPOINTS[0], DEFAULT_OPTIONS);
     }
 
     if (this.client) {
@@ -33,19 +28,7 @@ class CacheService {
     }
   }
 
-  async connect() {
-    if (this.disableCache) {
-      return;
-    }
-
-    await this.client.connect();
-  }
-
   async set(key, value, expire = DEFAULT_CACHE_TTL) {
-    if (this.disableCache) {
-      return;
-    }
-
     return this.client.set(
       key,
       typeof value === "string" ? value : JSON.stringify(value),
@@ -55,10 +38,6 @@ class CacheService {
   }
 
   async get(key) {
-    if (this.disableCache) {
-      return;
-    }
-
     const result = await this.client.get(key);
     if (result) {
       let value;
@@ -73,34 +52,18 @@ class CacheService {
   }
 
   async ttl(key) {
-    if (this.disableCache) {
-      return;
-    }
-
     return this.client.ttl(key);
   }
 
   async del(key) {
-    if (this.disableCache) {
-      return;
-    }
-
     return this.client.del(key);
   }
 
   async flush() {
-    if (this.disableCache) {
-      return;
-    }
-
     return this.client.flushall();
   }
 
   async scan(key) {
-    if (this.disableCache) {
-      return;
-    }
-
     const result = await this.client.scan(
       0,
       "MATCH",
@@ -112,5 +75,4 @@ class CacheService {
   }
 }
 
-const cacheService = new CacheService();
-export default cacheService;
+export default RedisService;
