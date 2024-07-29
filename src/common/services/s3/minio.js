@@ -1,5 +1,5 @@
 import logger from "#common/helpers/logger.js";
-import Minio from "minio";
+import * as Minio from "minio";
 import {
   MINIO_ACCESS_KEY,
   MINIO_ENDPOINT,
