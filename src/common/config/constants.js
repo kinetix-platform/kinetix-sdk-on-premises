@@ -175,3 +175,27 @@ if (NODE_ENV == "production" && FILES_HOSTING_SERVICE === "fs") {
 export const S3_BUCKET = process.env.S3_BUCKET;
 
 export const LOCAL_FS_TARGET = process.env.LOCAL_FS_TARGET;
+
+// AWS
+
+export const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
+
+export const AWS_REGION = process.env.AWS_REGION;
+
+export const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
+
+// MINIO
+
+export const MINIO_ENDPOINT = process.env.MINIO_ENDPOINT;
+
+export const MINIO_PORT = process.env.MINIO_PORT
+  ? parseInt(process.env.MINIO_PORT, 10)
+  : 9000;
+
+export const MINIO_SSL = process.env.MINIO_SSL
+  ? process.env.MINIO_SSL === "true"
+  : true;
+
+export const MINIO_ACCESS_KEY = process.env.MINIO_ACCESS_KEY;
+
+export const MINIO_SECRET_KEY = process.env.MINIO_SECRET_KEY;

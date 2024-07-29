@@ -1,28 +1,37 @@
-import { S3_CLIENT } from "#common/config/constants.js";
-import logger from "../helpers/logger.js";
+import { FILES_HOSTING_SERVICE } from "#common/config/constants.js";
 import AWSS3Service from "./aws.js";
 import MinioS3Service from "./minio.js";
-import FSS3Service from "./fs.js";
+import FSService from "./fs.js";
+import logger from "#common/helpers/logger.js";
+import fs from "fs";
 
-const initClient = () => {
-    let client;
-
-    switch (S3_CLIENT) {
-        case 'aws':
-            client = new AWSS3Service();   
-            break;
-        case 'minio':
-            client = new MinioS3Service();
-            break;
-        default:
-            client = new FSS3Service();
-            break;
+class S3Service {
+  constructor() {
+    switch (FILES_HOSTING_SERVICE) {
+      case "aws":
+        this.client = new AWSS3Service();
+        break;
+      case "minio":
+        this.client = new MinioS3Service();
+        break;
+      default:
+        this.client = new FSService();
+        break;
     }
+  }
 
-    return client;
+  async upload({ localPath, deleteAfter = true, ...params }) {
+    await this.client.upload({ localPath, ...params });
+    if (deleteAfter) {
+      await fs.promises.unlink(localPath);
+      logger.info(`${localPath} has been deleted`);
+    }
+  }
+
+  async download(params) {
+    await this.client.download(params);
+  }
 }
 
-const service = initClient();
-logger.info(`S3 ${S3_CLIENT} initialized`);
-
-export default service;
+const s3Service = new S3Service();
+export default s3Service;

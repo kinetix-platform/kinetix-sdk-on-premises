@@ -1,6 +1,6 @@
 import { S3 } from "@aws-sdk/client-s3";
 import fs from "fs";
-import logger from "./logger.js";
+import logger from "#common/helpers/logger.js";
 import {
   AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY,
@@ -20,7 +20,7 @@ class AWSS3Service {
     logger.info("AWS S3 initialized !");
   }
 
-  async upload({ localPath, key, deleteAfter = false }) {
+  async upload({ localPath, key }) {
     logger.debug(`uploading ${localPath} to s3://${S3_BUCKET}/${key}`);
     const fileContent = await fs.promises.readFile(localPath);
     await this.s3.putObject({
@@ -28,12 +28,8 @@ class AWSS3Service {
       Key: key,
       Body: fileContent,
     });
-    logger.info(`${localPath} has been uploaded to s3://${S3_BUCKET}/${key}`);
 
-    if (deleteAfter) {
-      await fs.promises.unlink(localPath);
-      logger.info(`${localPath} has been deleted`);
-    }
+    logger.info(`${localPath} has been uploaded to s3://${S3_BUCKET}/${key}`);
   }
 
   async download({ key, localPath }) {
@@ -42,6 +38,7 @@ class AWSS3Service {
       Bucket: S3_BUCKET,
       Key: key,
     });
+
     logger.info(`s3://${S3_BUCKET}/${key} has been downloaded to ${localPath}`);
     await fs.promises.writeFile(localPath, result.Body);
   }
