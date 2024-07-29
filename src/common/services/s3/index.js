@@ -20,6 +20,10 @@ class S3Service {
     }
   }
 
+  async createBucket() {
+    await this.client.createBucket();
+  }
+
   async upload({ localPath, deleteAfter = true, ...params }) {
     await this.client.upload({ localPath, ...params });
     if (deleteAfter) {
@@ -34,4 +38,5 @@ class S3Service {
 }
 
 const s3Service = new S3Service();
+await s3Service.createBucket();
 export default s3Service;

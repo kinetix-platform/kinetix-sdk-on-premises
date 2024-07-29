@@ -19,19 +19,37 @@ class MinioS3Service {
       secretKey: MINIO_SECRET_KEY,
     });
 
-    logger.info("Minio S3 initialized !");
+    logger.info("Minio: initialized");
+  }
+
+  async bucketExists() {
+    return await this.minio.bucketExists(S3_BUCKET);
+  }
+
+  async createBucket() {
+    const exists = await this.bucketExists();
+    if (!exists) {
+      await this.minio.makeBucket(S3_BUCKET);
+      logger.info(`Minio: Bucket ${S3_BUCKET} created successfully`);
+    } else {
+      logger.debug(`Minio: Bucket ${S3_BUCKET} already exists`);
+    }
   }
 
   async upload({ localPath, key }) {
-    logger.debug(`uploading ${localPath} to s3://${S3_BUCKET}/${key}`);
+    logger.debug(`Minio: uploading ${localPath} to s3://${S3_BUCKET}/${key}`);
     await this.minio.fPutObject(S3_BUCKET, key, localPath);
-    logger.info(`${localPath} has been uploaded to s3://${S3_BUCKET}/${key}`);
+    logger.info(
+      `Minio: ${localPath} has been uploaded to s3://${S3_BUCKET}/${key}`,
+    );
   }
 
   async download({ key, localPath }) {
-    logger.debug(`downloading s3://${S3_BUCKET}/${key} to ${localPath}`);
+    logger.debug(`Minio: downloading s3://${S3_BUCKET}/${key} to ${localPath}`);
     await this.minio.fGetObject(S3_BUCKET, key, localPath);
-    logger.info(`s3://${S3_BUCKET}/${key} has been downloaded to ${localPath}`);
+    logger.info(
+      `Minio: s3://${S3_BUCKET}/${key} has been downloaded to ${localPath}`,
+    );
   }
 }
 
