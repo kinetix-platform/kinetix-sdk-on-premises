@@ -1,5 +1,6 @@
 import dotenv from "dotenv-safe";
 import logger from "#common/helpers/logger.js";
+import path from "path";
 
 dotenv.config({
   allowEmptyValues: true,
@@ -172,9 +173,10 @@ if (NODE_ENV == "production" && FILES_HOSTING_SERVICE === "fs") {
   );
 }
 
-export const S3_BUCKET = process.env.S3_BUCKET;
+export const S3_BUCKET = process.env.S3_BUCKET || "kinetix";
 
-export const LOCAL_FS_TARGET = process.env.LOCAL_FS_TARGET;
+export const LOCAL_FS_TARGET =
+  process.env.LOCAL_FS_TARGET || path.resolve("./kinetix");
 
 // AWS
 
@@ -186,7 +188,7 @@ export const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
 
 // MINIO
 
-export const MINIO_ENDPOINT = process.env.MINIO_ENDPOINT;
+export const MINIO_ENDPOINT = process.env.MINIO_ENDPOINT || "play.min.io";
 
 export const MINIO_PORT = process.env.MINIO_PORT
   ? parseInt(process.env.MINIO_PORT, 10)

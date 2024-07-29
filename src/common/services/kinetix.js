@@ -16,6 +16,7 @@ class Kinetix {
       retries: 5,
     });
   }
+
   async createAsset({ cognitoUuid, files = [], ...asset }) {
     const route = `${KINETIX_BACKEND}/api/v1/assets`;
     const body = {
