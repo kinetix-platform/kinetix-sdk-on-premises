@@ -29,18 +29,6 @@ class Controller {
     }
   }
 
-  async getCategories(req, res, next) {
-    try {
-      const { includeSubCategories } = req.query;
-      const categories = await storeService.getCategories(includeSubCategories);
-      res.send(categories);
-    } catch (e) {
-      return next(
-        new HttpError(null, e, INTERNAL_SERVER_ERROR, "An error occured"),
-      );
-    }
-  }
-
   async getWithAvatar(req, res, next) {
     try {
       const { vw } = req;

@@ -23,10 +23,3 @@ export const search = {
     size: Joi.number().integer().min(1).max(10),
   }),
 };
-
-export const categoriesSearch = {
-  query: Joi.object().keys({
-    includeSubCategories: Joi.boolean().default(false),
-    parentId: Joi.string(),
-  }),
-};

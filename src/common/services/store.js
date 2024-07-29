@@ -2,7 +2,6 @@ import axios from "axios";
 import hmac from "./hmac.js";
 import _ from "lodash";
 import logger from "../helpers/logger.js";
-import signRequest from "./hmac.js";
 import cacheService from "./cache/index.js";
 
 const { KINETIX_BACKEND } = process.env;
@@ -10,61 +9,6 @@ const { KINETIX_BACKEND } = process.env;
 class Store {
   constructor() {
     this.backendHost = KINETIX_BACKEND;
-  }
-
-  async getEmoteGallery(vw) {
-    const baseRoute = `${this.backendHost}`;
-    const provider = await this.getProvider();
-    let nextRoute = `/api/v1/store?type=emote&noProcess=true&limit=100&offset=0&providers[]=${provider.id}`;
-    const emotes = [];
-    while (nextRoute) {
-      const route = `${baseRoute}${nextRoute}`;
-      const signature = hmac(route, null, "GET");
-      const response = await axios(route, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `hmac signature=${signature}`,
-          "x-cognito-uuid": vw.cognitoUuid,
-        },
-        body: {},
-      });
-      emotes.push(response.data);
-      nextRoute = response.headers["x-pagination-next-page"];
-    }
-
-    return emotes;
-  }
-
-  async getAvatarsByCognito(cognitoUuid) {
-    const baseRoute = `${this.backendHost}`;
-    const route = `${baseRoute}/api/v1/assets?type=avatar&fetchAll=true&limit=1000&offset=0`;
-    const signature = hmac(route, null, "GET");
-    const response = await axios(route, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `hmac signature=${signature}`,
-        "x-cognito-uuid": cognitoUuid,
-      },
-      body: {},
-    });
-    return response.data.data;
-  }
-
-  async getTotalAvatarCount() {
-    const baseRoute = `${this.backendHost}`;
-    const route = `${baseRoute}/api/v1/assets?type=avatar&fetchAll=true&limit=1&offset=0&source=kinePortal`;
-    const signature = hmac(route, null, "GET");
-    const response = await axios(route, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `hmac signature=${signature}`,
-      },
-      body: {},
-    });
-    return parseInt(response.headers["x-pagination-length"]);
   }
 
   async getEmotes(emotes, vw, { mature, categories } = {}) {
@@ -172,40 +116,6 @@ class Store {
     }
 
     return data;
-  }
-
-  async getProvider() {
-    const route = `${this.backendHost}/api/v1/providers`;
-    const signature = hmac(route, null, "GET");
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: `hmac signature=${signature}`,
-    };
-    const r = await axios(route, {
-      method: "GET",
-      headers,
-      body: {},
-    });
-    return r.data.data.find((p) => p.name === "KinePortal");
-  }
-
-  async getCategories(includeSubCategories = false) {
-    const route = `${KINETIX_BACKEND}/api/v1/categories`;
-    const signature = signRequest(route, null, "GET");
-    const r = await axios.get(route, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `hmac signature=${signature}`,
-      },
-    });
-
-    if (!includeSubCategories) {
-      r.data.data = r.data.data
-        .filter((c) => !c.parentId)
-        .sort((a, b) => a.name.localeCompare(b.name));
-    }
-
-    return r.data;
   }
 
   async updateEmote(uuid, { name }, vw) {
