@@ -4,7 +4,6 @@ import httpStatus from "http-status";
 import logger from "#common/helpers/logger.js";
 import HttpError from "../../common/helpers/error.js";
 import kinetixService from "#common/services/kinetix.js";
-import awsService from "#common/services/aws.js";
 import vwService from "#common/services/repository/virtualWorld.js";
 import processService from "#common/services/repository/process.js";
 import cacheService from "#common/services/cache/index.js";
@@ -197,9 +196,10 @@ class Controller {
 
   async create(req, res, next) {
     try {
-      const { body, vw, user, files, parentProcess, keyId } = req;
-
       const uuid = uuidv4();
+      const { body, vw, user, files, parentProcess, keyId } = req;
+      console.log(body, vw, user, files, parentProcess, keyId, uuid);
+
       if (vw && !vw.configuration.allowUGC) {
         return next(
           new HttpError(
@@ -213,160 +213,7 @@ class Controller {
       }
 
       const { start, end, mature, videoUuid, text } = body;
-
-      let video;
-      let videoAsset;
-      let extension;
-      let name;
-
-      if (videoUuid) {
-        try {
-          const { data } = await kinetixService.getAsset(videoUuid);
-          videoAsset = data;
-          if (videoAsset.type !== "video") {
-            return next(
-              new HttpError(null, {}, BAD_REQUEST, "uuid is not an video uuid"),
-            );
-          }
-          extension =
-            videoAsset.files.find((f) => f.name === "original")?.extension ||
-            "mp4";
-          name = body.name || videoAsset.name;
-        } catch (error) {
-          logger.error(error.message, error);
-          return next(
-            new HttpError(
-              null,
-              {},
-              NOT_FOUND,
-              `Cant find video uuid ${videoUuid}`,
-            ),
-          );
-        }
-      } else if (files && files.length > 0) {
-        video = files[0];
-        extension = video.originalname.split(".").pop();
-        name = body.name || video.originalname;
-
-        const videoFiles = [
-          {
-            name: "original",
-            extension,
-          },
-          {
-            name: "prepared",
-            extension: "mp4",
-          },
-        ];
-
-        // CREATION THROUGH TRY UGC/UGE FEATUE
-        if (user && user.sub) {
-          videoFiles.push({ name: "thumbnail", extension: "jpg" });
-        }
-
-        videoAsset = await kinetixService.createAsset({
-          name,
-          type: "video",
-          files: videoFiles,
-          ...(user && user.sub && { cognitoUuid: user.sub }),
-        });
-      } else {
-        name = body.name || text;
-      }
-
-      const animation = await kinetixService.createAsset({
-        name,
-        type: "animation",
-        metadata: {
-          maturity: mature,
-        },
-        ...(user && user.sub && { cognitoUuid: user.sub }),
-      });
-
-      const emote = await kinetixService.createAsset({
-        name,
-        type: "emote",
-        metadata: {
-          maturity: mature,
-        },
-        ...(user && user.sub && { cognitoUuid: user.sub }),
-      });
-
-      const npData = {
-        uuid,
-        name,
-        animation: animation.uuid,
-        emote: emote.uuid,
-        ...(user && user.sub ? { cognito: user.sub } : { user: user.id }), // IF TRY UGC/UGE FEATURE
-        ...(text ? { text } : { video: videoAsset.uuid }), // SUPPORT FOR VIDEO OR TEXT
-        ...(vw && { vw: vw.id }), // IF COGNITO THERE IS NO VW
-        step: "initialized",
-        maturity: mature,
-        validated: false,
-        rejected: false,
-        ...(keyId && { key: parseInt(keyId) }),
-      };
-
-      if (parentProcess) {
-        npData.parent = parentProcess;
-      }
-
-      const newProcess = await processService.createProcess(npData);
-
-      res.status(201).send(newProcess);
-      if (req.token) {
-        const token = await tokenService.getBy({ value: req.token });
-        token.processUuid = newProcess.uuid;
-        await token.save();
-        await cacheService.del(`sdk-token-${req.token}`);
-        logger.info("deleting sdk token after process creation");
-      }
-
-      const originalPath = videoAsset
-        ? `user-data/${videoAsset.uuid}-original.${extension}`
-        : "";
-      const preparedPath = videoAsset
-        ? `user-data/${videoAsset.uuid}-prepared.mp4`
-        : "";
-
-      if (!text) {
-        try {
-          logger.info(`running transcode ${uuid}`);
-          await awsService.transcodeVideo({
-            originalPath,
-            preparedPath,
-            video,
-            ...(user &&
-              user.sub && {
-                thumbnail: `user-data/${videoAsset.uuid}-thumbnail.jpg`,
-              }),
-            options: {
-              start,
-              end,
-            },
-          });
-          logger.info(`transcode done ${uuid}`);
-          newProcess.step = "transcode_done";
-          await newProcess.save();
-        } catch (e) {
-          logger.error(`transcoding failed ${e.message}`);
-          newProcess.step = "transcode_failed";
-          return newProcess.save();
-        }
-      }
-
-      newProcess.step = "requesting_ml";
-      await newProcess.save();
-
-      try {
-        // TO DO CREATE PROCESS
-      } catch {
-        newProcess.step = "ml_request_failed";
-        await newProcess.save();
-      }
-
-      newProcess.step = "waiting_scheduler";
-      await newProcess.save();
+      console.log(start, end, mature, videoUuid, text);
     } catch (e) {
       logger.error(`process creation error ${e.message}`, e);
       return next(
