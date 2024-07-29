@@ -67,7 +67,7 @@ class AWSS3Service {
       Bucket: S3_BUCKET,
       Key: key,
     });
-
+    
     logger.info(
       `AWS S3: s3://${S3_BUCKET}/${key} has been downloaded to ${localPath}`,
     );
