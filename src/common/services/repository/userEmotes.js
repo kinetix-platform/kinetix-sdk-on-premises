@@ -9,13 +9,22 @@ export class UserEmotesService extends CrudService {
     super("users_emotes", UserEmoteModel);
   }
 
+  async findOrCreate(data) {
+    const [vw] = await UserEmoteModel.findOrCreate({
+      where: { uuid: data.uuid },
+      defaults: data,
+    });
+    vw.isNewRecord = vw._options.isNewRecord;
+    return vw;
+  }
+
   async getModerationEmotes({
     threshold = 0.6,
     vwUuid,
     limit = 20,
     offset = 0,
   }) {
-    const { count, rows } = await this.model.findAndCountAll({
+    const { count, rows } = await UserEmoteModel.findAndCountAll({
       where: {
         [Op.and]: {
           "moderation.validated": { [Op.not]: true },

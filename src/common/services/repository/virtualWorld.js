@@ -9,8 +9,22 @@ export class VirtualWorldService extends CrudService {
     super("virtual_world", VirtualWorld);
   }
 
+  async create(data) {
+    const vw = await VirtualWorld.create(data);
+    return vw;
+  }
+
+  async findOrCreate(data) {
+    const [vw] = await VirtualWorld.findOrCreate({
+      where: { uuid: data.uuid },
+      defaults: data,
+    });
+    vw.isNewRecord = vw._options.isNewRecord;
+    return vw;
+  }
+
   async getAll(where, fields = ["*"], options = {}) {
-    return this.model.findAll({
+    return VirtualWorld.findAll({
       where,
       attributes: {
         include: fields,
@@ -21,7 +35,7 @@ export class VirtualWorldService extends CrudService {
   }
 
   async getAndCountAll(where, fields = ["*"], options = {}) {
-    return this.model.findAndCountAll({
+    return VirtualWorld.findAndCountAll({
       where,
       attributes: {
         include: fields,
@@ -72,7 +86,7 @@ export class VirtualWorldService extends CrudService {
   }
 
   async getByKey(value) {
-    return this.model.findOne({
+    return VirtualWorld.findOne({
       include: {
         model: Key,
         as: "keys",

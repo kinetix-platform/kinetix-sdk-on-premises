@@ -106,16 +106,25 @@ export const sequelizeAutoSync = async (sync = false) => {
   }
 };
 
-export const initDB = async () => {
+export const initDB = async (silent = false) => {
   try {
     await sequelize.authenticate();
-    logger.info(`${dialect}: Connection has been established successfully`);
+    if (!silent)
+      logger.info(`${dialect}: Connection has been established successfully`);
   } catch (error) {
-    logger.error(
-      `${dialect}: Unable to connect to the database: ${error.message}`,
-    );
+    if (!silent) {
+      logger.error(
+        `${dialect}: Unable to connect to the database: ${error.message}`,
+      );
+    }
+    return false;
   }
   const { associateModels } = await import("#common/database/models/index.js");
   await associateModels();
   await sequelizeAutoSync(DB_AUTO_SYNC);
+  return true;
+};
+
+export const closeDB = async () => {
+  await sequelize.close();
 };

@@ -39,7 +39,6 @@ VirtualWorld.init(
     cognitoUuid: {
       type: DataTypes.UUID,
       allowNull: false,
-      defaultValue: Sequelize.UUIDV4,
       field: "cognito_uuid",
     },
     name: {

@@ -16,6 +16,14 @@ export const UGE_TOKEN_EXPIRE = process.env.UGE_TOKEN_EXPIRE
   ? parseInt(process.env.UGE_TOKEN_EXPIRE, 10)
   : 3600;
 
+// KINETIX ENDPOINTS
+
+export const KINETIX_SDK_BASE_URL =
+  process.env.KINETIX_SDK_BASE_URL || "https://sdk-api.kinetix.tech";
+
+export const KINETIX_ANIMATE_BASE_URL =
+  process.env.KINETIX_ANIMATE_BASE_URL || "https://animate-api.kinetix.tech";
+
 // COGNITO
 
 export const COGNITO_CLIENT_ID =

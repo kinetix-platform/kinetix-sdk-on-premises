@@ -8,6 +8,9 @@ class UserEmote extends Model {
     UserEmote.belongsTo(models.User, {
       as: "user",
     });
+    UserEmote.hasOne(models.Asset, {
+      as: "emote",
+    });
   }
 }
 
@@ -23,9 +26,9 @@ UserEmote.init(
       field: "user_id",
       allowNull: false,
     },
-    emoteUuid: {
+    emoteId: {
       type: DataTypes.UUID,
-      field: "emote_uuid",
+      field: "emote_id",
       allowNull: false,
     },
     deletionReason: {
@@ -50,7 +53,12 @@ UserEmote.init(
     },
   },
   {
-    indexes: [],
+    indexes: [
+      {
+        unique: true,
+        fields: ["user_id", "emote_id"],
+      },
+    ],
     sequelize,
     modelName: "user_emote",
     paranoid: true,

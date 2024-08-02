@@ -1,48 +1,11 @@
 import UserModel from "#common/database/models/user.js";
 import UserEmoteModel from "#common/database/models/userEmote.js";
 import CrudService from "./crud.js";
-import Sequelize from "sequelize";
-import VWModel from "#common/database/models/virtualWorld.js";
 import { Op } from "sequelize";
 
 export class UsersService extends CrudService {
   constructor() {
     super("users", UserModel);
-  }
-
-  async getAllFromVW(vw) {
-    const response = await this.model.findAll({
-      attributes: {
-        include: [
-          [Sequelize.fn("COUNT", Sequelize.col("emotes.id")), "emotesCount"],
-          "*",
-        ],
-      },
-      include: [
-        {
-          model: VWModel,
-          as: "virtualWorld",
-          attributes: [],
-          required: true,
-        },
-        {
-          model: UserEmoteModel,
-          as: "emotes",
-          required: false,
-          attributes: [],
-        },
-      ],
-      group: ["users.id", "virtualWorlds->virtual_worlds_users.id"],
-      order: [
-        ["emotesCount", "DESC"],
-        ["created_at", "DESC"],
-      ],
-    });
-
-    return response.map((u) => ({
-      ...u.dataValues,
-      emotesCount: parseInt(u.dataValues.emotesCount),
-    }));
   }
 
   /**
@@ -141,6 +104,15 @@ export class UsersService extends CrudService {
         : { validated: true };
       await emote.save();
     }
+  }
+
+  async findOrCreate(vw, externalId) {
+    const [user] = await UserModel.findOrCreate({
+      where: { virtualWorldId: vw.id, externalId },
+      defaults: { virtualWorldId: vw.id, externalId },
+    });
+    user.isNewRecord = user._options.isNewRecord;
+    return user;
   }
 }
 

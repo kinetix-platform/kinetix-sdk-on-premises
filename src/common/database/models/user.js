@@ -42,7 +42,12 @@ User.init(
     },
   },
   {
-    indexes: [],
+    indexes: [
+      {
+        unique: true,
+        fields: ["vw_id", "external_id"],
+      },
+    ],
     sequelize,
     modelName: "user",
     paranoid: true,
